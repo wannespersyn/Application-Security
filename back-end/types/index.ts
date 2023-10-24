@@ -4,7 +4,36 @@
  * 
 ***/
 
+import { type } from "os";
+import { LightSource } from "../domain/model/lightSource";
+import { User } from "../domain/model/user";
+import { Scene } from "../domain/model/scene";
+
 type UserInput = {
     name: string;
     password: string;
+}
+
+type LightSourceInput = {
+    name: string;
+    location: string;
+    brightness: number;
+}
+
+type SceneInput = {
+    name: string;
+    activationTargets: LightSource[];
+}
+
+type ControlCenterInput= {
+    users: User[];
+    light_sources: LightSource[];
+    scenes: Scene[];
+}
+
+export {
+    UserInput,
+    LightSourceInput,
+    SceneInput,
+    ControlCenterInput
 }

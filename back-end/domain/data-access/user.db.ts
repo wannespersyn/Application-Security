@@ -1,10 +1,10 @@
 import { User } from "../model/user";
 
-//voorlopige database
+//preliminary database
 const users = [];
 
 const createUser = ({ name, password}: User): User => {
-    //constructor oproepen om de user te valideren
+    //call constructor to validate
     const validation_user = new User({
         name, 
         password
