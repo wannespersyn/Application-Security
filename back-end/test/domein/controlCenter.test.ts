@@ -5,8 +5,8 @@ import { Scene } from "../../domain/model/scene";
 import { User } from "../../domain/model/user";
 
 const validUsers = [
-    new User({name: "Wannes Persyn", password: "Test1234"}),
-    new User({name: "Wannes Test", password: "Test1234"})
+    new User({name: "Wannes Persyn", password: "Test1234", admin: false}),
+    new User({name: "Wannes Test", password: "Test1234", admin: false})
 ];
 
 const validLightSources = [

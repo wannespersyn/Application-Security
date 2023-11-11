@@ -9,7 +9,8 @@ test(`given: valid value for name and password; when: user is created; then: fie
     //when
     const user = new User({
         name: validName,
-        password: validPassword
+        password: validPassword,
+        admin: false
     });
 
     //then
@@ -25,7 +26,8 @@ test(`giver: invalid password; when: user is created; then: an error is thrown`,
     const CreateNewuser = () => 
         new User({
             name: validName,
-            password: invalidPassword
+            password: invalidPassword,
+            admin: false
         });
 
     //then

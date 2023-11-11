@@ -19,9 +19,9 @@ test(`given: a valid user; when: user is created; then: schedule is created with
     //given
 
     //when
-    userService.createUser({name: validName, password: validPassword})
+    userService.createUser({name: validName, password: validPassword, admin: false})
 
     //then
     expect(mockUserDbCreateUser).toHaveBeenCalledTimes(1);
-    expect(mockUserDbCreateUser).toHaveBeenCalledWith(new User({name: validName, password: validPassword}));
+    expect(mockUserDbCreateUser).toHaveBeenCalledWith(new User({name: validName, password: validPassword, admin:false}));
 })

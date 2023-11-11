@@ -12,6 +12,7 @@ import { Scene } from "../domain/model/scene";
 type UserInput = {
     name: string;
     password: string;
+    admin: boolean;
 }
 
 type LightSourceInput = {

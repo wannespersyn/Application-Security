@@ -3,6 +3,8 @@ export class User {
 
     readonly name: string;
     readonly password: string;
+    readonly admin: boolean
+
     readonly id: number;
 
     /**
@@ -10,11 +12,12 @@ export class User {
      * 
      * @param user 
      */
-    constructor (user: {name: string, password: string}) {
+    constructor (user: {name: string, password: string, admin: boolean}) {
         this.validation(user);
 
         this.name = user.name;
         this.password = user.password;
+        this.admin = user.admin;
     }
 
     /**
@@ -22,7 +25,7 @@ export class User {
      * 
      * @param user 
      */
-    validation (user: { name, password}) {
+    validation (user: { name: string, password: string, admin: boolean}) {
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
         if (!passwordRegex.test(user.password)) {
