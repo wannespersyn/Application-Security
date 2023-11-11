@@ -11,7 +11,8 @@ test(`given: valid value for name; when: light source is created; then: light so
     const light_source = new LightSource({
         name: validName,
         location: validLocation,
-        brightness: validBrightness
+        brightness: validBrightness,
+        status: true
     });
 
     //then
@@ -27,9 +28,10 @@ test(`given: brightness to high; when: lightsource is created; then: throw error
         new LightSource({
             name: validName,
             location: validLocation,
-            brightness: invalidBrightness
+            brightness: invalidBrightness,
+            status: true
         });
-    
+
     //then
     expect(CreateNewLightSource).toThrowError("Invalid brightness! Brightness has to be between 0 - 100");
 })
@@ -43,7 +45,8 @@ test(`given: brightness to low; when: lightsource is created; then: throw error`
         new LightSource({
             name: validName,
             location: validLocation,
-            brightness: invalidBrightness
+            brightness: invalidBrightness,
+            status: true
         });
     
     //then

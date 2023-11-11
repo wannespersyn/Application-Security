@@ -18,6 +18,7 @@ type LightSourceInput = {
     name: string;
     location: string;
     brightness: number;
+    status: boolean;
 }
 
 type SceneInput = {

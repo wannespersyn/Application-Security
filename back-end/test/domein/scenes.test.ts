@@ -6,12 +6,14 @@ const validActivationTargets = [
     new LightSource({
         name: "Light 1",
         location: "Living",
-        brightness: 50
+        brightness: 50,
+        status: true
     }),
     new LightSource({
         name: "Light 3",
         location: "Living",
-        brightness: 100
+        brightness: 100,
+        status: true
     })
 ] 
 
@@ -35,12 +37,14 @@ test(`given: activation targets has 2x the same lightsource; when: scene is crea
         new LightSource({
             name: "Light 1",
             location: "Living",
-            brightness: 100
+            brightness: 100,
+            status: true
         }),
         new LightSource({
             name: "Light 1",
             location: "Living",
-            brightness: 10
+            brightness: 10,
+            status: true
         })
         
     ] 

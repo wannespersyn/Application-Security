@@ -9,7 +9,8 @@
         "schema": "domain/data-access/prisma/schema.prisma"
     },
     "scripts": {
-        "test": "jest","start": "nodemon -L app.ts --delay 3"
+        "test": "jest",
+        "start": "nodemon -L app.ts --delay 3"
     },
     "nodemonConfig": {
         "ext": "ts",
@@ -19,7 +20,7 @@
         }
     },
     "dependencies": {
-        "@prisma/client": "^5.1.1",
+        "@prisma/client": "^5.5.2",
         "bcrypt": "^5.1.0",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.20.1",
