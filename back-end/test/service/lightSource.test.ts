@@ -5,10 +5,10 @@ import lightSourceService from "../../service/lightSource.service";
 const validName = "First Floor WC";
 const validLocation = "WC"
 
-let mockLightSourceDbCreateLightSource: jest.SpyInstance<LightSource, [LightSource], any>;
-let mockLightSourceDbTurnLightOn: jest.SpyInstance<LightSource, [string], any>;
-let mockLightSourceDbTurnLightOff: jest.SpyInstance<LightSource, [string], any>;
-let mockLightSourceDbChangeBrightness: jest.SpyInstance<LightSource, [string, number], any>;
+let mockLightSourceDbCreateLightSource: jest.SpyInstance<LightSource, [LightSource]>;
+let mockLightSourceDbTurnLightOn: jest.SpyInstance<LightSource, [string]>;
+let mockLightSourceDbTurnLightOff: jest.SpyInstance<LightSource, [string]>;
+let mockLightSourceDbChangeBrightness: jest.SpyInstance<LightSource, [string, number]>;
 
 beforeEach( () => {
     mockLightSourceDbCreateLightSource = jest.spyOn(lightSourceDb, 'createLightSource')
@@ -47,7 +47,7 @@ test(`given: a valid light source name; when: turning the light on; then: the li
     // given
 
     // when
-    const createdLightSource = lightSourceService.createLightSource(
+    lightSourceService.createLightSource(
         {name: validName,
             location: validLocation,
             brightness: 0,
@@ -74,7 +74,7 @@ test(`given: a invalid light source name; when: turning the light on; then: erro
     const invalidName = "wrong"
 
     // when
-    const createdLightSource = lightSourceService.createLightSource(
+    lightSourceService.createLightSource(
         {name: validName,
             location: validLocation,
             brightness: 0,
@@ -91,7 +91,7 @@ test(`given: a valid light source name; when: turning the light off; then: the l
     // given
 
     // when
-    const createdLightSource = lightSourceService.createLightSource(
+    lightSourceService.createLightSource(
         {name: validName,
             location: validLocation,
             brightness: 0,
@@ -118,7 +118,7 @@ test(`given: a invalid light source name; when: turning the light off; then: err
     const invalidName = "wrong"
 
     // when
-    const createdLightSource = lightSourceService.createLightSource(
+    lightSourceService.createLightSource(
         {name: validName,
             location: validLocation,
             brightness: 0,
@@ -136,7 +136,7 @@ test(`given: a valid light source name and brightness; when: changing brightness
     const validBrightness = 50;
 
     // when
-    const createdLightSource = lightSourceService.createLightSource(
+    lightSourceService.createLightSource(
         {name: validName,
             location: validLocation,
             brightness: 0,
@@ -164,7 +164,7 @@ test(`given: a invalid light source name & valid brightness; when: changing the 
     const validBrightness = 50;
 
     // when
-    const createdLightSource = lightSourceService.createLightSource(
+    lightSourceService.createLightSource(
         {name: validName,
             location: validLocation,
             brightness: 0,
@@ -182,7 +182,7 @@ test(`given: a valid light source name & invalid brightness; when: changing the 
     const invalidBrightness = 150;
 
     // when
-    const createdLightSource = lightSourceService.createLightSource(
+    lightSourceService.createLightSource(
         {name: validName,
             location: validLocation,
             brightness: 0,
@@ -200,7 +200,7 @@ test(`given: a valid light source name & invalid brightness; when: changing the 
     const invalidBrightness = -10;
 
     // when
-    const createdLightSource = lightSourceService.createLightSource(
+    lightSourceService.createLightSource(
         {name: validName,
             location: validLocation,
             brightness: 0,
