@@ -52,7 +52,7 @@ const userRouter = express.Router();
  *                        $ref: '#/components/schemas/User'
  */
 
-userRouter.post('/', (req: Request, res: Response) => {
+userRouter.post('/users', (req: Request, res: Response) => {
     try {
         const user = <UserInput>req.body;
         const result = userService.createUser(user);
