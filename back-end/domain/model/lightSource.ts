@@ -1,10 +1,11 @@
+import {stat} from "fs";
 
 export class LightSource {
 
     readonly name: string;
     readonly location: string;
-    readonly brightness: number;
-    readonly status: boolean;
+    public brightness: number;
+    public status: boolean;
     readonly id: number;
 
     /**
