@@ -15,7 +15,7 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-test(`given: a valid user; when: user is created; then: schedule is created with those values`, () => {
+test(`given: a valid user; when: user is created; then: user is created with those values`, () => {
     //given
 
     //when
