@@ -54,5 +54,6 @@ const turnSceneOff = (name: string): Scene => {
 
 export default {
     createScene,
-    turnSceneOn
+    turnSceneOn,
+    turnSceneOff
 };
