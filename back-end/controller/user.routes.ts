@@ -17,6 +17,8 @@
  *              type: string
  *            password:
  *              type: string
+ *            isAdmin:
+ *              type: boolean
  *      UserInput:
  *          type: object
  *          properties:
@@ -24,6 +26,8 @@
  *              type: string
  *            password: 
  *              type: string
+ *            isAdmin:
+ *              type: boolean
 */
 
 import express, { Request, Response } from "express";

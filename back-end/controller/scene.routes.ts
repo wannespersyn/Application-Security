@@ -66,6 +66,52 @@ const sceneRouter = express.Router();
  *                        $ref: '#/components/schemas/Scene'
  */
 
+/**
+ * @swagger
+ * /Scene/turnOn:
+ *   post:
+ *      summary: Turn the scene on
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application.json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                name:
+ *                  type: string
+ *      responses:
+ *          200:
+ *              description: A Scene object
+ *              content:
+ *                  application.json:
+ *                      schema:
+ *                        $ref: '#/components/schemas/Scene'
+ */
+
+/**
+ * @swagger
+ * /Scene/turnOff:
+ *   post:
+ *      summary: Turn the scene off
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application.json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                name:
+ *                  type: string
+ *      responses:
+ *          200:
+ *              description: A Scene object
+ *              content:
+ *                  application.json:
+ *                      schema:
+ *                        $ref: '#/components/schemas/Scene'
+ */
+
 sceneRouter.post('/', (req: Request, res: Response) => {
     try {
         const scene = <SceneInput>req.body;
@@ -75,5 +121,26 @@ sceneRouter.post('/', (req: Request, res: Response) => {
         res.status(400).json({status: "error", errorMessage: error.message});
     }
 })
+
+sceneRouter.post('/turnOn', (req: Request, res: Response) => {
+    try {
+        const name = <string>req.body;
+        const result = sceneService.turnSceneOn(name);
+        res.status(200).json(result);
+    } catch(error) {
+        res.status(400).json({status: "error", errorMessage: error.message});
+    }
+})
+
+sceneRouter.post('/turnOff', (req: Request, res: Response) => {
+    try {
+        const name = <string>req.body;
+        const result = sceneService.turnSceneOff(name);
+        res.status(200).json(result);
+    } catch(error) {
+        res.status(400).json({status: "error", errorMessage: error.message});
+    }
+})
+
 
 export { sceneRouter };
