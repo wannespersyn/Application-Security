@@ -1,12 +1,9 @@
-import {stat} from "fs";
-
 export class LightSource {
 
     readonly name: string;
     readonly location: string;
     public brightness: number;
     public status: boolean;
-    readonly id: number;
 
     /**
      * Creates a new instance of the LightSource class.

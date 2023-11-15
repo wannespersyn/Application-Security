@@ -16,6 +16,7 @@ const createUser = ({ name, password, admin}: User): User => {
 
 const getAllUsers = (): User[] => users;
 
+
 export default {
     createUser,
     getAllUsers
