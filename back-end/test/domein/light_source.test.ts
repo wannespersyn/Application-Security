@@ -9,6 +9,7 @@ test(`given: valid value for name; when: light source is created; then: light so
 
     //when
     const light_source = new LightSource({
+        id: 1,
         name: validName,
         location: validLocation,
         brightness: validBrightness,
@@ -19,13 +20,14 @@ test(`given: valid value for name; when: light source is created; then: light so
     expect(light_source.name).toEqual(validName)
 })
 
-test(`given: brightness to high; when: lightsource is created; then: throw error`, () => {
+test(`given: brightness to high; when: light source is created; then: throw error`, () => {
     //given
     const invalidBrightness = 200;
 
     //when
     const CreateNewLightSource = () =>
         new LightSource({
+            id: 2,
             name: validName,
             location: validLocation,
             brightness: invalidBrightness,
@@ -36,13 +38,14 @@ test(`given: brightness to high; when: lightsource is created; then: throw error
     expect(CreateNewLightSource).toThrowError("Invalid brightness! Brightness has to be between 0 - 100");
 })
 
-test(`given: brightness to low; when: lightsource is created; then: throw error`, () => {
+test(`given: brightness to low; when: light source is created; then: throw error`, () => {
     //given
     const invalidBrightness = -5;
 
     //when
     const CreateNewLightSource = () =>
         new LightSource({
+            id: 3,
             name: validName,
             location: validLocation,
             brightness: invalidBrightness,

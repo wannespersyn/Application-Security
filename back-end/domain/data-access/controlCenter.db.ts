@@ -2,6 +2,8 @@ import { User } from "../model/user";
 import { LightSource } from "../model/lightSource";
 import { Scene } from "../model/scene";
 import { ControlCenter } from "../model/controlCenter";
+import sceneService from "../../service/scene.service";
+import lightSourceService from "../../service/lightSource.service";
 
 /** Preliminary databases **/
 const controlCenters: ControlCenter[] = [];
@@ -9,15 +11,10 @@ const controlCenters: ControlCenter[] = [];
 /**
  * Creates a new control center with the provided users, light sources, and scenes.
  *
- * @param {ControlCenter} controlCenter - The ControlCenter object containing users, light sources, and scenes.
  * @returns {ControlCenter} The created ControlCenter.
  */
-const createControlPanel = ({ users, light_sources, scenes }: ControlCenter): ControlCenter => {
-    const validationControlCenter = new ControlCenter({
-        users,
-        light_sources,
-        scenes
-    });
+const createControlPanel = (): ControlCenter => {
+    const validationControlCenter = new ControlCenter();
 
     controlCenters.push(validationControlCenter);
 
@@ -30,6 +27,13 @@ const createControlPanel = ({ users, light_sources, scenes }: ControlCenter): Co
  * @returns {ControlCenter[]} An array containing all ControlCenter objects.
  */
 const getWholeControlCenter = (): ControlCenter[] => controlCenters;
+
+const getAllUsers = (): User[] => {
+    const currentControlCenter = controlCenters[controlCenters.length - 1];
+
+    return currentControlCenter.users;
+}
+
 
 /**
  * Finds a user in the Control Center by name.
@@ -75,8 +79,8 @@ const findSceneByName = (name: string): Scene => {
  * @param {User} user - The User object to be added.
  * @returns {User} The added User.
  */
-const addUser = ({ name, password, admin }: User): User => {
-    const user = new User({ name, password, admin });
+const addUser = ({ id, name, password, admin }: User): User => {
+    const user = new User({ id, name, password, admin });
 
     const currentControlCenter = controlCenters[controlCenters.length - 1];
     if (currentControlCenter) {
@@ -94,7 +98,7 @@ const addUser = ({ name, password, admin }: User): User => {
  * @returns {LightSource} The added LightSource.
  */
 const addLightSource = ({ name, location, brightness, status }: LightSource): LightSource => {
-    const lightSource = new LightSource({ name, location, brightness, status });
+    const lightSource = lightSourceService.createLightSource({ name, location, brightness, status });
 
     const currentControlCenter = controlCenters[controlCenters.length - 1];
     if (currentControlCenter) {
@@ -112,7 +116,7 @@ const addLightSource = ({ name, location, brightness, status }: LightSource): Li
  * @returns {Scene} The added Scene.
  */
 const addScene = ({ name, activationTargets }: Scene): Scene => {
-    const scene = new Scene({ name, activationTargets });
+    const scene = sceneService.createScene({name, activationTargets})
 
     const currentControlCenter = controlCenters[controlCenters.length - 1];
     if (currentControlCenter) {
@@ -131,5 +135,6 @@ export default {
     addScene,
     findUserByName,
     findLightSourceByNameAndLocation,
-    findSceneByName
+    findSceneByName,
+    getAllUsers
 }

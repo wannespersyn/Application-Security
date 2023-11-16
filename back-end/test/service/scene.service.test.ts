@@ -6,12 +6,14 @@ import sceneService from "../../service/scene.service";
 const validName = "watching tv";
 const validActivationTargets = [
     new LightSource({
+        id: 1,
         name: "Light 1",
         location: "Living",
         brightness: 50,
         status: false
     }),
     new LightSource({
+        id: 2,
         name: "Light 3",
         location: "Living",
         brightness: 100,
@@ -48,6 +50,7 @@ test(`given: a valid scene; when: scene is created; then: scene is created with 
     expect(mockSceneDbCreateScene).toHaveBeenCalledTimes(1);
     expect(mockSceneDbCreateScene).toHaveBeenCalledWith(
         new Scene(({
+            id: 1,
             name: validName,
             activationTargets: validActivationTargets
         }))
@@ -70,15 +73,18 @@ test(`given: a valid scene; when: scene is turned on; then: activation targets a
     expect(mockSceneDbTurnSceneOn).toHaveBeenCalledWith(validName);
 
     expect(result).toEqual({
+        id: 1,
         name: validName,
         activationTargets: [
             new LightSource({
+                id: 1,
                 name: "Light 1",
                 location: "Living",
                 brightness: 50,
                 status: true
             }),
             new LightSource({
+                id: 2,
                 name: "Light 3",
                 location: "Living",
                 brightness: 100,
@@ -120,15 +126,18 @@ test(`given: a valid scene; when: scene is turned off; then: activation targets 
     expect(mockSceneDbTurnSceneOff).toHaveBeenCalledWith(validName);
 
     expect(result).toEqual({
+        id: 1,
         name: validName,
         activationTargets: [
             new LightSource({
+                id: 1,
                 name: "Light 1",
                 location: "Living",
                 brightness: 50,
                 status: false
             }),
             new LightSource({
+                id: 2,
                 name: "Light 3",
                 location: "Living",
                 brightness: 100,

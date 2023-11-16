@@ -9,16 +9,17 @@ const lightSources = [];
  * @param {LightSource}
  * @returns {LightSource} The newly created light source.
  */
-const createLightSource = ({name, location, brightness, status}: LightSource): LightSource => {
+const createLightSource = ({id, name, location, brightness, status}: LightSource): LightSource => {
     //call constructor to validate
     const validation_lightSource = new LightSource({
+        id,
         name,
         location,
         brightness,
         status
     });
     lightSources.push(validation_lightSource);
-    return null;
+    return validation_lightSource;
 };
 
 /**

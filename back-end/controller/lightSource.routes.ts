@@ -24,7 +24,7 @@
  *      LightSourceInput:
  *          type: object
  *          properties:
- *            name: 
+ *            name:
  *              type: string
  *            location:
  *              type: string
@@ -42,31 +42,33 @@ const lightSourceRouter = express.Router();
 
 /**
  * @swagger
- * /LightSource:
+ * tags:
+ *   name: LightSource
+ *   description: Light source functions
+ * /lightSource:
  *   post:
- *      summary: Create a new light source
- *      requestBody: 
- *        required: true
- *        content:
- *          application.json:
- *            schema:
- *              $ref: '#/components/schemas/LightSourceInput'
- *      responses:
- *          200:
- *              description: A LightSource object
- *              content:
- *                  application.json:
- *                      schema:
- *                        $ref: '#/components/schemas/LightSource'
+ *     summary: Create a light source
+ *     tags: [LightSource]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LightSourceInput'
+ *     responses:
+ *       200:
+ *         description: A light source object is created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/LightSource'
+ *       500:
+ *         description: Some server error
  *
- */
-
-
-/**
- * @swagger
  * /LightSource/turnLightOn:
  *   post:
  *      summary: Turn the light on
+ *      tags: [LightSource]
  *      requestBody:
  *        required: true
  *        content:
@@ -84,13 +86,10 @@ const lightSourceRouter = express.Router();
  *                      schema:
  *                        $ref: '#/components/schemas/LightSource'
  *
- */
-
-/**
- * @swagger
  * /LightSource/turnLightOff:
  *   post:
  *      summary: Turn the light off
+ *      tags: [LightSource]
  *      requestBody:
  *        required: true
  *        content:
@@ -108,13 +107,10 @@ const lightSourceRouter = express.Router();
  *                      schema:
  *                        $ref: '#/components/schemas/LightSource'
  *
- */
-
-/**
- * @swagger
  * /LightSource/changeBrightness:
  *   post:
  *      summary: Change the brightness of the light
+ *      tags: [LightSource]
  *      requestBody:
  *        required: true
  *        content:

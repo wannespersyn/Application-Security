@@ -1,18 +1,22 @@
 import { User } from "../model/user";
 
 //preliminary database
-const users = [];
+const users: User[] = [];
 
-const createUser = ({ name, password, admin}: User): User => {
-    //call constructor to validate
+let currentId = 1;
+
+const createUser = ({ name, password, admin }: User): User => {
+    // Call constructor to validate
     const validation_user = new User({
-        name, 
+        id: currentId++,
+        name,
         password,
         admin
-    })
+    });
     users.push(validation_user);
-    return null;
+    return validation_user;
 };
+
 
 const getAllUsers = (): User[] => users;
 

@@ -4,20 +4,21 @@ export class Scene {
 
     readonly name: string;
     readonly activationTargets: Array<LightSource>;
-
     readonly id: number;
 
 
     /**
      * Constructor for the Scene class.
      *
-     * @param {object} scene - An object containing the name and activationTargets for the new scene.
+     * @param {object} scene - An object containing the id, name and activationTargets for the new scene.
+     * @param {id} scene.id - The id of the scene.
      * @param {string} scene.name - The name of the scene.
      * @param {Array} scene.activationTargets - The lights that need to turn on.
      */
-    constructor (scene: {name: string, activationTargets: Array<LightSource>}) {
+    constructor (scene: {id: number, name: string, activationTargets: Array<LightSource>}) {
         this.validation(scene);
 
+        this.id = scene.id;
         this.name = scene.name;  
         this.activationTargets = scene.activationTargets;
     }

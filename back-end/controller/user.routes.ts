@@ -22,9 +22,12 @@
  *      UserInput:
  *          type: object
  *          properties:
- *            name: 
+ *            id:
+ *              type: number
+ *              format: int64
+ *            name:
  *              type: string
- *            password: 
+ *            password:
  *              type: string
  *            isAdmin:
  *              type: boolean
@@ -38,25 +41,31 @@ const userRouter = express.Router();
 
 /**
  * @swagger
- * /Users:
+ * tags:
+ *   name: User
+ *   description: User functions
+ * /users:
  *   post:
- *      summary: Create a new user
- *      requestBody: 
- *        required: true
- *        content:
- *          application.json:
- *            schema:
- *              $ref: '#/components/schemas/UserInput'
- *      responses:
- *          200:
- *              description: A User object
- *              content:
- *                  application.json:
- *                      schema:
- *                        $ref: '#/components/schemas/User'
+ *     summary: Create a new user
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserInput'
+ *     responses:
+ *       200:
+ *         description: A User object is created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Some server error
  */
 
-userRouter.post('/users', (req: Request, res: Response) => {
+userRouter.post('/', async (req: Request, res: Response) => {
     try {
         const user = <UserInput>req.body;
         const result = userService.createUser(user);
@@ -64,6 +73,6 @@ userRouter.post('/users', (req: Request, res: Response) => {
     } catch(error) {
         res.status(400).json({status: "error", errorMessage: error.message});
     }
-})
+});
 
 export { userRouter };

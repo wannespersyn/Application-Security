@@ -3,16 +3,21 @@ import { ControlCenter } from "../domain/model/controlCenter";
 import {User} from "../domain/model/user";
 import {LightSource} from "../domain/model/lightSource";
 import {Scene} from "../domain/model/scene";
+import sceneService from "./scene.service";
+import lightSourceService from "./lightSource.service";
 
 /**
  * Creates a new control center with the provided users, light sources, and scenes.
  *
- * @param {ControlCenter} controlCenter - The ControlCenter object containing users, light sources, and scenes.
  * @returns {ControlCenter} The created ControlCenter.
  */
-const createControlCenter = ({users, light_sources, scenes}: ControlCenter): ControlCenter => {
-    const control_center = new ControlCenter({users, light_sources, scenes});
-    return controlCenterDb.createControlPanel(control_center);
+const createControlCenter = (): ControlCenter => {
+    const control_center = controlCenterDb.createControlPanel();
+    return null;
+}
+
+const getAllUsers = (): User[] => {
+    return controlCenterDb.getAllUsers();
 }
 
 
@@ -24,8 +29,8 @@ const createControlCenter = ({users, light_sources, scenes}: ControlCenter): Con
  *
  * @throws {Error} If the user with the same name already exists.
  */
-const addUserToControlCenter = ({ name, password, admin }: User): User => {
-    const user = new User ({name, password, admin});
+const addUserToControlCenter = ({ id, name, password, admin }: User): User => {
+    const user = new User ({id, name, password, admin});
 
     if (controlCenterDb.findUserByName(user.name))
         throw new Error(`User already in use: '${user.name}'`)
@@ -41,8 +46,8 @@ const addUserToControlCenter = ({ name, password, admin }: User): User => {
  *
  * @throws {Error} If a light source with the same name and location already exists.
  */
-const addLightSource = ({name, location, brightness, status}: LightSource) : LightSource => {
-    const lightSource = new LightSource({name, location, brightness, status})
+const addLightSource = ({id, name, location, brightness, status}: LightSource) : LightSource => {
+    const lightSource = new LightSource({id, name, location, brightness, status})
 
     if (controlCenterDb.findLightSourceByNameAndLocation(lightSource.name, lightSource.location))
         throw new Error(`Light source with location: '${lightSource.location}' and 
@@ -59,8 +64,8 @@ const addLightSource = ({name, location, brightness, status}: LightSource) : Lig
  *
  * @throws {Error} If a scene with the same name already exists.
  */
-const addScene = ({name, activationTargets}: Scene) : Scene => {
-    const scene = new Scene({name, activationTargets});
+const addScene = ({id, name, activationTargets}: Scene) : Scene => {
+    const scene = new Scene({id, name, activationTargets})
 
     if (controlCenterDb.findSceneByName(scene.name))
         throw new Error(`Scene with name: '${scene.name}' already in exist!`)
@@ -71,5 +76,6 @@ export default {
     createControlCenter,
     addUserToControlCenter,
     addLightSource,
-    addScene
+    addScene,
+    getAllUsers
 };

@@ -10,14 +10,15 @@ const scenes = [];
  * @param {Scene} scene - The scene object to be created.
  * @returns {Scene} The newly created scene.
  */
-const createScene = ({name, activationTargets}: Scene): Scene => {
+const createScene = ({id, name, activationTargets}: Scene): Scene => {
     //call constructor to validate
     const validation_scene = new Scene({
+        id,
         name,
         activationTargets
     });
     scenes.push(validation_scene);
-    return null;
+    return validation_scene;
 }
 
 /**

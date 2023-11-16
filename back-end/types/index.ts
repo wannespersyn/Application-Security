@@ -10,9 +10,10 @@ import { User } from "../domain/model/user";
 import { Scene } from "../domain/model/scene";
 
 type UserInput = {
-    name: string;
-    password: string;
-    admin: boolean;
+    id?: number;
+    name?: string;
+    password?: string;
+    admin?: boolean;
 }
 
 type LightSourceInput = {

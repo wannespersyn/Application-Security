@@ -2,6 +2,7 @@ import sceneDb from "../domain/data-access/scene.db";
 import { Scene } from "../domain/model/scene";
 import { SceneInput } from "../types";
 
+let currentId = 1;
 
 /**
  * Creates a new scene and adds it to the database.
@@ -10,7 +11,7 @@ import { SceneInput } from "../types";
  * @returns {Scene} The newly created scene object with the specified properties.
  */
 const createScene = ({name, activationTargets}: SceneInput): Scene => {
-    const scene = new Scene({name, activationTargets});
+    const scene = new Scene({id: currentId++, name, activationTargets});
     return sceneDb.createScene(scene);
 };
 
@@ -27,7 +28,7 @@ const turnSceneOn = (name: string): Scene => {
     const targetScene = sceneDb.getAllScenes().find((scene) => scene.name === name);
 
     if (!targetScene) {
-        throw new Error(`Scene '${name}' not found!`)
+        throw new Error(`Scene '${targetScene.name}' not found!`)
     }
 
     return sceneDb.turnSceneOn(name);

@@ -2,6 +2,7 @@ export class LightSource {
 
     readonly name: string;
     readonly location: string;
+    readonly id: number;
     public brightness: number;
     public status: boolean;
 
@@ -9,14 +10,16 @@ export class LightSource {
      * Creates a new instance of the LightSource class.
      *
      * @param {Object} lightSource - An object containing the properties of the light source.
+     * @param {number} lightSource.id - The id of the light source.
      * @param {string} lightSource.name - The name of the light source.
      * @param {string} lightSource.location - The location of the light source.
      * @param {number} lightSource.brightness - The brightness level of the light source (0 to 100).
      * @param {boolean} lightSource.status - The status of the light source (on/off).
      */
-    constructor (lightSource: {name: string, location: string, brightness: number, status: boolean}) {
+    constructor (lightSource: {id: number, name: string, location: string, brightness: number, status: boolean}) {
         this.validation(lightSource);
 
+        this.id = lightSource.id;
         this.name = lightSource.name;
         this.location = lightSource.location;
         this.brightness = lightSource.brightness;

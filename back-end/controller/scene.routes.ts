@@ -48,29 +48,32 @@ const sceneRouter = express.Router();
 
 /**
  * @swagger
- * /Scene:
+ * tags:
+ *   name: Scene
+ *   description: Scene functions
+ *
+ * /scene:
  *   post:
- *      summary: Create a new scene
- *      requestBody: 
- *        required: true
- *        content:
- *          application.json:
- *            schema:
- *              $ref: '#/components/schemas/SceneInput'
- *      responses:
- *          200:
- *              description: A Scene object
- *              content:
- *                  application.json:
- *                      schema:
- *                        $ref: '#/components/schemas/Scene'
- */
-
-/**
- * @swagger
- * /Scene/turnOn:
+ *     summary: Create scene
+ *     tags: [Scene]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/SceneInput'
+ *     responses:
+ *       200:
+ *         description: A Scene object
+ *         content:
+ *           application.json:
+ *             schema:
+ *               $ref: '#/components/schemas/Scene'
+ *
+ * /scene/turnOn:
  *   post:
  *      summary: Turn the scene on
+ *      tags: [Scene]
  *      requestBody:
  *        required: true
  *        content:
@@ -87,13 +90,11 @@ const sceneRouter = express.Router();
  *                  application.json:
  *                      schema:
  *                        $ref: '#/components/schemas/Scene'
- */
-
-/**
- * @swagger
- * /Scene/turnOff:
+ * 
+ * /scene/turnOff:
  *   post:
  *      summary: Turn the scene off
+ *      tags: [Scene]
  *      requestBody:
  *        required: true
  *        content:
