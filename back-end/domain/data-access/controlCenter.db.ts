@@ -34,7 +34,6 @@ const getAllUsers = (): User[] => {
     return currentControlCenter.users;
 }
 
-
 /**
  * Finds a user in the Control Center by name.
  *
@@ -127,6 +126,50 @@ const addScene = ({ name, activationTargets }: Scene): Scene => {
     return scene;
 }
 
+/**
+ * Turns on the specified light source.
+ *
+ * @param {string} name - The name of the light source to turn on.
+ * @param {string} location - The location of the light source to turn on.
+ * @returns {LightSource} The light source that was turned on.
+ */
+const turnLightOn = (name: string, location: string): LightSource => {
+    const targetLightSource = findLightSourceByNameAndLocation(name, location)
+    targetLightSource.status = true;
+
+    return targetLightSource;
+};
+
+/**
+ * Turns off the specified light source.
+ *
+ * @param {string} name - The name of the light source to turn off.
+ * @param {string} location - The location of the light source to turn on.
+ * @returns {LightSource} The light source that was turned off.
+ */
+const turnLightOff = (name: string, location: string): LightSource => {
+    const targetLightSource = findLightSourceByNameAndLocation(name, location)
+    targetLightSource.status = false;
+
+    return targetLightSource;
+};
+
+/**
+ * Changes the brightness of the specified light source.
+ *
+ * @param {string} name - The name of the light source to change brightness.
+ * @param {string} location - The location of the light source to turn on.
+ * @param {number} brightness - The new brightness value for the light source.
+ * @returns {LightSource} The light source with the updated brightness.
+ */
+const changeBrightness = (name: string, location: string, brightness: number): LightSource => {
+    const targetLightSource = findLightSourceByNameAndLocation(name, location)
+    targetLightSource.brightness = brightness;
+    targetLightSource.status = brightness > 0;
+
+    return targetLightSource;
+}
+
 export default {
     createControlPanel,
     getWholeControlCenter,
@@ -136,5 +179,8 @@ export default {
     findUserByName,
     findLightSourceByNameAndLocation,
     findSceneByName,
-    getAllUsers
+    getAllUsers,
+    turnLightOn,
+    turnLightOff,
+    changeBrightness
 }

@@ -28,7 +28,7 @@ const turnSceneOn = (name: string): Scene => {
     const targetScene = sceneDb.getAllScenes().find((scene) => scene.name === name);
 
     if (!targetScene) {
-        throw new Error(`Scene '${targetScene.name}' not found!`)
+        throw new Error(`Scene '${name}' not found!`)
     }
 
     return sceneDb.turnSceneOn(name);

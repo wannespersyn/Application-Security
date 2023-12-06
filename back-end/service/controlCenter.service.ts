@@ -1,10 +1,8 @@
 import controlCenterDb from "../domain/data-access/controlCenter.db";
-import { ControlCenter } from "../domain/model/controlCenter";
+import {ControlCenter} from "../domain/model/controlCenter";
 import {User} from "../domain/model/user";
 import {LightSource} from "../domain/model/lightSource";
 import {Scene} from "../domain/model/scene";
-import sceneService from "./scene.service";
-import lightSourceService from "./lightSource.service";
 
 /**
  * Creates a new control center with the provided users, light sources, and scenes.
@@ -12,13 +10,9 @@ import lightSourceService from "./lightSource.service";
  * @returns {ControlCenter} The created ControlCenter.
  */
 const createControlCenter = (): ControlCenter => {
-    const control_center = controlCenterDb.createControlPanel();
-    return null;
+    return controlCenterDb.createControlPanel();
 }
 
-const getAllUsers = (): User[] => {
-    return controlCenterDb.getAllUsers();
-}
 
 
 /**
@@ -72,10 +66,122 @@ const addScene = ({id, name, activationTargets}: Scene) : Scene => {
     return controlCenterDb.addScene(scene);
 }
 
+/**
+ * Turn the light with the specified name on.
+ *
+ * @param {string} name - The name of the light source to turn on.
+ * @param {string} location - The location of the light source to turn on.
+ * @returns {LightSource} The light source that was turned on, or null if not found.
+ *
+ * @throws {Error} If the light source with the specified name is not found.
+ */
+const turnLightOn = (name: string, location: string): LightSource => {
+    const targetLightSource = controlCenterDb.findLightSourceByNameAndLocation(name, location)
+
+    if (!targetLightSource) {
+        throw new Error(`Light source with name: '${name}' and location: '${location} not found!`)
+    }
+
+    return controlCenterDb.turnLightOn(name, location)
+};
+
+/**
+ * Turn the light with the specified name off.
+ *
+ * @param {string} name - The name of the light source to turn on.
+ * @param {string} location - The location of the light source to turn on.
+ * @returns {LightSource} The light source that was turned on
+ *
+ * @throws {Error} If the light source with the specified name is not found.
+ */
+const turnLightOff = (name: string, location: string): LightSource => {
+    const targetLightSource = controlCenterDb.findLightSourceByNameAndLocation(name, location)
+
+    if (!targetLightSource) {
+        throw new Error(`Light source with name: '${name}' and location: '${location} not found!`)
+    }
+
+    return controlCenterDb.turnLightOff(name, location);
+};
+
+/**
+ * Change the brightness of the light with the specified name.
+ *
+ * @param {string} name - The name of the light source to turn on.
+ * @param {string} location - The location of the light source to turn on.
+ * @param {number} brightness - The brightness that the light source should be.
+ * @returns {LightSource} The light source that was turned on, or null if not found.
+ *
+ * @throws {Error} If the light source with the specified name is not found, or if the brightness is out of the valid range.
+ */
+const changeBrightnessLight= (name: string, location: string, brightness: number): LightSource | null => {
+    const targetLightSource = controlCenterDb.findLightSourceByNameAndLocation(name, location)
+
+    if (!targetLightSource) {
+        throw new Error(`Light source with name: '${name}' and location: '${location} not found!`)
+    }
+
+    if (brightness > 100 || brightness < 0) {
+        throw new Error("Brightness must be between 0 & 100 (inclusive)!")
+    }
+
+    return controlCenterDb.changeBrightness(name, location, brightness);
+};
+
+/**
+ * Returns all users in the Control Center.
+ *
+ * @returns {User[]} All users in the Control Center.
+ */
+const getAllUsers = (): User[] => {
+    return controlCenterDb.getAllUsers();
+}
+
+/**
+ * Returns the light source with the specified name and location.
+ *
+ * @param {string} name - The name of the light source to find.
+ * @param {string} location - The location of the light source to find.
+ * @returns {LightSource} The light source with the specified name and location, or null if not found.
+ */
+const getSpecificLighSource = (name, location): LightSource => {
+    return controlCenterDb.findLightSourceByNameAndLocation(name, location);
+}
+
+/**
+ * Returns the scene with the specified name.
+ *
+ * @param {string} name - The name of the scene to find.
+ * @returns {Scene} The scene with the specified name, or null if not found.
+ */
+const getSpecificScene = (name): Scene => {
+    return controlCenterDb.findSceneByName(name);
+}
+
+/**
+ * Returns the user with the specified name.
+ *
+ * @param {string} name - The name of the user to find.
+ * @returns {User} The user with the specified name, or null if not found.
+ */
+const getSpecificUser = (name): User => {
+    return controlCenterDb.findUserByName(name);
+}
+
+
 export default {
     createControlCenter,
+
     addUserToControlCenter,
     addLightSource,
     addScene,
-    getAllUsers
+
+    turnLightOn,
+    turnLightOff,
+    changeBrightnessLight,
+
+    getAllUsers,
+    getSpecificLighSource,
+    getSpecificScene,
+    getSpecificUser
 };

@@ -29,51 +29,8 @@ const createLightSource = ({id, name, location, brightness, status}: LightSource
  */
 const getAllLightSources = (): LightSource[] => lightSources;
 
-/**
- * Turns on the specified light source.
- *
- * @param {string} name - The name of the light source to turn on.
- * @returns {LightSource} The light source that was turned on.
- */
-const turnLightOn = (name: string): LightSource => {
-    const targetLightSource = lightSources.find((lightSource) => lightSource.name === name)
-    targetLightSource.status = true;
-
-    return targetLightSource;
-};
-
-/**
- * Turns off the specified light source.
- *
- * @param {string} name - The name of the light source to turn off.
- * @returns {LightSource} The light source that was turned off.
- */
-const turnLightOff = (name: string): LightSource => {
-    const targetLightSource = lightSources.find((lightSource) => lightSource.name === name)
-    targetLightSource.status = false;
-
-    return targetLightSource;
-};
-
-/**
- * Changes the brightness of the specified light source.
- *
- * @param {string} name - The name of the light source to change brightness.
- * @param {number} brightness - The new brightness value for the light source.
- * @returns {LightSource} The light source with the updated brightness.
- */
-const changeBrightness = (name: string, brightness: number): LightSource => {
-    const targetLightSource = lightSources.find((lightSource) => lightSource.name === name)
-    targetLightSource.brightness = brightness;
-
-    return targetLightSource;
-}
-
 export default {
     createLightSource,
-    getAllLightSources,
-    turnLightOn,
-    turnLightOff,
-    changeBrightness
+    getAllLightSources
 }
 

@@ -64,72 +64,6 @@ const lightSourceRouter = express.Router();
  *               $ref: '#/components/schemas/LightSource'
  *       500:
  *         description: Some server error
- *
- * /LightSource/turnLightOn:
- *   post:
- *      summary: Turn the light on
- *      tags: [LightSource]
- *      requestBody:
- *        required: true
- *        content:
- *          application.json:
- *            schema:
- *              type: object
- *              properties:
- *                name:
- *                  type: string
- *      responses:
- *          200:
- *              description: A LightSource object
- *              content:
- *                  application.json:
- *                      schema:
- *                        $ref: '#/components/schemas/LightSource'
- *
- * /LightSource/turnLightOff:
- *   post:
- *      summary: Turn the light off
- *      tags: [LightSource]
- *      requestBody:
- *        required: true
- *        content:
- *          application.json:
- *            schema:
- *              type: object
- *              properties:
- *                name:
- *                  type: string
- *      responses:
- *          200:
- *              description: A LightSource object
- *              content:
- *                  application.json:
- *                      schema:
- *                        $ref: '#/components/schemas/LightSource'
- *
- * /LightSource/changeBrightness:
- *   post:
- *      summary: Change the brightness of the light
- *      tags: [LightSource]
- *      requestBody:
- *        required: true
- *        content:
- *          application.json:
- *            schema:
- *              type: object
- *              properties:
- *                name:
- *                  type: string
- *                brightness:
- *                  type: number
- *      responses:
- *          200:
- *              description: A LightSource object
- *              content:
- *                  application.json:
- *                      schema:
- *                        $ref: '#/components/schemas/LightSource'
- *
  */
 
 lightSourceRouter.post('/', (req: Request, res: Response) => {
@@ -142,35 +76,5 @@ lightSourceRouter.post('/', (req: Request, res: Response) => {
     }
 })
 
-lightSourceRouter.post('/turnLightOn', (req: Request, res: Response) => {
-    try {
-        const name  = <string>req.body;
-        const result = lightSourceService.turnLightOn(name);
-        res.status(200).json(result);
-    } catch(error) {
-        res.status(400).json({status: "error", errorMessage: error.message});
-    }
-})
-
-lightSourceRouter.post('/turnLightOff', (req: Request, res: Response) => {
-    try {
-        const name  = <string>req.body;
-        const result = lightSourceService.turnLightOff(name);
-        res.status(200).json(result);
-    } catch(error) {
-        res.status(400).json({status: "error", errorMessage: error.message});
-    }
-})
-
-lightSourceRouter.post('/changeBrightness', (req: Request, res: Response) => {
-    try {
-        const name  = <string>req.body;
-        const brightness  = <number>req.body;
-        const result = lightSourceService.changeBrightnessLight(name, brightness);
-        res.status(200).json(result);
-    } catch(error) {
-        res.status(400).json({status: "error", errorMessage: error.message});
-    }
-})
 
 export { lightSourceRouter };
