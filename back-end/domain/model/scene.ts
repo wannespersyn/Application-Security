@@ -1,37 +1,29 @@
+import { 
+    Scene as ScenePrisma,
+    LightSources as LightSourcePrisma
+} from "@prisma/client";
 import { LightSource } from "./lightSource";
 
 export class Scene {
 
+    readonly id?: number;
     readonly name: string;
-    readonly activationTargets: Array<LightSource>;
-    readonly id: number;
+    readonly lightSources: LightSource[];
 
-
-    /**
-     * Constructor for the Scene class.
-     *
-     * @param {object} scene - An object containing the id, name and activationTargets for the new scene.
-     * @param {id} scene.id - The id of the scene.
-     * @param {string} scene.name - The name of the scene.
-     * @param {Array} scene.activationTargets - The lights that need to turn on.
-     */
-    constructor (scene: {id: number, name: string, activationTargets: Array<LightSource>}) {
-        this.validation(scene);
+    constructor (scene: {id: number, name: string, lightSources: LightSource[]}) {
+        this.validate(scene);
 
         this.id = scene.id;
         this.name = scene.name;  
-        this.activationTargets = scene.activationTargets;
+        this.lightSources = scene.lightSources;
     }
 
-    /**
-     * Validates the scene by checking for duplicate light sources.
-     *
-     * @param {object} scene - An object containing the name and activationTargets for the new scene.
-     * @throws {Error} If a duplicate light source is found.
-     */
-    validation(scene: { name: string, activationTargets: Array<LightSource> }) {
+    validate(scene: { name: string, lightSources: Array<LightSource> }) {
         const pairs: string[] = [];
-        for (const target of scene.activationTargets) {
+        if (scene.lightSources.length === 0) {
+            throw new Error("No light sources found!");
+        } else {}
+        for (const target of scene.lightSources) {
             const pair = `${target.name}-${target.location}`;
 
             if (pairs.includes(pair)) {
@@ -41,4 +33,17 @@ export class Scene {
             }
         }
     }
+
+    static from({ 
+        id,
+        name,
+        lightSources
+     }: ScenePrisma & { lightSources: LightSourcePrisma[] }) {
+        return new Scene({
+            id,
+            name,
+            lightSources: lightSources.map((lightSource) => LightSource.from(lightSource))
+        })
+    }
+
 }

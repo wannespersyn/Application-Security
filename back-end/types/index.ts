@@ -11,27 +11,31 @@ import { Scene } from "../domain/model/scene";
 
 type UserInput = {
     id?: number;
-    name?: string;
-    password?: string;
+    name: string;
+    password: string;
     admin?: boolean;
 }
 
 type LightSourceInput = {
+    id?: number;
     name: string;
     location: string;
-    brightness: number;
-    status: boolean;
+    brightness?: number;
+    status?: boolean;
 }
 
 type SceneInput = {
+    id?: number;
     name: string;
-    activationTargets: LightSource[];
+    lightSources: LightSource[];
 }
 
-type ControlCenterInput= {
-    users: User[];
-    light_sources: LightSource[];
-    scenes: Scene[];
+type ControlCenterInput = {
+    id?: number;
+    name: string;
+    users?: User[];
+    light_sources?: LightSource[];
+    scenes?: Scene[];
 }
 
 export {

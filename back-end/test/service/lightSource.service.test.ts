@@ -5,10 +5,10 @@ import lightSourceService from "../../service/lightSource.service";
 const validName = "First Floor WC";
 const validLocation = "WC"
 
-let mockLightSourceDbCreateLightSource: jest.SpyInstance<LightSource, [LightSource]>;
+let mockLightSourceDbCreateLightSource: jest.Mock;
 
 beforeEach( () => {
-    mockLightSourceDbCreateLightSource = jest.spyOn(lightSourceDb, 'createLightSource')
+    mockLightSourceDbCreateLightSource = jest.fn();
 });
 
 afterEach(() => {

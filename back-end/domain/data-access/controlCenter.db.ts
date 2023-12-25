@@ -4,183 +4,198 @@ import { Scene } from "../model/scene";
 import { ControlCenter } from "../model/controlCenter";
 import sceneService from "../../service/scene.service";
 import lightSourceService from "../../service/lightSource.service";
+import database from "../../util/database";
+import userService from "../../service/user.service";
 
-/** Preliminary databases **/
-const controlCenters: ControlCenter[] = [];
+const createControlPanel = (): Promise<ControlCenter> => {
+    const newControlCenterPrisma = database.controlCenter.create({
+        data: {
+        name: "Control Center",
+        }
+    });
 
-/**
- * Creates a new control center with the provided users, light sources, and scenes.
- *
- * @returns {ControlCenter} The created ControlCenter.
- */
-const createControlPanel = (): ControlCenter => {
-    const validationControlCenter = new ControlCenter();
-
-    controlCenters.push(validationControlCenter);
-
-    return validationControlCenter;
-}
-
-/**
- * Retrieves the entire Control Center.
- *
- * @returns {ControlCenter[]} An array containing all ControlCenter objects.
- */
-const getWholeControlCenter = (): ControlCenter[] => controlCenters;
-
-const getAllUsers = (): User[] => {
-    const currentControlCenter = controlCenters[controlCenters.length - 1];
-
-    return currentControlCenter.users;
-}
-
-/**
- * Finds a user in the Control Center by name.
- *
- * @param {string} name - The name of the user to find.
- * @returns {User} The found User object, or null if not found.
- */
-const findUserByName = (name: string): User => {
-    const currentControlCenter = controlCenters[controlCenters.length - 1];
-
-    return currentControlCenter.users.find(user => user.name === name);
-}
-
-/**
- * Finds a light source in the Control Center by name and location.
- *
- * @param {string} name - The name of the light source to find.
- * @param {string} location - The location of the light source to find.
- * @returns {LightSource} The found LightSource object, or null if not found.
- */
-const findLightSourceByNameAndLocation = (name: string, location: string): LightSource => {
-    const currentControlCenter = controlCenters[controlCenters.length - 1];
-
-    return currentControlCenter.light_sources.find(lightSource => lightSource.name === name && lightSource.location == location);
-}
-
-/**
- * Finds a scene in the Control Center by name.
- *
- * @param {string} name - The name of the scene to find.
- * @returns {Scene} The found Scene object, or null if not found.
- */
-const findSceneByName = (name: string): Scene => {
-    const currentControlCenter = controlCenters[controlCenters.length - 1];
-
-    return currentControlCenter.scenes.find(scene => scene.name === name);
+    return newControlCenterPrisma.then((controlCenter) => ControlCenter.from(controlCenter));
 }
 
 
 /**
- * Adds a new user to the Control Center.
- *
- * @param {User} user - The User object to be added.
- * @returns {User} The added User.
+ * 
+ * GETTERS
+ * 
  */
-const addUser = ({ id, name, password, admin }: User): User => {
-    const user = new User({ id, name, password, admin });
+const getAllControlCenters = async (): Promise<ControlCenter[]> => {
+    const controlCenterPrisma = await database.controlCenter.findMany({});
+    return controlCenterPrisma.map((controlCenter) => ControlCenter.from(controlCenter));
+}
 
-    const currentControlCenter = controlCenters[controlCenters.length - 1];
-    if (currentControlCenter) {
-        currentControlCenter.users = currentControlCenter.users || [];
-        currentControlCenter.users.push(user);
-    }
+const getAllUsers = async (): Promise<User[]> => {
+    const userPrisma = await database.user.findMany({
+        include: {
+            controlCenter: true
+        }
+    });
+    return userPrisma.map((user) => User.from(user));
+}
 
+const getAllLightSources = async (): Promise<LightSource[]> => {
+    const lightSourcePrisma = await database.lightSources.findMany({
+        include: {
+            controlCenter: true
+        }
+    });
+    return lightSourcePrisma.map((lightSource) => LightSource.from(lightSource));
+}
+
+const getAllScenes = async (): Promise<Scene[]> => {
+    const scenePrisma = await database.scene.findMany({
+       include: {
+              lightSources: true,
+              controlCenter: true
+         }
+    });
+    return scenePrisma.map((scene) => Scene.from(scene));
+}
+
+
+
+/**
+ * 
+ * FIND FUNCTIONS
+ * 
+ */
+
+const findUserByName = (name: string): Promise<User> => {
+    const findUserPrisma = database.user.findUnique({
+        where: {
+            name: name
+        }
+    });
+
+    return findUserPrisma.then((user) => User.from(user))
+}
+
+const findLightSourceByNameAndLocation = (name: string, location: string): Promise<LightSource> => {
+    const findLightSourcePrisma = database.lightSources.findUnique({
+        where: {
+            name_location: {
+                name: name,
+                location: location
+            }
+        },
+        include: {
+            scenes: true
+        }
+    });
+
+    return findLightSourcePrisma.then((lightSource) => LightSource.from(lightSource))
+}
+
+const findSceneByName = (name: string): Promise<Scene> => {
+    const findScenePrisma = database.scene.findUnique({
+        where: {
+            name: name
+        },
+        include: {
+            lightSources: true
+        }
+    });
+
+    return findScenePrisma.then((scene) => Scene.from(scene))
+}
+
+
+
+/**
+ * 
+ *  ADD FUNCTIONS
+ * 
+ */
+const addUser = async ({ id, name, password, admin }: User): Promise<User> => {
+    const user = await userService.createUser({id, name, password, admin})
     return user;
+
 }
 
-/**
- * Adds a new light source to the Control Center.
- *
- * @param {LightSource} lightSource - The LightSource object to be added.
- * @returns {LightSource} The added LightSource.
- */
-const addLightSource = ({ name, location, brightness, status }: LightSource): LightSource => {
-    const lightSource = lightSourceService.createLightSource({ name, location, brightness, status });
-
-    const currentControlCenter = controlCenters[controlCenters.length - 1];
-    if (currentControlCenter) {
-        currentControlCenter.light_sources = currentControlCenter.light_sources || [];
-        currentControlCenter.light_sources.push(lightSource);
-    }
-
+const addLightSource = async ({ name, location, brightness, status }: LightSource): Promise<LightSource> => {
+    const lightSource = await lightSourceService.createLightSource({name, location, brightness, status})
     return lightSource;
 }
 
-/**
- * Adds a new scene to the Control Center.
- *
- * @param {Scene} scene - The Scene object to be added.
- * @returns {Scene} The added Scene.
- */
-const addScene = ({ name, activationTargets }: Scene): Scene => {
-    const scene = sceneService.createScene({name, activationTargets})
-
-    const currentControlCenter = controlCenters[controlCenters.length - 1];
-    if (currentControlCenter) {
-        currentControlCenter.scenes = currentControlCenter.scenes || [];
-        currentControlCenter.scenes.push(scene);
-    }
-
+const addScene = async ({ name, lightSources }: Scene): Promise<Scene> => {
+    const scene = await sceneService.createScene({name, lightSources});
     return scene;
 }
 
+
 /**
- * Turns on the specified light source.
- *
- * @param {string} name - The name of the light source to turn on.
- * @param {string} location - The location of the light source to turn on.
- * @returns {LightSource} The light source that was turned on.
+ * CONTROL LIGHT FUNCTIONS
  */
-const turnLightOn = (name: string, location: string): LightSource => {
-    const targetLightSource = findLightSourceByNameAndLocation(name, location)
+const turnLightOn = async (name: string, location: string): Promise<LightSource> => {
+    const targetLightSource = await findLightSourceByNameAndLocation(name, location)
     targetLightSource.status = true;
 
     return targetLightSource;
 };
 
-/**
- * Turns off the specified light source.
- *
- * @param {string} name - The name of the light source to turn off.
- * @param {string} location - The location of the light source to turn on.
- * @returns {LightSource} The light source that was turned off.
- */
-const turnLightOff = (name: string, location: string): LightSource => {
-    const targetLightSource = findLightSourceByNameAndLocation(name, location)
+const turnLightOff = async (name: string, location: string): Promise<LightSource> => {
+    const targetLightSource = await findLightSourceByNameAndLocation(name, location)
     targetLightSource.status = false;
 
     return targetLightSource;
 };
 
-/**
- * Changes the brightness of the specified light source.
- *
- * @param {string} name - The name of the light source to change brightness.
- * @param {string} location - The location of the light source to turn on.
- * @param {number} brightness - The new brightness value for the light source.
- * @returns {LightSource} The light source with the updated brightness.
- */
-const changeBrightness = (name: string, location: string, brightness: number): LightSource => {
-    const targetLightSource = findLightSourceByNameAndLocation(name, location)
+const changeBrightness = async (name: string, location: string, brightness: number): Promise<LightSource> => {
+    const targetLightSource = await findLightSourceByNameAndLocation(name, location)
     targetLightSource.brightness = brightness;
     targetLightSource.status = brightness > 0;
 
     return targetLightSource;
 }
 
+/**
+ * 
+ * CONTROL SCENE FUNCTIONS
+ * 
+ */
+const turnSceneOn = async (name: string): Promise<Scene> => {
+    const targetScene = await findSceneByName(name)
+    targetScene.lightSources.forEach((lightSource: LightSource) => {
+        lightSource.status = true;
+    })
+
+    return targetScene;
+}
+
+const turnSceneOff = async (name: string): Promise<Scene> => {
+    const targetScene = await findSceneByName(name)
+    targetScene.lightSources.forEach((lightSource: LightSource) => {
+        lightSource.status = false;
+    })
+
+    return targetScene;
+}
+
+
 export default {
     createControlPanel,
-    getWholeControlCenter,
+
     addUser,
     addLightSource,
     addScene,
+
     findUserByName,
     findLightSourceByNameAndLocation,
     findSceneByName,
+
+    getAllControlCenters,
     getAllUsers,
+    getAllLightSources,
+    getAllScenes,
+
     turnLightOn,
     turnLightOff,
-    changeBrightness
+    changeBrightness,
+
+    turnSceneOn,
+    turnSceneOff
 }

@@ -19,22 +19,22 @@ const validActivationTargets = [
     })
 ] 
 
-test(`given: valid value for name and ActivationTargets; when: scene is created; then: scene is created`, () => {
+test(`given: valid value for name and lightSources; when: scene is created; then: scene is created`, () => {
     //given
 
     //when
     const scene = new Scene({
         id: 1,
         name: validName,
-        activationTargets: validActivationTargets
+        lightSources: validActivationTargets
     });
 
     //then
     expect(scene.name).toEqual(validName);
-    expect(scene.activationTargets).toEqual(validActivationTargets);
+    expect(scene.lightSources).toEqual(validActivationTargets);
 })
 
-test(`given: activation targets has 2x the same light source; when: scene is created; then: throw error`, () => {
+test(`given: lightSources has 2x the same light source; when: scene is created; then: throw error`, () => {
     //given
     const invalidActivationTargets = [
         new LightSource({
@@ -59,7 +59,7 @@ test(`given: activation targets has 2x the same light source; when: scene is cre
         new Scene({
             id: 2,
             name: validName,
-            activationTargets: invalidActivationTargets
+            lightSources: invalidActivationTargets
         });
     
     //then

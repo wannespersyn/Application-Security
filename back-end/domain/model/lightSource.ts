@@ -1,3 +1,7 @@
+import { LightSources as LightSourcePrisma } from "@prisma/client";
+import { Scene } from "./scene";
+
+
 export class LightSource {
 
     readonly name: string;
@@ -6,18 +10,8 @@ export class LightSource {
     public brightness: number;
     public status: boolean;
 
-    /**
-     * Creates a new instance of the LightSource class.
-     *
-     * @param {Object} lightSource - An object containing the properties of the light source.
-     * @param {number} lightSource.id - The id of the light source.
-     * @param {string} lightSource.name - The name of the light source.
-     * @param {string} lightSource.location - The location of the light source.
-     * @param {number} lightSource.brightness - The brightness level of the light source (0 to 100).
-     * @param {boolean} lightSource.status - The status of the light source (on/off).
-     */
     constructor (lightSource: {id: number, name: string, location: string, brightness: number, status: boolean}) {
-        this.validation(lightSource);
+        this.validate(lightSource);
 
         this.id = lightSource.id;
         this.name = lightSource.name;
@@ -26,22 +20,27 @@ export class LightSource {
         this.status = lightSource.status;
     }
 
-    /**
-     * Validates the properties of the light source.
-     *
-     * @param {Object} lightSource - An object containing the properties of the light source.
-     * @param {string} lightSource.name - The name of the light source.
-     * @param {string} lightSource.location - The location of the light source.
-     * @param {number} lightSource.brightness - The brightness level of the light source (0 to 100).
-     * @param {boolean} lightSource.status - The status of the light source (on/off).
-     *
-     * @throws {Error} If the brightness level is outside the valid range (0 to 100).
-     */
-    validation (lightSource: {name: string, location: string, brightness: number, status: boolean}) {
+    validate (lightSource: {name: string, location: string, brightness: number, status: boolean}) {
 
         if (lightSource.brightness > 100 || lightSource.brightness < 0) {
             throw new Error("Invalid brightness! Brightness has to be between 0 - 100")
         }
+    }
+
+    static from({
+        id,
+        name,
+        location,
+        brightness,
+        status
+    }: LightSourcePrisma): LightSource {
+        return new LightSource({
+            id,
+            name, 
+            location,
+            brightness,
+            status
+        })
     }
 
 }

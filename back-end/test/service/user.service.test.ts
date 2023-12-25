@@ -5,10 +5,10 @@ import userService from "../../service/user.service";
 const validName = "Wannes Persyn";
 const validPassword = "Test1234";
 
-let mockUserDbCreateUser: jest.SpyInstance<User, [User]>;
+let mockUserDbCreateUser: jest.Mock;
 
 beforeEach(() => {
-    mockUserDbCreateUser = jest.spyOn(userDb, 'createUser');
+    mockUserDbCreateUser = jest.fn();
 });
 
 afterEach(() => {

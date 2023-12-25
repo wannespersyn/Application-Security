@@ -56,7 +56,7 @@ const validScenes = [
     new Scene({
         id: 1,
         name: "watching tv",
-        activationTargets: [
+        lightSources: [
             validLightSources[0],
             validLightSources[1]
         ]
@@ -64,7 +64,7 @@ const validScenes = [
     new Scene({
         id: 2,
         name: "sleeping",
-        activationTargets: [
+        lightSources: [
             validLightSources[0],
             validLightSources[1],
             validLightSources[2]
@@ -72,23 +72,23 @@ const validScenes = [
     })
 ]
 
-let mockControlCenterDbCreateControlCenter: jest.SpyInstance<ControlCenter, []>;
-let mockControlCenterDbAddLightSource: jest.SpyInstance<LightSource, [LightSource]>;
-let mockControlCenterDbTurnLightOn: jest.SpyInstance<LightSource, [string, string], any>
-let mockControlCenterDbTurnLightOff: jest.SpyInstance<LightSource,[string, string]>
-let mockControlCenterDbChangeBrightness: jest.SpyInstance<LightSource, [string, string, number]>
-let mockControlCenterDbAddScene: jest.SpyInstance<Scene, [Scene]>
+let mockControlCenterDbCreateControlCenter: jest.Mock
+let mockControlCenterDbAddLightSource: jest.Mock
+let mockControlCenterDbTurnLightOn: jest.Mock
+let mockControlCenterDbTurnLightOff:jest.Mock
+let mockControlCenterDbChangeBrightness: jest.Mock
+let mockControlCenterDbAddScene: jest.Mock
 
 
 beforeEach( () => {
-    mockControlCenterDbCreateControlCenter = jest.spyOn(controlCenterDb, 'createControlPanel')
-    mockControlCenterDbAddLightSource = jest.spyOn(controlCenterDb, 'addLightSource');
+    mockControlCenterDbCreateControlCenter = jest.fn()
+    mockControlCenterDbAddLightSource = jest.fn()
     
-    mockControlCenterDbTurnLightOn = jest.spyOn(controlCenterDb, 'turnLightOn');
-    mockControlCenterDbTurnLightOff = jest.spyOn(controlCenterDb, 'turnLightOff');
-    mockControlCenterDbChangeBrightness = jest.spyOn(controlCenterDb, 'changeBrightness');
+    mockControlCenterDbTurnLightOn = jest.fn()
+    mockControlCenterDbTurnLightOff = jest.fn()
+    mockControlCenterDbChangeBrightness = jest.fn()
 
-    mockControlCenterDbAddScene = jest.spyOn(controlCenterDb, "addScene");
+    mockControlCenterDbAddScene = jest.fn()
 });
 
 afterEach(() => {
@@ -191,7 +191,7 @@ test(`given: a valid scene; when: scene is added; then: scene is added with thos
      const newScene = new Scene({
          id: 1,
          name: "cooking",
-         activationTargets: [
+         lightSources: [
              validLightSources[0],
              validLightSources[1]
          ]
@@ -213,7 +213,7 @@ test(`given: a scene with an existing name and ; when: scene is added; then: err
     const invalidScene = new Scene({
         id: 4,
         name: "watching tv",
-        activationTargets: [
+        lightSources: [
             validLightSources[0],
             validLightSources[1]
         ]
@@ -279,13 +279,13 @@ test(`given: a invalid light source location; when: turning the light on; then: 
 });
 
 
-test(`given: a valid light source name; when: turning the light off; then: the light source status should be false`, () => {
+test(`given: a valid light source name; when: turning the light off; then: the light source status should be false`, async () => {
     // given
 
     // when
     controlCenterService.createControlCenter();
     controlCenterService.addLightSource(validLightSources[0])
-    const result = controlCenterService.turnLightOff(validLightSources[0].name, validLightSources[0].location);
+    const result = await controlCenterService.turnLightOff(validLightSources[0].name, validLightSources[0].location);
 
     // then
     expect(mockControlCenterDbTurnLightOff).toHaveBeenCalledTimes(1);
@@ -322,14 +322,14 @@ test(`given: a invalid light source location; when: turning the light off; then:
     expect(result).toThrowError(`Light source with name: '${validLightSources[0].name}' and location: '${invalidLocation} not found!`)
 });
 
-test(`given: a valid light source name and brightness; when: changing brightness; then: the light source brightness should change`, () => {
+test(`given: a valid light source name and brightness; when: changing brightness; then: the light source brightness should change`, async () => {
     // given
     const validBrightness = 50;
 
     // when
     controlCenterService.createControlCenter();
     controlCenterService.addLightSource(validLightSources[0])
-    const result = controlCenterService.changeBrightnessLight(validLightSources[0].name, validLightSources[0].location, validBrightness);
+    const result = await controlCenterService.changeBrightnessLight(validLightSources[0].name, validLightSources[0].location, validBrightness);
 
     // then
     expect(mockControlCenterDbChangeBrightness).toHaveBeenCalledTimes(1);

@@ -203,6 +203,62 @@ const ControlCenterRouter = express.Router();
  *                  application.json:
  *                      schema:
  *                        $ref: '#/components/schemas/LightSource'
+ * 
+ * /Scene/turnSceneOn:
+ *   post:
+ *      summary: turn in a scene
+ *      tags: [Control Center]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application.json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                name:
+ *                  type: string
+ *      responses:
+ *          200:
+ *              description: A Scene object
+ *              content:
+ *                  application.json:
+ *                      schema:
+ *                        $ref: '#/components/schemas/Scene'
+ * 
+ * /Scene/turnSceneOff:
+ *   post:
+ *      summary: turn off a scene
+ *      tags: [Control Center]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application.json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                name:
+ *                  type: string
+ *      responses:
+ *          200:
+ *              description: A Scene object
+ *              content:
+ *                  application.json:
+ *                      schema:
+ *                        $ref: '#/components/schemas/Scene'
+ * 
+ * /getAllControlCenters:
+ *   get:
+ *      summary: Get all control centers.
+ *      tags: [Control Center]
+ *      requestBody:
+ *        required: false
+ *      responses:
+ *          200:
+ *           description: A list of Control Center objects
+ *           content:
+ *                application/json:
+ *                    schema:
+ *                      $ref: '#/components/schemas/ControlCenter'
  * /getAllUsers:
  *   get:
  *      summary: Get all users in control center.
@@ -217,19 +273,45 @@ const ControlCenterRouter = express.Router();
  *                    schema:
  *                      $ref: '#/components/schemas/User'
  * 
+ * 
+ * /getAllLightSources:
+ *   get:
+ *      summary: Get all light sources in the control center.
+ *      tags: [Control Center]
+ *      requestBody:
+ *        required: false
+ *      responses:
+ *          200:
+ *           description: A list of Light Source objects
+ *           content:
+ *                application.json:
+ *                    schema:
+ *                      $ref: '#/components/schemas/LightSource'
+ * 
+ *
+ * /getAllScenes:
+ *   get:
+ *      summary: Get all scenes in the control center.
+ *      tags: [Control Center]
+ *      requestBody:
+ *        required: false
+ *      responses:
+ *          200:
+ *           description: A list of scene objects
+ *           content:
+ *                application.json:
+ *                    schema:
+ *                      $ref: '#/components/schemas/Scene'
  * /getSpecificUser:
  *   get:
  *      summary: Get specific user in control center.
  *      tags: [Control Center]
- *      requestBody:
+ *      parameters:
+ *      - in: query
+ *        name: name
  *        required: true
- *        content:
- *          application.json:
- *            schema:
- *              type: object
- *              properties:
- *                name:
- *                  type: string
+ *        schema:
+ *           type: string
  *      responses:
  *          200:
  *           description: A User object
@@ -237,41 +319,40 @@ const ControlCenterRouter = express.Router();
  *                application/json:
  *                    schema:
  *                      $ref: '#/components/schemas/User'
+ * 
  * /getSpecificLightSource:
  *   get:
  *      summary: Get specific light source in control center.
  *      tags: [Control Center]
- *      requestBody:
+ *      parameters:
+ *      - in: query
+ *        name: name
  *        required: true
- *        content:
- *          application.json:
- *            schema:
- *              type: object
- *              properties:
- *                name:
- *                  type: string
- *                location:
- *                  type: string
+ *        schema:
+ *           type: string
+ *      - in: query
+ *        location: location
+ *        required: true
+ *        schema:
+ *           type: string
  *      responses:
  *          200:
- *           description: A LightSource object
+ *           description: A Light Source object
  *           content:
  *                application/json:
  *                    schema:
  *                      $ref: '#/components/schemas/LightSource'
+ * 
  * /getSpecificScene:
  *   get:
  *      summary: Get specific scene  in control center.
  *      tags: [Control Center]
- *      requestBody:
+ *      parameters:
+ *      - in: query
+ *        name: name
  *        required: true
- *        content:
- *          application.json:
- *            schema:
- *              type: object
- *              properties:
- *                name:
- *                  type: string
+ *        schema:
+ *           type: string
  *      responses:
  *          200:
  *           description: A Scene object
@@ -353,6 +434,45 @@ ControlCenterRouter.post('/changeBrightness', (req: Request, res: Response) => {
     }
 })
 
+/**
+ * 
+ * SCENE CONTROL FUNCTIONS
+ * 
+ */
+
+ControlCenterRouter.post('turnSceneOn', (req: Request, res: Response) => {
+    try {
+        const name  = <string>req.body;
+        const result = controlCenterService.turnSceneOn(name);
+        res.status(200).json(result);
+    } catch(error) {
+        res.status(400).json({status: "error", errorMessage: error.message});
+    }
+})
+
+ControlCenterRouter.post('turnSceneOff', (req: Request, res: Response) => {
+    try {
+        const name  = <string>req.body;
+        const result = controlCenterService.turnSceneOff(name);
+        res.status(200).json(result);
+    } catch(error) {
+        res.status(400).json({status: "error", errorMessage: error.message});
+    }
+})
+
+/**
+ * GETTERS
+ */
+
+ControlCenterRouter.get('/getAllControlCenters', async (req: Request, res: Response) => {
+    try {
+        const controlCenter = await controlCenterService.getAllControlCenters();
+        res.status(200).json(controlCenter);
+    } catch(error) {
+        res.status(400).json({status: "error", errorMessage: error.message});
+    }
+})
+
 ControlCenterRouter.get('/getAllUsers', async (req: Request, res: Response) => {
     try {
         const users = await controlCenterService.getAllUsers();
@@ -362,10 +482,34 @@ ControlCenterRouter.get('/getAllUsers', async (req: Request, res: Response) => {
     }
 })
 
+ControlCenterRouter.get('/getAllLightSources', async (req: Request, res: Response) => {
+    try {
+        const lightSources = await controlCenterService.getAllLightSources();
+        return res.status(200).json(lightSources);
+    } catch(error) {
+        res.status(400).json({status: "error", errorMessage: error.message});
+    }
+})
+
+ControlCenterRouter.get('/getAllScenes', async (req: Request, res: Response) => {
+    try {
+        const scenes = await controlCenterService.getAllScenes();
+        res.status(200).json(scenes);
+    } catch(error) {
+        res.status(400).json({status: "error", errorMessage: error.message});
+    }
+})
+
+/**
+ * 
+ * FIND FUNCTIONS
+ * 
+ */
+
 ControlCenterRouter.get('/getSpecificLighSource', async (req: Request, res: Response) => {
     try {
-        const name  = <string>req.body;
-        const location  = <string>req.body;
+        const name  = <string>req.query.name;
+        const location  = <string>req.query.location;
         const lightSource = await controlCenterService.getSpecificLighSource(name, location);
         res.status(200).json(lightSource);
     } catch(error) {
@@ -375,7 +519,7 @@ ControlCenterRouter.get('/getSpecificLighSource', async (req: Request, res: Resp
 
 ControlCenterRouter.get('/getSpecificScene', async (req: Request, res: Response) => {
     try {
-        const name  = <string>req.body;
+        const name  = <string>req.query.scene
         const scene = await controlCenterService.getSpecificScene(name);
         res.status(200).json(scene);
     } catch(error) {
@@ -385,7 +529,7 @@ ControlCenterRouter.get('/getSpecificScene', async (req: Request, res: Response)
 
 ControlCenterRouter.get('/getSpecificUser', async (req: Request, res: Response) => {
     try {
-        const name  = <string>req.body;
+        const name  = <string>req.query.name;
         const user = await controlCenterService.getSpecificUser(name);
         res.status(200).json(user);
     } catch(error) {
