@@ -16,8 +16,6 @@ const main = async () => {
         }
     });
 
-    const getControlCenter = await prisma.controlCenter.findMany();
-    console.log(JSON.stringify(getControlCenter));
 
     await prisma.user.create({
         data: {
@@ -30,30 +28,62 @@ const main = async () => {
         }
     });
 
-    const getUser = await prisma.user.findMany();
-    console.log(JSON.stringify(getUser));
-
-    const lightSource = await prisma.lightSources.create({
+    await prisma.lightSources.create({
         data: {
             name: "light",
             location: "living room",
-            brightness: 100,
-            status: true,
+            brightness: 0,
+            status: false,
             controlCenter: {
                 connect: { id: controlHomeCenter.id }
             }
         }
     });
 
-    const getLightSources = await prisma.lightSources.findMany();
-    console.log(JSON.stringify(getLightSources));
+    await prisma.lightSources.create({
+        data: {
+            name: "light table",
+            location: "kitchen",
+            brightness: 0,
+            status: false,
+            controlCenter: {
+                connect: { id: controlHomeCenter.id }
+            }
+        }
+    });
+
+    await prisma.lightSources.create({
+        data: {
+            name: "light sink",
+            location: "kitchen",
+            brightness: 0,
+            status: false,
+            controlCenter: {
+                connect: { id: controlHomeCenter.id }
+            }
+        }
+    });
+
+    const getLightSourcesKitchen = await prisma.lightSources.findMany({
+        where: {
+            location: "kitchen"
+        }
+    });
+
+    const getLightSourcesLivingRoom = await prisma.lightSources.findMany({
+        where: {
+            location: "living room"
+        }
+    });
 
 
     await prisma.scene.create({
         data: {
             name: "watching tv",
             lightSources: {
-                connect: {id: lightSource.id }
+                connect: getLightSourcesLivingRoom.map((lightSource) => ({
+                    id: lightSource.id
+                }))
             },
             controlCenter: {
                 connect: {id: controlHomeCenter.id }
@@ -61,8 +91,31 @@ const main = async () => {
         }
     });
 
+    await prisma.scene.create({
+        data: {
+            name: "cooking",
+            lightSources: {
+                connect: getLightSourcesKitchen.map((lightSource) => ({
+                    id: lightSource.id
+                }))
+            },
+            controlCenter: {
+                connect: {id: controlHomeCenter.id }
+            }
+        }
+    });
     const getScenes = await prisma.scene.findMany();
     console.log(JSON.stringify(getScenes));
+
+
+    const getControlCenter = await prisma.controlCenter.findMany();
+    console.log(JSON.stringify(getControlCenter));
+
+    const getUser = await prisma.user.findMany();
+    console.log(JSON.stringify(getUser));
+
+    const getLightSources = await prisma.lightSources.findMany();
+    console.log(JSON.stringify(getLightSources));
 
 }
 

@@ -11,7 +11,7 @@ let currentId = 1;
  * @param {LightSourceInput} param0 - Object containing the name, location, brightness, and status of the light source.
  * @returns {LightSource} The newly created light source object with the specified properties
  */
-const createLightSource = ({name, location, brightness, status}: LightSourceInput): LightSource => {
+const createLightSource = ({name, location, brightness, status}: LightSourceInput): Promise<LightSource> => {
     const lightSource = new LightSource({id: currentId++, name, location, brightness, status});
     return lightSourceDb.createLightSource(lightSource);
 };

@@ -2,7 +2,7 @@ import database from "../../util/database";
 import { LightSource } from "../model/lightSource";
 
 
-const createLightSource = async ({id, name, location, brightness, status}: LightSource): Promise<LightSource> => {
+const createLightSource = async ({name, location, brightness, status}: LightSource): Promise<LightSource> => {
     try {
         const newLightSourcePrisma = await database.lightSources.create({
             data: {
@@ -12,7 +12,7 @@ const createLightSource = async ({id, name, location, brightness, status}: Light
                 status: status,
                 controlCenter: {
                     connect: {
-                        id: id
+                        id: 1
                     }
                 },
             }

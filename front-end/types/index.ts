@@ -11,3 +11,9 @@ export type Scene = {
     name: string;
     lightSources: LightSource[];
 };
+
+export type StatusMessage = {
+    message: string;
+    type: "error" | "success";
+    
+};

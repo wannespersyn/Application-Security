@@ -8,7 +8,10 @@ const createUser = async ({ name, password, admin }: User): Promise<User> => {
             data: {
                 name: name,
                 password: password,
-                admin: admin
+                admin: admin,
+                controlCenter: {
+                    connect: { id: 1 }
+                }  
             }
         });
         return User.from(newUserPrisma);

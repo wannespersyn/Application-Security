@@ -1,19 +1,61 @@
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
+import { useState } from "react";
 
 const Header: React.FC = () => {
+    const [loggedInUser, setLoggedInUser] = useState<String | null>(null);
+
+    useEffect(() => {
+        setLoggedInUser(sessionStorage.getItem("loggedInUser"));
+    }, []);
+
+    const handleClick = () => {
+        sessionStorage.removeItem("loggedInUser");
+        setLoggedInUser(null);
+    };
+
     return (
-        <header className="bg-slate-400">
-            <h1>Home Control Center</h1>
-            <nav>
-                <Link href="/controlLights">
-                    Lights
-                </Link>
-                <Link href="/controlScenes">
-                    Scenes
-                </Link>
-            </nav>
-        </header>
+        <>
+            <header className="mx-auto bg-gray-800 py-4 text-white">
+                <nav className="m-5 md:flex md:items-start md:justify-between">
+                    <div className="text-2xl">
+                        <span>
+                            <img className="h-10 inline" src="/logo.png" alt="logo" />
+                            Control Home Center
+                        </span>
+                    </div>
+                    <ul className="uppercase flex justify-between gap-10 mr-16 md:items-center m-auto">
+                        <li>
+                            <a href="/">Home</a>
+                        </li>
+                        <li>
+                            <a href="/controlLights">Lights</a>
+                        </li>
+                        <li>
+                            <a href="/controlScenes">Scenes</a>
+                        </li>
+                        <li>
+                            <a href="/SystemManagement">System management</a>
+                        </li>
+                        {!loggedInUser && (
+                            <li>
+                                <a href="/login">Login</a>
+                            </li>
+                        )}
+                        {loggedInUser && (
+                            <li>
+                                <a
+                                    href="#"
+                                    onClick={handleClick}>
+                                    Logout
+                                </a>
+                            </li>
+                            )}
+                       
+                    </ul>
+                </nav>
+            </header>
+        </>
     );
 }
 
