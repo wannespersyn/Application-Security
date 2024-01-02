@@ -54,14 +54,16 @@
  *                  format: int64
 */
 
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import controlCenterService from "../service/controlCenter.service";
-import { ControlCenterInput } from "../types";
+import { ControlCenterInput, UserInput } from "../types";
 import {User} from "../domain/model/user";
 import {LightSource} from "../domain/model/lightSource";
 import {Scene} from "../domain/model/scene";
 import lightSourceService from "../service/lightSource.service";
 import {lightSourceRouter} from "./lightSource.routes";
+import { requestToBodyStream } from "next/dist/server/body-streams";
+import next from "next";
 
 
 const ControlCenterRouter = express.Router();
@@ -85,9 +87,9 @@ const ControlCenterRouter = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/ControlCenter'
  *
- * /controlCenter/addUser:
+ * /controlCenter/signUp:
  *   post:
- *      summary: Add a new user to control center.
+ *      summary: sign a new user up to control center.
  *      tags: [Control Center]
  *      requestBody:
  *        required: true
@@ -97,7 +99,7 @@ const ControlCenterRouter = express.Router();
  *              $ref: '#/components/schemas/UserInput'
  *      responses:
  *          200:
- *              description: A ControlCenter object
+ *              description: A user object
  *              content:
  *                  application/json:
  *                      schema:
@@ -140,7 +142,7 @@ const ControlCenterRouter = express.Router();
  *                        $ref: '#/components/schemas/ControlCenter'
  *
  * /LightSource/turnLightOn:
- *   post:
+ *   put:
  *      summary: Turn the light on
  *      tags: [Control Center]
  *      requestBody:
@@ -161,7 +163,7 @@ const ControlCenterRouter = express.Router();
  *                        $ref: '#/components/schemas/LightSource'
  *
  * /LightSource/turnLightOff:
- *   post:
+ *   put:
  *      summary: Turn the light off
  *      tags: [Control Center]
  *      requestBody:
@@ -182,7 +184,7 @@ const ControlCenterRouter = express.Router();
  *                        $ref: '#/components/schemas/LightSource'
  *
  * /LightSource/changeBrightness:
- *   post:
+ *   put:
  *      summary: Change the brightness of the light
  *      tags: [Control Center]
  *      requestBody:
@@ -205,7 +207,7 @@ const ControlCenterRouter = express.Router();
  *                        $ref: '#/components/schemas/LightSource'
  * 
  * /Scene/turnSceneOn:
- *   post:
+ *   put:
  *      summary: turn in a scene
  *      tags: [Control Center]
  *      requestBody:
@@ -226,7 +228,7 @@ const ControlCenterRouter = express.Router();
  *                        $ref: '#/components/schemas/Scene'
  * 
  * /Scene/turnSceneOff:
- *   post:
+ *   put:
  *      summary: turn off a scene
  *      tags: [Control Center]
  *      requestBody:
@@ -261,6 +263,8 @@ const ControlCenterRouter = express.Router();
  *                      $ref: '#/components/schemas/ControlCenter'
  * /getAllUsers:
  *   get:
+ *      security:
+ *         - bearerAuth: []
  *      summary: Get all users in control center.
  *      tags: [Control Center]
  *      requestBody:
@@ -360,6 +364,88 @@ const ControlCenterRouter = express.Router();
  *                application/json:
  *                    schema:
  *                      $ref: '#/components/schemas/Scene'
+ * 
+ * /getIdLightSource:
+ *   get:
+ *      summary: Get id from light source in control center.
+ *      tags: [Control Center]
+ *      parameters:
+ *      - in: query
+ *        name: name
+ *        required: true
+ *        schema:
+ *           type: string
+ *      - in: query
+ *        location: location
+ *        required: true
+ *        schema:
+ *           type: string
+ *      responses:
+ *          200:
+ *           description: A id of a Light Source object
+ *           content:
+ *                application/json:
+ *                    schema:
+ *                      $ref: '#/components/schemas/LightSource'
+ * 
+ * /deleteLightSource:
+ *   del:
+ *      summary: delete light source in control center.
+ *      tags: [Control Center]
+ *      parameters:
+ *      - in: query
+ *        name: name
+ *        required: true
+ *        schema:
+ *           type: string
+ *      - in: query
+ *        location: location
+ *        required: true
+ *        schema:
+ *           type: string
+ *      responses:
+ *          200:
+ *           description: Deleted a light source object
+ *           content:
+ *                application/json:
+ *                    schema:
+ *                      $ref: '#/components/schemas/LightSource'
+ * 
+ * /deleteScene:
+ *   del:
+ *      summary: delete scene in control center.
+ *      tags: [Control Center]
+ *      parameters:
+ *      - in: query
+ *        name: name
+ *        required: true
+ *        schema:
+ *           type: string
+ *      responses:
+ *          200:
+ *           description: Deleted a scene object
+ *           content:
+ *                application/json:
+ *                    schema:
+ *                      $ref: '#/components/schemas/Scene'
+ * 
+ * /deleteUser:
+ *   del:
+ *      summary: delete user in control center.
+ *      tags: [Control Center]
+ *      parameters:
+ *      - in: query
+ *        name: name
+ *        required: true
+ *        schema:
+ *           type: string
+ *      responses:
+ *          200:
+ *           description: Deleted a user object
+ *           content:
+ *                application/json:
+ *                    schema:
+ *                      $ref: '#/components/schemas/User'
  */
 
 ControlCenterRouter.post('/', (req: Request, res: Response) => {
@@ -370,21 +456,59 @@ ControlCenterRouter.post('/', (req: Request, res: Response) => {
         res.status(400).json({status: "error", errorMessage: error.message});
     }
 })
+/**
+ * @swagger
+ * /controlCenter/login:
+ *   post:
+ *      summary: Login using name and password. Returns a token an object with JWT token and user name when succesfull.
+ *      tags: [Control Center]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application.json:
+ *            schema:
+ *              $ref: '#/components/schemas/UserInput'
+ *      responses:
+ *         200:
+ *            description: The created user object
+ *            content:
+ *             application/json:
+ *               schema:  
+ *                 $ref: '#/components/schemas/User'
+ */
 
-ControlCenterRouter.post('/addUser', (req: Request, res: Response) => {
+ControlCenterRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user = <User>req.body;
-        const result = controlCenterService.addUserToControlCenter(user);
-        res.status(200).json(result);
+        const user = <UserInput>req.body;
+        const result = await controlCenterService.authenticate(user);
+        res.status(200).json({message: "authentication succesfull", token: result});
     } catch(error) {
-        res.status(400).json({status: "error", errorMessage: error.message});
+        next(error);
     }
 })
-ControlCenterRouter.post('/addLightSource', (req: Request, res: Response) => {
+/**
+ * 
+ * ADD FUNCTIONS
+ * 
+ */
+ControlCenterRouter.post('/signUp', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = <UserInput>req.body;
+        const result = await controlCenterService.addUserToControlCenter(user);
+        res.status(200).json(result);
+    } catch(error) {
+        next(error);
+    }
+})
+
+ControlCenterRouter.post('/addLightSource', async (req: Request & { auth }, res: Response) => {
     try {
         const lightSource = <LightSource>req.body;
-        const result = controlCenterService.addLightSource(lightSource);
+        const { admin } = req.auth;
+        const result = await controlCenterService.addLightSource(lightSource, { admin });
         res.status(200).json(result);
+        console.log(result)
+        return result;
     } catch(error) {
         res.status(400).json({status: "error", errorMessage: error.message});
     }
@@ -400,7 +524,49 @@ ControlCenterRouter.post('/addScene', (req: Request, res: Response) => {
     }
 })
 
-ControlCenterRouter.post('/turnLightOn', (req: Request, res: Response) => {
+/**
+ * 
+ * DELETE FUNCTIONS
+ * 
+ */
+ControlCenterRouter.delete('/deleteLightSource', (req: Request, res: Response) => {
+    try {
+        const name  = <string>req.query.name;
+        const location  = <string>req.query.location;
+        const result = controlCenterService.deleteLightSource(name, location);
+        res.status(200).json(result);
+    } catch(error) {
+        res.status(400).json({status: "error", errorMessage: error.message});
+    }
+})
+
+ControlCenterRouter.delete('/deleteScene', (req: Request, res: Response) => {
+    try {
+        const name  = <string>req.query.name;
+        const result = controlCenterService.deleteScene(name);
+        res.status(200).json(result);
+    } catch(error) {
+        res.status(400).json({status: "error", errorMessage: error.message});
+    }
+})
+
+ControlCenterRouter.delete('/deleteUser', (req: Request, res: Response) => {
+    try {
+        const name  = <string>req.query.name;
+        const result = controlCenterService.deleteUser(name);
+        res.status(200).json(result);
+    } catch(error) {
+        res.status(400).json({status: "error", errorMessage: error.message});
+    }
+})
+
+/**
+ * 
+ * LIGHT CONTROL FUNTIONS
+ * 
+ */
+
+ControlCenterRouter.put('/turnLightOn', (req: Request, res: Response) => {
     try {
         const name  = <string>req.body;
         const location  = <string>req.body;
@@ -411,7 +577,7 @@ ControlCenterRouter.post('/turnLightOn', (req: Request, res: Response) => {
     }
 })
 
-ControlCenterRouter.post('/turnLightOff', (req: Request, res: Response) => {
+ControlCenterRouter.put('/turnLightOff', (req: Request, res: Response) => {
     try {
         const name  = <string>req.body;
         const location  = <string>req.body;
@@ -422,7 +588,7 @@ ControlCenterRouter.post('/turnLightOff', (req: Request, res: Response) => {
     }
 })
 
-ControlCenterRouter.post('/changeBrightness', (req: Request, res: Response) => {
+ControlCenterRouter.put('/changeBrightness', (req: Request, res: Response) => {
     try {
         const name  = <string>req.body;
         const location  = <string>req.body;
@@ -440,17 +606,18 @@ ControlCenterRouter.post('/changeBrightness', (req: Request, res: Response) => {
  * 
  */
 
-ControlCenterRouter.post('turnSceneOn', (req: Request, res: Response) => {
+ControlCenterRouter.put('/Scene/turnSceneOn', (req: Request, res: Response) => {
     try {
         const name  = <string>req.body;
         const result = controlCenterService.turnSceneOn(name);
         res.status(200).json(result);
+        return result;
     } catch(error) {
         res.status(400).json({status: "error", errorMessage: error.message});
     }
 })
 
-ControlCenterRouter.post('turnSceneOff', (req: Request, res: Response) => {
+ControlCenterRouter.put('turnSceneOff', (req: Request, res: Response) => {
     try {
         const name  = <string>req.body;
         const result = controlCenterService.turnSceneOff(name);
@@ -464,7 +631,7 @@ ControlCenterRouter.post('turnSceneOff', (req: Request, res: Response) => {
  * GETTERS
  */
 
-ControlCenterRouter.get('/getAllControlCenters', async (req: Request, res: Response) => {
+ControlCenterRouter.get('/getAllControlCenters', async (req: Request & { auth }, res: Response) => {
     try {
         const controlCenter = await controlCenterService.getAllControlCenters();
         res.status(200).json(controlCenter);
@@ -478,13 +645,14 @@ ControlCenterRouter.get('/getAllUsers', async (req: Request, res: Response) => {
         const users = await controlCenterService.getAllUsers();
         res.status(200).json(users);
     } catch(error) {
-        res.status(400).json({status: "error", errorMessage: error.message});
+        next(error);
     }
 })
 
-ControlCenterRouter.get('/getAllLightSources', async (req: Request, res: Response) => {
+ControlCenterRouter.get('/getAllLightSources', async (req: Request & { auth }, res: Response) => {
     try {
-        const lightSources = await controlCenterService.getAllLightSources();
+        const { name, admin } = req.auth;   
+        const lightSources = await controlCenterService.getAllLightSources({name, admin});
         return res.status(200).json(lightSources);
     } catch(error) {
         res.status(400).json({status: "error", errorMessage: error.message});
@@ -522,6 +690,18 @@ ControlCenterRouter.get('/getSpecificScene', async (req: Request, res: Response)
         const name  = <string>req.query.scene
         const scene = await controlCenterService.getSpecificScene(name);
         res.status(200).json(scene);
+    } catch(error) {
+        res.status(400).json({status: "error", errorMessage: error.message});
+    }
+})
+
+ControlCenterRouter.get('/getIdLightSource', async (req: Request, res: Response) => {
+    try {
+        const name  = <string>req.query.name;
+        const location  = <string>req.query.location;
+        const result = await controlCenterService.getIdFromLightSource(name, location);
+        res.status(200).json(result);
+        return result;
     } catch(error) {
         res.status(400).json({status: "error", errorMessage: error.message});
     }

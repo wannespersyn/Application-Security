@@ -29,7 +29,6 @@ test(`given: a valid light source; when: light source is created; then: light so
     expect(mockLightSourceDbCreateLightSource).toHaveBeenCalledTimes(1);
     expect(mockLightSourceDbCreateLightSource).toHaveBeenCalledWith(
         new LightSource(({
-            id: 1,
             name: validName,
             location: validLocation,
             brightness: 0,

@@ -10,7 +10,6 @@ import { User } from "../domain/model/user";
 import { Scene } from "../domain/model/scene";
 
 type UserInput = {
-    id?: number;
     name: string;
     password: string;
     admin?: boolean;
@@ -38,9 +37,15 @@ type ControlCenterInput = {
     scenes?: Scene[];
 }
 
+type AuthenticationResponse = {
+    token: string;
+    name: string;
+}
+
 export {
     UserInput,
     LightSourceInput,
     SceneInput,
-    ControlCenterInput
+    ControlCenterInput,
+    AuthenticationResponse
 }

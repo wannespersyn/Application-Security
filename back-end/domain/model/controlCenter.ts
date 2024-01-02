@@ -16,8 +16,15 @@ export class ControlCenter {
     public scenes: Scene[] = [];
     
     constructor (name: string) {
+        this.validate({name});
+
         this.name = name;
-        this.users = [new User({id: 0, name: "admin", admin: true, password: "Admin123!"})];
+    }
+
+    validate (controlCenter: {name: string}) {
+        if (controlCenter.name.length < 3) {
+            throw new Error("Invalid name! Name has to be at least 3 characters long")
+        }
     }
     
     static from({

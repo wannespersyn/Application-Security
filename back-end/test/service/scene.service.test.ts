@@ -5,14 +5,12 @@ import sceneService from "../../service/scene.service";
 const validName = "watching tv";
 const validActivationTargets = [
     new LightSource({
-        id: 1,
         name: "Light 1",
         location: "Living",
         brightness: 50,
         status: false
     }),
     new LightSource({
-        id: 2,
         name: "Light 3",
         location: "Living",
         brightness: 100,
@@ -44,7 +42,6 @@ test(`given: a valid scene; when: scene is created; then: scene is created with 
     expect(mockSceneDbCreateScene).toHaveBeenCalledTimes(1);
     expect(mockSceneDbCreateScene).toHaveBeenCalledWith(
         new Scene(({
-            id: 1,
             name: validName,
             lightSources: validActivationTargets
         }))

@@ -9,7 +9,6 @@ test(`given: valid value for name; when: light source is created; then: light so
 
     //when
     const light_source = new LightSource({
-        id: 1,
         name: validName,
         location: validLocation,
         brightness: validBrightness,
@@ -27,7 +26,6 @@ test(`given: brightness to high; when: light source is created; then: throw erro
     //when
     const CreateNewLightSource = () =>
         new LightSource({
-            id: 2,
             name: validName,
             location: validLocation,
             brightness: invalidBrightness,
@@ -45,7 +43,6 @@ test(`given: brightness to low; when: light source is created; then: throw error
     //when
     const CreateNewLightSource = () =>
         new LightSource({
-            id: 3,
             name: validName,
             location: validLocation,
             brightness: invalidBrightness,

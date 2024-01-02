@@ -1,5 +1,4 @@
 import { LightSources as LightSourcePrisma } from "@prisma/client";
-import { Scene } from "./scene";
 
 
 export class LightSource {
@@ -10,10 +9,9 @@ export class LightSource {
     public brightness: number;
     public status: boolean;
 
-    constructor (lightSource: {id: number, name: string, location: string, brightness: number, status: boolean}) {
+    constructor (lightSource: {name: string, location: string, brightness: number, status: boolean}) {
         this.validate(lightSource);
 
-        this.id = lightSource.id;
         this.name = lightSource.name;
         this.location = lightSource.location;
         this.brightness = lightSource.brightness;
@@ -28,14 +26,12 @@ export class LightSource {
     }
 
     static from({
-        id,
         name,
         location,
         brightness,
         status
     }: LightSourcePrisma): LightSource {
         return new LightSource({
-            id,
             name, 
             location,
             brightness,

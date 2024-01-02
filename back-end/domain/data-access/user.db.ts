@@ -21,9 +21,23 @@ const createUser = async ({ name, password, admin }: User): Promise<User> => {
     
 };
 
+const deleteUser = async (name: string): Promise<User> => {
+    try {
+        const userPrisma = await database.user.delete({
+            where: {
+                name: name
+            }
+        });
+        return User.from(userPrisma);
+    } catch (error) {
+        throw new Error(`Error deleting user: ${error.message}`);
+    }
+}
+
 
 
 
 export default {
-    createUser
+    createUser,
+    deleteUser
 }

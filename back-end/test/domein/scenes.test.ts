@@ -4,14 +4,12 @@ import { Scene} from "../../domain/model/scene";
 const validName = "watching tv";
 const validActivationTargets = [
     new LightSource({
-        id: 1,
         name: "Light 1",
         location: "Living",
         brightness: 50,
         status: true
     }),
     new LightSource({
-        id: 2,
         name: "Light 3",
         location: "Living",
         brightness: 100,
@@ -24,7 +22,6 @@ test(`given: valid value for name and lightSources; when: scene is created; then
 
     //when
     const scene = new Scene({
-        id: 1,
         name: validName,
         lightSources: validActivationTargets
     });
@@ -38,14 +35,12 @@ test(`given: lightSources has 2x the same light source; when: scene is created; 
     //given
     const invalidActivationTargets = [
         new LightSource({
-            id: 1,
             name: "Light 1",
             location: "Living",
             brightness: 100,
             status: true
         }),
         new LightSource({
-            id: 2,
             name: "Light 1",
             location: "Living",
             brightness: 10,
@@ -57,7 +52,6 @@ test(`given: lightSources has 2x the same light source; when: scene is created; 
     //when
     const CreateNewScene = () => 
         new Scene({
-            id: 2,
             name: validName,
             lightSources: invalidActivationTargets
         });

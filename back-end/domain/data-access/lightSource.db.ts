@@ -23,7 +23,24 @@ const createLightSource = async ({name, location, brightness, status}: LightSour
     }
 };
 
+const deleteLightSource = async (name: string, location: string): Promise<LightSource> => {
+    try {
+        const deletedLightSourcePrisma = await database.lightSources.delete({
+            where: {
+                name_location: {
+                    name: name,
+                    location: location
+                }
+            }
+        });
+        return LightSource.from(deletedLightSourcePrisma);
+    } catch (error) {
+        throw new Error(`Error deleting light source: ${error.message}`);
+    }
+}
+
 export default {
     createLightSource,
+    deleteLightSource
 }
 

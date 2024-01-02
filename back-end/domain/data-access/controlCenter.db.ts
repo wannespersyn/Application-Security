@@ -56,6 +56,21 @@ const getAllScenes = async (): Promise<Scene[]> => {
     return scenePrisma.map((scene) => Scene.from(scene));
 }
 
+const getIdFromLightSource = async (name: string, location: string): Promise<number> => {
+   const lightSource = await database.lightSources.findUnique({
+        where: {
+            name_location: {
+                name: name,
+                location: location
+            }
+        },
+        include: {
+            scenes: true
+        }
+    });
+    console.log(lightSource.id)
+    return lightSource.id;
+}
 
 
 /**
@@ -70,11 +85,16 @@ const findUserByName = (name: string): Promise<User> => {
             name: name
         }
     });
-
-    return findUserPrisma.then((user) => User.from(user))
+    
+    return findUserPrisma.then((user) => {
+        if (user !== null) {
+            return User.from(user); 
+        }
+        return null; 
+    });
 }
 
-const findLightSourceByNameAndLocation = (name: string, location: string): Promise<LightSource> => {
+const findLightSourceByNameAndLocation = async (name: string, location: string): Promise<LightSource> => {
     const findLightSourcePrisma = database.lightSources.findUnique({
         where: {
             name_location: {
@@ -110,20 +130,35 @@ const findSceneByName = (name: string): Promise<Scene> => {
  *  ADD FUNCTIONS
  * 
  */
-const addUser = async ({ id, name, password, admin }: User): Promise<User> => {
-    const user = await userService.createUser({id, name, password, admin})
+const addUser = async ({name, password, admin }: User): Promise<User> => {
+    const user = await userService.createUser({name, password, admin})
     return user;
 
 }
 
 const addLightSource = async ({ name, location, brightness, status }: LightSource): Promise<LightSource> => {
     const lightSource = await lightSourceService.createLightSource({name, location, brightness, status})
-    return lightSource;
+    return lightSource
 }
 
 const addScene = async ({ name, lightSources }: Scene): Promise<Scene> => {
     const scene = await sceneService.createScene({name, lightSources});
     return scene;
+}
+
+const deleteLightSource = async (name: string, location: string): Promise<LightSource> => {
+    const lightSource = await lightSourceService.deleteLightSource(name, location);
+    return lightSource;
+}
+
+const deleteScene = async (name: string): Promise<Scene> => {
+    const scene = await sceneService.deleteScene(name);
+    return scene;
+}
+
+const deleteUser = async (name: string): Promise<User> => {
+    const user = await userService.deleteUser(name);
+    return user;
 }
 
 
@@ -159,9 +194,17 @@ const changeBrightness = async (name: string, location: string, brightness: numb
  */
 const turnSceneOn = async (name: string): Promise<Scene> => {
     const targetScene = await findSceneByName(name)
-    targetScene.lightSources.forEach((lightSource: LightSource) => {
-        lightSource.status = true;
-    })
+    for (const lightSource of targetScene.lightSources) {
+        const id = await getIdFromLightSource(lightSource.name, lightSource.location)
+        database.lightSources.update({
+            where: {
+                id: id
+            },
+            data: {
+                status: true
+            }
+        })
+    }
 
     return targetScene;
 }
@@ -183,6 +226,10 @@ export default {
     addLightSource,
     addScene,
 
+    deleteLightSource,
+    deleteScene,
+    deleteUser,
+
     findUserByName,
     findLightSourceByNameAndLocation,
     findSceneByName,
@@ -191,6 +238,7 @@ export default {
     getAllUsers,
     getAllLightSources,
     getAllScenes,
+    getIdFromLightSource,
 
     turnLightOn,
     turnLightOff,

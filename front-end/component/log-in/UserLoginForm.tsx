@@ -2,9 +2,10 @@ import { StatusMessage } from "@/types";
 import { useRouter } from "next/router";
 import classNames from "classnames";
 import React, { useState } from "react";
+import ControlService from "@/service/ControlService";
 
 const UserLoginForm: React.FC = () => {
-    const [username, setUsername] = useState('');
+    const [name, setUsername] = useState('');
     const [nameError, setNameError] = useState("");
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState("");
@@ -20,7 +21,7 @@ const UserLoginForm: React.FC = () => {
     const validate = (): boolean => {
         let result = true;
 
-        if (!username && username.trim() === '') {
+        if (!name && name.trim() === '') {
             setNameError("Name is required");
             result = false;
         }
@@ -42,11 +43,28 @@ const UserLoginForm: React.FC = () => {
             return;
         }
 
-        setStatusMessage([{message: `Login succesful! Redirecting to homepage...`, type: "success"}])
+        const user = {name, password};
+        const response = await ControlService.login(user);
 
-        sessionStorage.setItem("loggedInUser", username);
+        if (response.status === 200) {
+            setStatusMessage([{message: `Login succesful! Redirecting to homepage...`, type: "success"}])
+            const user = await response.json();
 
-        setTimeout(() => { router.push("/"); }, 2000);
+            sessionStorage.setItem(
+                'loggedInUser',
+                JSON.stringify({
+                    token: user.token,
+                    name: user.name,
+                })
+            ),
+            setTimeout(() => { router.push("/"); }, 2000);
+        } else if (response.status === 401) {
+            const { errorMessage }  = await response.json();
+            setStatusMessage([{message: errorMessage, type: "error"}]);
+        } else {
+            setStatusMessage([{message: "An error occurred. Try again later.", type: "error"}]);
+        }
+
     };
 
     return (
@@ -74,7 +92,7 @@ const UserLoginForm: React.FC = () => {
                             className="input"
                             type="text"
                             id="usernameInput"
-                            value={username}
+                            value={name}
                             onChange={(event) => setUsername(event.target.value)}
                             placeholder="Username"
                         />

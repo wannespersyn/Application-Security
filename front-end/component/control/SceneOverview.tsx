@@ -8,7 +8,6 @@ type Props = {
 
 const SceneOverview: React.FC<Props> = ({ scenes }: Props) => {
     const [activatedScenes, setActivatedScenes] =  useState<Set<Number>>(new Set());
-    const [updateActivatedScene, setUpdateActivatedScene] = useState<Set<Number>>(new Set());
 
     const handleSubmit = (scene: Scene) => (event: React.FormEvent) => {
         event.preventDefault();

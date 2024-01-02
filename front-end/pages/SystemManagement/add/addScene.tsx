@@ -1,57 +1,17 @@
 import Header from "@/component/header";
-import { useRouter } from "next/router";
+import AddSceneForm from "@/component/systemManagement/addSceneForm";
+import Navigation from "@/component/systemManagement/navigation";
 
 const AddScene: React.FC = () => {
-    const router = useRouter();
-
-    const onClickAddLight = () => {
-        router.push('/SystemManagement/add/addLight');
-        return;
-    }
-
-    const onClickAddScene = () => {
-        router.push('/SystemManagement/add/addScene');
-        return;
-    }
-
-    const onClickDeleteLight = () => {
-        router.push('/SystemManagement/delete/deleteLight');
-        return;
-    }
-
-    const onClickDeleteScene = () => {
-        router.push('/SystemManagement/delete/deleteScene');
-        return;
-    }
 
     return (
         <>
             <Header />
-            <div>
-                <section className="system-mangament-nav">
-                    <button
-                        className="system-mangament-button"
-                        onClick={onClickAddLight}>
-                        Add light
-                    </button>
-                    <button
-                        className="system-mangament-button"
-                        onClick={onClickAddScene}>
-                        Add Scene
-                    </button>
-                    <button
-                        className="system-mangament-button"
-                        onClick={onClickDeleteLight}>
-                        Delete light
-                    </button>
-                    <button
-                        className="system-mangament-button"
-                        onClick={onClickDeleteScene}>
-                        Delete Scene
-                    </button>
-                </section>
-            </div>
-            <h1>Add Scene</h1>
+            <Navigation />
+            <section className="my-4 w-2/3 mx-auto">
+                <h2 className="font-medium text-xl text-center">Add Scene</h2>
+                <AddSceneForm />
+            </section>
         </>
     );
 }

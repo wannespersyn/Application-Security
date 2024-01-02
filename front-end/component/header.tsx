@@ -1,9 +1,14 @@
+import i18next from "i18next";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { useState } from "react";
+import LanguageSwitcher from "./languageSwitcher";
+import { t } from "i18next"
+import { useRouter } from "next/router";
 
 const Header: React.FC = () => {
     const [loggedInUser, setLoggedInUser] = useState<String | null>(null);
+    const router = useRouter();
 
     useEffect(() => {
         setLoggedInUser(sessionStorage.getItem("loggedInUser"));
@@ -12,6 +17,7 @@ const Header: React.FC = () => {
     const handleClick = () => {
         sessionStorage.removeItem("loggedInUser");
         setLoggedInUser(null);
+        router.push("/login");
     };
 
     return (
@@ -29,13 +35,13 @@ const Header: React.FC = () => {
                             <a href="/">Home</a>
                         </li>
                         <li>
-                            <a href="/controlLights">Lights</a>
+                            <a href="/controlLights">{t('lights')}</a>
                         </li>
                         <li>
                             <a href="/controlScenes">Scenes</a>
                         </li>
                         <li>
-                            <a href="/SystemManagement">System management</a>
+                            <a href="/SystemManagement">{t('system.management')}</a>
                         </li>
                         {!loggedInUser && (
                             <li>
@@ -53,6 +59,7 @@ const Header: React.FC = () => {
                             )}
                        
                     </ul>
+                    <LanguageSwitcher />
                 </nav>
             </header>
         </>

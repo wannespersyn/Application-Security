@@ -1,7 +1,7 @@
 import { Scene } from "../model/scene";
 import database from "../../util/database";
 
-const createScene = async ({ id, name, lightSources }: Scene): Promise<Scene> => {
+const createScene = async ({name, lightSources }: Scene): Promise<Scene> => {
     try {
         const newScenePrisma = await database.scene.create({
             data: {
@@ -13,7 +13,7 @@ const createScene = async ({ id, name, lightSources }: Scene): Promise<Scene> =>
                 },
                 controlCenter: {
                     connect: {
-                        id: id
+                        id: 1
                     }
                 }
             },
@@ -28,6 +28,23 @@ const createScene = async ({ id, name, lightSources }: Scene): Promise<Scene> =>
     }
 };
 
+const deleteScene = async (name: string): Promise<Scene> => {
+    try {
+        const deletedScenePrisma = await database.scene.delete({
+            where: {
+                name: name
+            },
+            include: {
+                lightSources: true,
+            }
+        });
+        return Scene.from(deletedScenePrisma);
+    } catch (error) {
+        throw new Error(`Error deleting scene: ${error.message}`);
+    }
+}
+
 export default {
-    createScene
+    createScene,
+    deleteScene
 }

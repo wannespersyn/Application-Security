@@ -1,27 +1,20 @@
 import {User} from "../../domain/model/user";
 import {LightSource} from "../../domain/model/lightSource";
 import {Scene} from "../../domain/model/scene";
-import {ControlCenter} from "../../domain/model/controlCenter";
-import controlCenterDb from "../../domain/data-access/controlCenter.db";
 import controlCenterService from "../../service/controlCenter.service";
-import lightSourceDb from "../../domain/data-access/lightSource.db";
-import lightSourceService from "../../service/lightSource.service";
 
 const validUsers = [
     new User({
-        id: 1,
         name: "Wannes Persyn",
         password: "WannesPS456!",
         admin: true
     }),
     new User({
-        id: 2,
         name: "Timo De Winter",
         password: "TimoDW123#",
         admin: true
     }),
     new User({
-        id: 3,
         name: "test",
         password: "Test123!",
         admin: false
@@ -30,21 +23,18 @@ const validUsers = [
 
 const validLightSources = [
     new LightSource({
-        id: 1,
         name: "Light 1",
         location: "Living",
         brightness: 50,
         status: false
     }),
     new LightSource({
-        id: 2,
         name: "Light 3",
         location: "Living",
         brightness: 100,
         status: false
     }),
     new LightSource({
-        id: 3,
         name: "Light upstairs",
         location: "WC",
         brightness: 100,
@@ -54,7 +44,6 @@ const validLightSources = [
 
 const validScenes = [
     new Scene({
-        id: 1,
         name: "watching tv",
         lightSources: [
             validLightSources[0],
@@ -62,7 +51,6 @@ const validScenes = [
         ]
     }),
     new Scene({
-        id: 2,
         name: "sleeping",
         lightSources: [
             validLightSources[0],

@@ -1,34 +1,23 @@
+import AddService from "@/service/AddService";
 import { StatusMessage } from "@/types";
 import classNames from "classnames";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const AddLightForm: React.FC = () => {
     const [name, setName] = useState('');
-    const [nameError, setNameError] = useState("");
+    const [nameError, setNameError] = useState('');
     const [location, setLocation] = useState('');
-    const [locationError, setlocationError] = useState("");
-    const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
+    const [locationError, setLocationError] = useState('');
+    const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);    
+
+    const addLight = async (name: string, location: string) => {
+        const response = await AddService.addNewLight(name, location);
+        return response;
+    }
 
     const clearErros = () => {
         setNameError("");
-        setlocationError("");
-        setStatusMessage([]);
-    }
-
-    const validate = (): boolean => {
-        let result = true;
-
-        if (!name && name.trim() === '') {
-            setNameError("Name for light is required");
-            result = false;
-        }
-
-        if (!location && location.trim() === '') {
-            setlocationError("Location is required");
-            result = false;
-        }
-
-        return result;
+        setLocationError("");
     }
 
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
@@ -40,21 +29,39 @@ const AddLightForm: React.FC = () => {
             return;
         }
 
+        addLight(name, location);
+
         setStatusMessage([{message: `Added light succesful!`, type: "success"}])
         
     };
 
+    const validate = (): boolean => {
+        let result = true;
+
+        if (!name && name.trim() === '') {
+            setNameError("Name for light is required");
+            result = false;
+        }
+
+        if (!location && location.trim() === '') {
+            setLocationError("Location is required");
+            result = false;
+        }
+
+        return result;
+    }
+
+
     return (
         <>
-            <h2 className="font-medium text-xl text-center">Add Light</h2>
-            {statusMessage && (
+             {statusMessage && (
                 <div className="w-1/2 mx-auto">
                     <ul className="list-none mb-3 mx-auto">
                         {statusMessage.map(({message, type}, index) => (
                             <li key={index}
                                 className={classNames({
                                     "text-green-600 ": type === "success",
-                                    "text-red-600": type === "error"
+                                    "text-red-800": type === "error"
                                 })}>
                                     {message}
                             </li>
@@ -96,7 +103,7 @@ const AddLightForm: React.FC = () => {
                     </button>
 
                 </form>
-        </div>
+                </div>
         </>
     );
 }

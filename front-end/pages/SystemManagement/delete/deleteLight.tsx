@@ -1,59 +1,15 @@
 import Header from "@/component/header";
-import DeleteLightForm from "@/component/systemManagement/deleteLightForm";
-import { useRouter } from "next/router";
+import DeleteLightComponent from "@/component/systemManagement/deleteLightComponent";
+import Navigation from "@/component/systemManagement/navigation";
 
 const DeleteLight: React.FC = () => {
-    const router = useRouter();
-
-    const onClickAddLight = () => {
-        router.push('/SystemManagement/add/addLight');
-        return;
-    }
-
-    const onClickAddScene = () => {
-        router.push('/SystemManagement/add/addScene');
-        return;
-    }
-
-    const onClickDeleteLight = () => {
-        router.push('/SystemManagement/delete/deleteLight');
-        return;
-    }
-
-    const onClickDeleteScene = () => {
-        router.push('/SystemManagement/delete/deleteScene');
-        return;
-    }
-
     return (
         <>
             <Header />
-            <div>
-                <section className="system-mangament-nav">
-                    <button
-                        className="system-mangament-button"
-                        onClick={onClickAddLight}>
-                        Add light
-                    </button>
-                    <button
-                        className="system-mangament-button"
-                        onClick={onClickAddScene}>
-                        Add Scene
-                    </button>
-                    <button
-                        className="system-mangament-button"
-                        onClick={onClickDeleteLight}>
-                        Delete light
-                    </button>
-                    <button
-                        className="system-mangament-button"
-                        onClick={onClickDeleteScene}>
-                        Delete Scene
-                    </button>
-                </section>
-            </div>
+            <Navigation />
             <section className="my-4 w-1/2 mx-auto">
-                <DeleteLightForm />
+            <h2 className="font-medium text-xl text-center">Delete Light</h2>
+                <DeleteLightComponent />
             </section>
         </>
     );

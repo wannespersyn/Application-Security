@@ -17,3 +17,11 @@ export type StatusMessage = {
     type: "error" | "success";
     
 };
+
+export type User = {
+    id?: number;
+    name: string;
+    password: string;
+    admin?: boolean;
+    token?: string;
+};

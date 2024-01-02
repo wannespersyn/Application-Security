@@ -1,8 +1,12 @@
 import controlCenterDb from "../domain/data-access/controlCenter.db";
-import {ControlCenter} from "../domain/model/controlCenter";
-import {User} from "../domain/model/user";
-import {LightSource} from "../domain/model/lightSource";
-import {Scene} from "../domain/model/scene";
+import { ControlCenter } from "../domain/model/controlCenter";
+import { User } from "../domain/model/user";
+import { LightSource } from "../domain/model/lightSource";
+import { Scene } from "../domain/model/scene";
+import { AuthenticationResponse, UserInput } from "../types";
+import bcrypt from "bcrypt";
+import { generateJwtToken } from "../util/jwt";
+import { UnauthorizedError } from "express-jwt";
 
 /**
  * 
@@ -13,37 +17,73 @@ const createControlCenter = (): Promise<ControlCenter> => {
     return controlCenterDb.createControlPanel();
 }
 
+const authenticate = async ({ name, password}: UserInput): Promise<AuthenticationResponse> => {
+    const user = await getSpecificUser(name);
 
+    const isvalidPassword = await bcrypt.compare(password, user.password);
+    if (!isvalidPassword) {
+        throw new Error("Password is incorrect!");
+    }
+
+    const test = {
+        token: generateJwtToken({ name, admin: user.admin }),
+        name: user.name
+    };
+    
+    return test;
+}
 
 /**
  * 
  * ADD FUNCTIONS
  * 
  */
-const addUserToControlCenter = ({ id, name, password, admin }: User): Promise<User> => {
-    const user = new User ({id, name, password, admin});
+const addUserToControlCenter = async ({name, password, admin }: UserInput): Promise<User> => {
+    const excisting = await controlCenterDb.findUserByName(name);
 
-    if (controlCenterDb.findUserByName(user.name))
-        throw new Error(`User already in use: '${user.name}'`)
-    return controlCenterDb.addUser(user);
+    if (excisting) {
+        throw new Error(`User with name: '${name}' already exists!`);
+    }
+    
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const user = new User ({name, password: hashedPassword, admin});
+
+    return await controlCenterDb.addUser(user);
 }
 
-const addLightSource = ({id, name, location, brightness, status}: LightSource) : Promise<LightSource> => {
-    const lightSource = new LightSource({id, name, location, brightness, status})
-
-    if (controlCenterDb.findLightSourceByNameAndLocation(lightSource.name, lightSource.location))
-        throw new Error(`Light source with location: '${lightSource.location}' and 
-                                    name: '${lightSource.name}' already in use!`)
+const addLightSource = ({name, location, brightness, status}: LightSource, { admin }) : Promise<LightSource> => {
+    if (!admin) {
+        throw new UnauthorizedError('credentials_required', 
+            { message: 'You are not authorized to add light sources' });
+    }
+    const lightSource = new LightSource({name, location, brightness, status})
     return controlCenterDb.addLightSource(lightSource);
 }
 
 
-const addScene = async ({id, name, lightSources}: Scene) : Promise<Scene> => {
-    const scene = new Scene({id, name, lightSources})
-
-    if (controlCenterDb.findSceneByName(scene.name))
-        throw new Error(`Scene with name: '${scene.name}' already in exist!`)
+const addScene = async ({name, lightSources}: Scene) : Promise<Scene> => {
+    const scene = new Scene({name, lightSources})
     return controlCenterDb.addScene(scene);
+}
+
+/**
+ * 
+ * DELETE FUNCTIONS
+ * 
+ */
+const deleteLightSource = async (name: string, location: string): Promise<LightSource> => {
+    const lightSource = await controlCenterDb.deleteLightSource(name, location);
+    return lightSource;
+}
+
+const deleteScene = async (name: string): Promise<Scene> => {
+    const scene = await controlCenterDb.deleteScene(name);
+    return scene;
+}
+
+const deleteUser = async (name: string): Promise<User> => {
+    const user = await controlCenterDb.deleteUser(name);
+    return user;
 }
 
 /**
@@ -94,9 +134,9 @@ const changeBrightnessLight= (name: string, location: string, brightness: number
 const turnSceneOn = (name: string): Promise<Scene> => {
     const targetScene = controlCenterDb.findSceneByName(name)
 
-    if (!targetScene) {
-        throw new Error(`Scene '${name}' not found!`)
-    }
+    // if (!targetScene) {
+    //     throw new Error(`Scene '${name}' not found!`)
+    // }
 
     return controlCenterDb.turnSceneOn(name);
 }
@@ -125,8 +165,13 @@ const getAllUsers = (): Promise<User[]> => {
     return controlCenterDb.getAllUsers();
 }
 
-const getAllLightSources = (): Promise<LightSource[]> => {
-    return controlCenterDb.getAllLightSources();
+const getAllLightSources = async ({name, admin}): Promise<LightSource[]> => {
+    if (!name) {
+        throw new UnauthorizedError('credentials_required', 
+            { message: 'You are not authorized to view light sources' });
+    } else {
+        return controlCenterDb.getAllLightSources();
+    }
 }
 
 const getAllScenes = (): Promise<Scene[]> => {
@@ -145,13 +190,22 @@ const getSpecificUser = (name): Promise<User> => {
     return controlCenterDb.findUserByName(name);
 }
 
+const getIdFromLightSource = (name, location) => {
+    return controlCenterDb.getIdFromLightSource(name, location);
+}
+
 
 export default {
     createControlCenter,
+    authenticate,
 
     addUserToControlCenter,
     addLightSource,
     addScene,
+
+    deleteLightSource,
+    deleteScene,
+    deleteUser,
 
     turnLightOn,
     turnLightOff,
@@ -167,5 +221,7 @@ export default {
     
     getSpecificLighSource,
     getSpecificScene,
-    getSpecificUser
+    getSpecificUser,
+
+    getIdFromLightSource
 };

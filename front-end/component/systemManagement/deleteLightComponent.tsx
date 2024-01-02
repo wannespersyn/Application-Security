@@ -1,59 +1,43 @@
-import Header from "@/component/header";
-import statusMessage from "@/component/statusMessage";
-import Navigation from "@/component/systemManagement/navigation";
-import OptionChooserDelete from "@/component/systemManagement/optionChooserDelete";
 import ControlService from "@/service/ControlService";
 import DeleteService from "@/service/DeleteService";
-import { Scene, StatusMessage } from "@/types";
+import { LightSource, StatusMessage } from "@/types";
 import classNames from "classnames";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useInterval from "use-interval";
+import OptionChooserDelete from "./optionChooserDelete";
 
-const deleteScene: React.FC = () => {
-    const [allScenes, setAllScenes] = useState<Scene[]>([]);
+const DeleteLightComponent: React.FC = () => {
+    const [allLightSources, setAllLightSources] = useState<LightSource[]>([]);
 
     const [name, setName] = useState('');
-    const [nameError, setNameError] = useState("");
+    const [location, setLocation] = useState('');
     const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
 
-    const deleteScene = async (name: string) => {
-        const response = await DeleteService.DeleteScene(name);
+    const deleteLight = async (name: string, location: string) => {
+        const response = await DeleteService.DeleteLight(name, location);
         return response;
     }
 
-    const getAllScenes = async () => {
+    const getLightSources = async () => {
         try {
-            const response = await ControlService.getAllScenes();
-            const sceneData = await response.json();
-            setAllScenes(sceneData);
+            const response = await ControlService.getAllLightSources();
+            const lightSourceData = await response.json();
+            setAllLightSources(lightSourceData);
         } catch (error) {
             console.log(error);
         }
     }
 
     useEffect(() => {
-        getAllScenes();
+        getLightSources();
     }, []);
 
     useInterval(() => {
-        getAllScenes();
+        getLightSources();
     }, 1000);
 
     const clearErros = () => {
-        setNameError("");
         setStatusMessage([]);
-    }
-
-    const validate = (): boolean => {
-        let result = true;
-
-        if (!name && name.trim() === '') {
-            setNameError("Name for light is required");
-            result = false;
-        }
-
-        return result;
     }
 
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
@@ -61,23 +45,15 @@ const deleteScene: React.FC = () => {
 
         clearErros();
 
-        if (validate() == false) {
-            return;
-        }
+        deleteLight(name, location);
 
-        deleteScene(name);
-
-        setStatusMessage([{message: `Deleted the scene succesful!`, type: "success"}])
+        setStatusMessage([{message: `Deleted the light succesful!`, type: "success"}])
         
     };
 
 
     return (
         <>
-            <Header />
-            <Navigation />
-            <section className="my-4 w-1/2 mx-auto">
-            <h2 className="font-medium text-xl text-center">Delete Scene</h2>
             {statusMessage && (
                 <div className="w-1/2 mx-auto">
                     <ul className="list-none mb-3 mx-auto">
@@ -96,24 +72,24 @@ const deleteScene: React.FC = () => {
             <div className="w-1/2 mx-auto">
                 <form onSubmit={handleSubmit}>
                     <div>
-                        {/* <OptionChooserDelete options={allScenes} 
+                        <OptionChooserDelete options={allLightSources}
+                            heading= {"choose light"}
                             choice={(selectedChoice: string) => {
                                 const [name, location] = selectedChoice.split('-');
                                 setName(name);
                                 setLocation(location);
-                            }} /> */}
+                            }} />
                     </div>
 
                     <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded mx-auto" 
                         type="submit">
-                        Delete Scene
+                        Delete Light
                     </button>
                 </form>
                 </div>
-            </section>
         </>
-    );
+    )
 }
 
-export default deleteScene;
+export default DeleteLightComponent;

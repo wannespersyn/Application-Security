@@ -7,7 +7,12 @@ const HomePage: React.FC = () => {
   const [name, setName] = useState<String | null>(null);
   
   useEffect(() => {
-    setName(sessionStorage.getItem('loggedInUser'));
+    const sessionDataString = sessionStorage.getItem('loggedInUser');
+    if (!sessionDataString) {
+      return;
+    }
+    const loginData = JSON.parse(sessionDataString);
+    setName(loginData.token.name);
   }, []);
 
 
@@ -19,9 +24,9 @@ const HomePage: React.FC = () => {
           <div>
             <h2 className='text-3xl'>Hey {name}!</h2>
           </div>
-        <h2 className='text-xl'>Welcome to the Home control app.</h2>
-        <p className='italic'>In this app you can conrol the lights and scenes in your home.</p>
-        <div className='grid subgrid-col-3 my-12 gap-8 mx-16'>
+          <h2 className='text-xl'>Welcome to the Home control app.</h2>
+          <p className='italic'>In this app you can conrol the lights and scenes in your home.</p>
+          <div className='grid subgrid-col-3 my-12 gap-8 mx-16'>
           <OptionsOverview />
         </div>
       </section>

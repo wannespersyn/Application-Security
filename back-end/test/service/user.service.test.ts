@@ -23,5 +23,5 @@ test(`given: a valid user; when: user is created; then: user is created with tho
 
     //then
     expect(mockUserDbCreateUser).toHaveBeenCalledTimes(1);
-    expect(mockUserDbCreateUser).toHaveBeenCalledWith(new User({id: 1, name: validName, password: validPassword, admin:false}));
+    expect(mockUserDbCreateUser).toHaveBeenCalledWith(new User({name: validName, password: validPassword, admin:false}));
 })
