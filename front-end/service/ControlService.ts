@@ -12,14 +12,28 @@ const getAllLightSources = () => {
     });
 }
 
-const getAllUsers = async () => {
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/controlcenter/getAllUsers', {
+const getAllScenes = () => {
+    const token = JSON.parse(sessionStorage.getItem('loggedInUser') || '')?.token;
+
+    return fetch(process.env.NEXT_PUBLIC_API_URL + '/controlcenter/getAllScenes', {
         method: 'GET',
         headers: {
-            'Content-Type': 'application.json'
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token.token}`
         }
     });
-    return response;
+}
+
+const getAllUsers = () => {
+    const token = JSON.parse(sessionStorage.getItem('loggedInUser') || '')?.token;
+
+    return fetch(process.env.NEXT_PUBLIC_API_URL + '/controlcenter/getAllUsers', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token.token}`
+        }
+    });
 }
 
 const getLightSourceByNameAndLocation = async (name: string, location: string) => {
@@ -42,15 +56,6 @@ const getIdLightSource = async (name: string, location: string) => {
     return response.json();
 }
 
-const getAllScenes = async () => {
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/controlcenter/getAllScenes', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application.json'
-        }
-    });
-    return response;
-}
 const TurnSceneOn = async (name: string) => {
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/controlcenter/turnSceneOn?name=${name}`, {
         method: 'PUT',
@@ -77,9 +82,9 @@ const login = ({name, password}: User) => {
 
 const ControlService = {
     getAllLightSources,
+    getAllScenes,
     getLightSourceByNameAndLocation,
     getIdLightSource,
-    getAllScenes,
     getAllUsers,
     login
 }

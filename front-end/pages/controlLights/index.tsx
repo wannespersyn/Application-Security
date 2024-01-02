@@ -37,11 +37,6 @@ const ControlLights: React.FC = () => {
     ); 
     
 
-    //Refresh scenes every 5 seconds
-    useInterval(() => {
-        mutate('controlLights', getAllLightSources());
-    }, 5000);
-
     return (
         <>
             <Head>

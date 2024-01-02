@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import classNames from "classnames";
 import React, { useState } from "react";
 import ControlService from "@/service/ControlService";
+import Link from "next/link";
 
 const UserLoginForm: React.FC = () => {
     const [name, setUsername] = useState('');
@@ -49,7 +50,11 @@ const UserLoginForm: React.FC = () => {
         if (response.status === 200) {
             setStatusMessage([{message: `Login succesful! Redirecting to homepage...`, type: "success"}])
             const user = await response.json();
-
+            console.log(JSON.stringify({
+                token: user.token,
+                name: user.name,
+                admin: user.admin,
+            }));
             sessionStorage.setItem(
                 'loggedInUser',
                 JSON.stringify({
@@ -110,6 +115,13 @@ const UserLoginForm: React.FC = () => {
                         {passwordError && (
                             <div className="text-red-800"> {passwordError} </div>
                         )}
+                    </div>
+                    <div className="w-full text-center pb-1">
+                        <a 
+                            href="/login/register"
+                            className="inline-bloc hover:underline font-medium">
+                                Register here
+                        </a>          
                     </div>
 
                     <button

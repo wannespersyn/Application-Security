@@ -5,20 +5,27 @@ import Header from '@/component/header';
 import useInterval from 'use-interval';
 import useSWR, { mutate } from 'swr';
 import SceneOverview from '@/component/control/SceneOverview';
+import { Scene } from '@/types';
 
 const controlScenes: React.FC = () => {
+    const [StatusError, setStatusError] = useState<string | null>(null);
+    const [scenes, setScenes] = useState<Scene[]>([]);
 
     const getAllScenes = async () => {
+        setStatusError("");
 
-        const responses = await Promise.all([
-            ControlService.getAllScenes()
-        ]);
+        const responses = await ControlService.getAllScenes();
         
-        const [scenesResponse] = responses;
-        const scene = await scenesResponse.json();
-
-        return {
-            scene
+        if (!responses.ok) {
+            if (responses.status === 401) {
+                setStatusError(
+                    'You are not authorized to view this page. Please login first.');
+            } else {
+                setStatusError(responses.statusText);
+            }
+        } else {
+            const scenesData = await responses.json();
+            setScenes(scenesData);
         }
     };
 
@@ -26,11 +33,6 @@ const controlScenes: React.FC = () => {
         'controlScenes', 
         getAllScenes
     );
-
-    //Refresh scenes every 5 seconds
-    useInterval(() => {
-        mutate('controlScenes', getAllScenes());
-    }, 5000);
 
     return (
         <>
@@ -44,8 +46,8 @@ const controlScenes: React.FC = () => {
                     {error && <div>{error}</div>}
                     {isLoading && <div>Loading...</div>}
                     <section className='grid grid-cols-3 gap-5'>
-                        {data && (
-                            <SceneOverview scenes={data.scene} />
+                        {scenes && (
+                            <SceneOverview scenes={scenes} />
                         )}
                     </section>
                 </section>

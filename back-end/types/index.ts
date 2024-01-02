@@ -40,6 +40,7 @@ type ControlCenterInput = {
 type AuthenticationResponse = {
     token: string;
     name: string;
+    admin: boolean;
 }
 
 export {

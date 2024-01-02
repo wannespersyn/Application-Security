@@ -25,12 +25,11 @@ const authenticate = async ({ name, password}: UserInput): Promise<Authenticatio
         throw new Error("Password is incorrect!");
     }
 
-    const test = {
+    return {
         token: generateJwtToken({ name, admin: user.admin }),
-        name: user.name
+        name: user.name,
+        admin: user.admin
     };
-    
-    return test;
 }
 
 /**
@@ -81,9 +80,14 @@ const deleteScene = async (name: string): Promise<Scene> => {
     return scene;
 }
 
-const deleteUser = async (name: string): Promise<User> => {
-    const user = await controlCenterDb.deleteUser(name);
-    return user;
+const deleteUser = async (name: string, admin: boolean): Promise<User> => {
+    if (!admin) {
+        throw new UnauthorizedError('credentials_required', 
+            { message: 'You are not authorized to delete users' });
+    } else {
+        const user = await controlCenterDb.deleteUser(name);
+        return user;
+    }
 }
 
 /**

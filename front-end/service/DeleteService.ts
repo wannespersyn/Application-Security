@@ -1,37 +1,43 @@
-const DeleteLight = async (name: string, location: string) => {
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + 
+const DeleteLight =  (name: string, location: string) => {
+    const token = JSON.parse(sessionStorage.getItem('loggedInUser') || '')?.token;
+
+    return fetch(process.env.NEXT_PUBLIC_API_URL + 
             `/controlCenter/deleteLightSource?name=${name}&location=${location}`, {
         method: 'DELETE',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token.token}`
         },
         body: JSON.stringify({})
     });
-    return response.json();
 }
 
-const DeleteScene = async (name: string) => {
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + 
+const DeleteScene = (name: string) => {
+    const token = JSON.parse(sessionStorage.getItem('loggedInUser') || '')?.token;
+    
+    return fetch(process.env.NEXT_PUBLIC_API_URL + 
             `/controlCenter/deleteScene?name=${name}`, {
         method: 'DELETE',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token.token}`
         },
         body: JSON.stringify({})
     });
-    return response.json();
 }
 
-const DeleteUser = async (name: string) => {
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + 
+const DeleteUser = (name: string) => {
+    const token = JSON.parse(sessionStorage.getItem('loggedInUser') || '')?.token;
+
+    return fetch(process.env.NEXT_PUBLIC_API_URL + 
             `/controlCenter/deleteUser?name=${name}`, {
         method: 'DELETE',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token.token}`
         },
         body: JSON.stringify({})
     });
-    return response.json();
 }
 
 const DeleteService = {

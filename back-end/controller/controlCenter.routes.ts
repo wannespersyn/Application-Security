@@ -87,26 +87,10 @@ const ControlCenterRouter = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/ControlCenter'
  *
- * /controlCenter/signUp:
- *   post:
- *      summary: sign a new user up to control center.
- *      tags: [Control Center]
- *      requestBody:
- *        required: true
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/UserInput'
- *      responses:
- *          200:
- *              description: A user object
- *              content:
- *                  application/json:
- *                      schema:
- *                        $ref: '#/components/schemas/User'
- *
  * /controlCenter/addLightSource:
  *   post:
+ *      security:
+ *         - bearerAuth: []
  *      summary: Add a new light source to control center.
  *      tags: [Control Center]
  *      requestBody:
@@ -125,6 +109,8 @@ const ControlCenterRouter = express.Router();
  *
  * /controlCenter/addScene:
  *   post:
+ *      security:
+ *         - bearerAuth: []
  *      summary: Add a new scene to control center.
  *      tags: [Control Center]
  *      requestBody:
@@ -431,6 +417,8 @@ const ControlCenterRouter = express.Router();
  * 
  * /deleteUser:
  *   del:
+ *      security:
+ *        - bearerAuth: []
  *      summary: delete user in control center.
  *      tags: [Control Center]
  *      parameters:
@@ -456,6 +444,7 @@ ControlCenterRouter.post('/', (req: Request, res: Response) => {
         res.status(400).json({status: "error", errorMessage: error.message});
     }
 })
+
 /**
  * @swagger
  * /controlCenter/login:
@@ -486,11 +475,29 @@ ControlCenterRouter.post('/login', async (req: Request, res: Response, next: Nex
         next(error);
     }
 })
+
 /**
+ * @swagger
  * 
- * ADD FUNCTIONS
- * 
+ *  /controlCenter/signUp:
+ *   post:
+ *      summary: sign a new user up to control center.
+ *      tags: [Control Center]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/UserInput'
+ *      responses:
+ *          200:
+ *              description: A user object
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                        $ref: '#/components/schemas/User'
  */
+
 ControlCenterRouter.post('/signUp', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = <UserInput>req.body;
@@ -550,10 +557,11 @@ ControlCenterRouter.delete('/deleteScene', (req: Request, res: Response) => {
     }
 })
 
-ControlCenterRouter.delete('/deleteUser', (req: Request, res: Response) => {
+ControlCenterRouter.delete('/deleteUser', (req: Request & { auth }, res: Response) => {
     try {
+        const { admin } = req.auth;
         const name  = <string>req.query.name;
-        const result = controlCenterService.deleteUser(name);
+        const result = controlCenterService.deleteUser(name, admin);
         res.status(200).json(result);
     } catch(error) {
         res.status(400).json({status: "error", errorMessage: error.message});
