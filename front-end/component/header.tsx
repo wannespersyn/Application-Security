@@ -1,14 +1,13 @@
-import i18next from "i18next";
-import Link from "next/link";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import LanguageSwitcher from "./languageSwitcher";
-import { t } from "i18next"
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
+import Language from "./Language";
 
 const Header: React.FC = () => {
     const [loggedInUser, setLoggedInUser] = useState<String | null>(null);
     const router = useRouter();
+    const { t } = useTranslation();
 
     useEffect(() => {
         setLoggedInUser(sessionStorage.getItem("loggedInUser"));
@@ -27,25 +26,25 @@ const Header: React.FC = () => {
                     <div className="text-2xl">
                         <span>
                             <img className="h-10 inline" src="/logo.png" alt="logo" />
-                            Control Home Center
+                            {t("header.title")}
                         </span>
                     </div>
                     <ul className="uppercase flex justify-between gap-10 mr-16 md:items-center m-auto">
                         <li>
-                            <a href="/">Home</a>
+                            <a href="/">{t("header.home")}</a>
                         </li>
                         <li>
-                            <a href="/controlLights">{t('lights')}</a>
+                            <a href="/controlLights">{t('header.lights')}</a>
                         </li>
                         <li>
-                            <a href="/controlScenes">Scenes</a>
+                            <a href="/controlScenes">{t("header.scenes")}</a>
                         </li>
                         <li>
-                            <a href="/SystemManagement">{t('system.management')}</a>
+                            <a href="/SystemManagement">{t("header.system.management")}</a>
                         </li>
                         {!loggedInUser && (
                             <li>
-                                <a href="/login">Login</a>
+                                <a href="/login">{t("header.login")}</a>
                             </li>
                         )}
                         {loggedInUser && (
@@ -53,13 +52,12 @@ const Header: React.FC = () => {
                                 <a
                                     href="#"
                                     onClick={handleClick}>
-                                    Logout
+                                    {t("header.logout")}
                                 </a>
                             </li>
                             )}
-                       
                     </ul>
-                    <LanguageSwitcher />
+                    <Language />
                 </nav>
             </header>
         </>

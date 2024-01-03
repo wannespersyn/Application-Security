@@ -1,9 +1,10 @@
 import AddService from "@/service/AddService";
-import ControlService from "@/service/ControlService";
 import { StatusMessage } from "@/types";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { useTranslation } from "next-i18next";
+
 
 const RegisterForm: React.FC = () => {
     const [name, setUsername] = useState('');
@@ -14,6 +15,8 @@ const RegisterForm: React.FC = () => {
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
     const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
     const router = useRouter();
+    const { t } = useTranslation();
+
 
     const clearErros = () => {
         setNameError("");
@@ -26,22 +29,22 @@ const RegisterForm: React.FC = () => {
         let result = true;
 
         if (!name && name.trim() === '') {
-            setNameError("Name is required");
+            setNameError(t("error.username.required"));
             result = false;
         }
 
         if (!password && password.trim() === '') {
-            setPasswordError("Password is required");
+            setPasswordError(t("error.password.required"));
             result = false;
         }
 
         if (!confirmPassword && confirmPassword.trim() === '') {
-            setConfirmPasswordError("Confirm Password is required");
+            setConfirmPasswordError(t("error.confirm.password.required"));
             result = false;
         }
 
         if (password !== confirmPassword) {
-            setConfirmPasswordError("Passwords do not match");
+            setConfirmPasswordError(t("error.password.not.match"));
             result = false;
         }
 
@@ -61,16 +64,16 @@ const RegisterForm: React.FC = () => {
         const response = await AddService.addNewUser(user);
 
         if (response.status === 200) {
-            setStatusMessage([{message: `Registration succesful! Redirecting to login page...`, type: "success"}])
+            setStatusMessage([{message: `${t("register.succes")}`, type: "success"}])
             router.push('/login');
         } else {
-            setStatusMessage([{message: `Registration failed!`, type: "error"}])
+            setStatusMessage([{message: `${t("register.error")}`, type: "error"}])
         }
     }
 
     return (
         <div className="w-1/3 mx-auto mt-8 bg-gray-200 p-8">
-            <h1 className="text-2xl font-bold mb-4">Register</h1>
+            <h1 className="text-2xl font-bold mb-4">{t("register.title")}</h1>
             {statusMessage && (
                 <div className="w-1/3 mx-auto">
                     <ul className="list-none mb-3 mx-auto">
@@ -95,7 +98,7 @@ const RegisterForm: React.FC = () => {
                         type="text" 
                         value={name}
                         onChange={(event) => setUsername(event.target.value)}
-                        placeholder="name"/>
+                        placeholder={t("register.name")}/>
                 </div>
                 {nameError && (
                     <div className="text-red-800"> {nameError} </div>
@@ -106,7 +109,7 @@ const RegisterForm: React.FC = () => {
                         type="password"
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
-                        placeholder="password" />
+                        placeholder={t("register.password")} />
                 </div>
                 {passwordError && (
                     <div className="text-red-800"> {passwordError} </div>
@@ -117,7 +120,7 @@ const RegisterForm: React.FC = () => {
                         type="password"
                         value={confirmPassword}
                         onChange={(event) => setConfirmPassword(event.target.value)}
-                        placeholder="confirm password" />
+                        placeholder={t("register.confirm.password")} />
                 </div>
                 {confirmPasswordError && (
                     <div className="text-red-800"> {confirmPasswordError} </div>
@@ -125,7 +128,7 @@ const RegisterForm: React.FC = () => {
                 <button 
                     type="submit" 
                     className="w-full bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded">
-                    Register
+                    {t("register.submit")}
                 </button>
             </form>
         </div>

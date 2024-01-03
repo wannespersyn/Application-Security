@@ -3,6 +3,7 @@ import Navigation from "@/component/systemManagement/navigation";
 import UserOverview from "@/component/systemManagement/userOverview";
 import { StatusMessage } from "@/types";
 import classNames from "classnames";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useEffect, useState } from "react";
 
 const SystemManagement = () => {
@@ -54,5 +55,5 @@ const SystemManagement = () => {
         </>
     );
 }
-
+  
 export default SystemManagement;

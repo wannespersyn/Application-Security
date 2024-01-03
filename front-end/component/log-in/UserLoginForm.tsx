@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import classNames from "classnames";
 import React, { useState } from "react";
 import ControlService from "@/service/ControlService";
-import Link from "next/link";
+import { useTranslation } from "next-i18next";
 
 const UserLoginForm: React.FC = () => {
     const [name, setUsername] = useState('');
@@ -11,6 +11,7 @@ const UserLoginForm: React.FC = () => {
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState("");
     const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
+    const { t } = useTranslation();
     const router = useRouter();
 
     const clearErros = () => {
@@ -23,12 +24,12 @@ const UserLoginForm: React.FC = () => {
         let result = true;
 
         if (!name && name.trim() === '') {
-            setNameError("Name is required");
+            setNameError(t("error.username.required"));
             result = false;
         }
 
         if (!password && password.trim() === '') {
-            setPasswordError("Password is required");
+            setPasswordError(t("error.password.required"));
             result = false;
         }
 
@@ -48,7 +49,7 @@ const UserLoginForm: React.FC = () => {
         const response = await ControlService.login(user);
 
         if (response.status === 200) {
-            setStatusMessage([{message: `Login succesful! Redirecting to homepage...`, type: "success"}])
+            setStatusMessage([{message: `${t("login.succes")}`, type: "success"}])
             const user = await response.json();
             console.log(JSON.stringify({
                 token: user.token,
@@ -67,14 +68,14 @@ const UserLoginForm: React.FC = () => {
             const { errorMessage }  = await response.json();
             setStatusMessage([{message: errorMessage, type: "error"}]);
         } else {
-            setStatusMessage([{message: "An error occurred. Try again later.", type: "error"}]);
+            setStatusMessage([{message:  `${t("login.error")}`, type: "error"}]);
         }
 
     };
 
     return (
         <>
-            <h2 className="font-medium text-xl text-center">Login</h2>
+            <h2 className="font-medium text-xl text-center">{t("login.title")}</h2>
             {statusMessage && (
                 <div className="w-1/3 mx-auto">
                     <ul className="list-none mb-3 mx-auto">
@@ -99,7 +100,7 @@ const UserLoginForm: React.FC = () => {
                             id="usernameInput"
                             value={name}
                             onChange={(event) => setUsername(event.target.value)}
-                            placeholder="Username"
+                            placeholder={t("login.username")}
                         />
                         {nameError && (
                             <div className="text-red-800"> {nameError} </div>
@@ -110,7 +111,7 @@ const UserLoginForm: React.FC = () => {
                             id="passwordInput"
                             value={password}
                             onChange={(event) => setPassword(event.target.value)}
-                            placeholder="Password"
+                            placeholder={t("login.password")}
                         />
                         {passwordError && (
                             <div className="text-red-800"> {passwordError} </div>
@@ -120,16 +121,15 @@ const UserLoginForm: React.FC = () => {
                         <a 
                             href="/login/register"
                             className="inline-bloc hover:underline font-medium">
-                                Register here
+                                {t("login.register")}
                         </a>          
                     </div>
 
                     <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded mx-auto" 
                         type="submit">
-                        Login
+                            {t("login.login")}
                     </button>
-
                 </form>
         </div>
         </>

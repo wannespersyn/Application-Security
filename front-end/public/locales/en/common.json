@@ -1,0 +1,44 @@
+{
+    "header": {
+        "title": "Control Home System",
+        "home": "Home",
+        "lights": "Lights",
+        "scenes": "Scenes",
+        "system.management": "System Management",
+        "login": "Login",
+        "logout": "Logout"
+    },
+    "login": {
+        "title": "Login",
+        "username": "Username",
+        "password": "Password",
+        "login": "Login",
+        "register": "Register",
+        "success": "Login successful! Redirecting to homepage...",
+        "error": "Login failed! Please check your credentials and try again."
+    },
+    "register": {
+        "title": "Register",
+        "name": "Name",
+        "password": "Password",
+        "confirm.password": "Confirm password",
+        "submit": "Register",
+        "success": "Registration successful! Redirecting to login page...",
+        "error": "Registration failed!"
+    },
+    "home": {
+        "title": "Welcome to the Home control app.",
+        "greeting": "Hello",
+        "info": "In this app you can control the lights and scenes in your home.",
+        "get.started": "Get started",
+        "control.lights": "Control Lights",
+        "control.scenes": "Control Scenes",
+        "system.management": "System Management"
+    },
+    "error": {
+        "password.required": "Password required!",
+        "username.required": "Username required!",
+        "confirm.password.required": "Confirm password required!",
+        "passwords.not.match": "Passwords do not match!"
+    }
+}

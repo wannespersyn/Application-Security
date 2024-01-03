@@ -2,6 +2,8 @@ import Header from "@/component/header";
 import Head from "next/head";
 import React from "react";
 import UserLoginForm from "@/component/log-in/UserLoginForm";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import RegisterForm from "@/component/log-in/registerForm";
 
 const Login: React.FC = () => {
     return (
@@ -17,6 +19,16 @@ const Login: React.FC = () => {
             </main>
         </>
     );
+};
+
+export const getServerSideProps = async (context: any) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
 };
 
 export default Login;

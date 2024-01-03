@@ -1,0 +1,44 @@
+{
+    "header": {
+        "title": "Bediening Thuis Systeem",
+        "home": "Home",
+        "lights": "Lampen",
+        "scenes": "Scènes",
+        "system.management": "Systeembeheer",
+        "login": "Inloggen",
+        "logout": "Uitloggen"
+    },
+    "login": {
+        "title": "Inloggen",
+        "username": "Gebruikersnaam",
+        "password": "Wachtwoord",
+        "login": "Inloggen",
+        "register": "Registreren",
+        "success": "Inloggen gelukt! Doorsturen naar startpagina...",
+        "error": "Inloggen mislukt! Controleer uw gegevens en probeer opnieuw."
+    },
+    "register": {
+        "title": "Registreren",
+        "name": "Naam",
+        "password": "Wachtwoord",
+        "confirm.password": "Bevestig wachtwoord",
+        "submit": "Registreren",
+        "success": "Registratie succesvol! Doorsturen naar inlogpagina...",
+        "error": "Registratie mislukt!"
+    },
+    "home": {
+        "title": "Welkom bij de Home control app.",
+        "greeting": "Hallo",
+        "info": "In deze app kun je de verlichting en scènes in je huis bedienen.",
+        "get.started": "Aan de slag",
+        "control.lights": "Verlichting bedienen",
+        "control.scenes": "Scènes bedienen",
+        "system.management": "Systeembeheer"
+    },
+    "error": {
+        "error.password.required": "Wachtwoord vereist!",
+        "error.username.required": "Gebruikersnaam vereist!",
+        "error.confirm.password.required": "Bevestiging van wachtwoord vereist!",
+        "error.passwords.not.match": "Wachtwoorden komen niet overeen!"
+    }
+}
