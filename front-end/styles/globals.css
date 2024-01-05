@@ -17,3 +17,11 @@
 .system-mangament-button {
     @apply  bg-blue-300 p-4 rounded-md shadow-sm focus:outline-none hover:bg-blue-400;
 }
+
+.tableData {
+    @apply  border px-4 py-2;
+}
+
+.buttons {
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded mx-auto;
+}

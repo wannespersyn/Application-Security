@@ -4,6 +4,7 @@ import OptionChooser from "./optionChooser";
 import classNames from "classnames";
 import ControlService from "@/service/ControlService";
 import AddService from "@/service/AddService";
+import { useTranslation } from "next-i18next";
 
 const AddSceneForm: React.FC  = () => {
     const [name, setName] = useState('');
@@ -12,6 +13,7 @@ const AddSceneForm: React.FC  = () => {
     const [lightSourcesError, setLightSourcesError] = useState("");
     const [allLightSources, setAllLightSources] = useState<LightSource[]>([]);
     const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
+    const { t } = useTranslation();
 
     
     const addScene = async (name: string, lightSources: LightSource[]) => {
@@ -53,12 +55,12 @@ const AddSceneForm: React.FC  = () => {
         let result = true;
 
         if (!name && name.trim() === '') {
-            setNameError("Name for scene is required");
+            setNameError(t("error.name.required"));
             result = false;
         }
 
         if (!lightSources) {
-            setLightSourcesError("At least one light source is required");
+            setLightSourcesError(t("error.light.required"));
             result = false;
         }
 
@@ -76,7 +78,7 @@ const AddSceneForm: React.FC  = () => {
 
         addScene(name, lightSources);
 
-        setStatusMessage([{message: `Added the scene succesful!`, type: "success"}])
+        setStatusMessage([{message: "sys.scenes.succes", type: "success"}])
         
     };
 
@@ -127,7 +129,7 @@ const AddSceneForm: React.FC  = () => {
                     <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded mx-auto" 
                         type="submit">
-                        Add Scene
+                        {t("sys.add.scene")}
                     </button>
 
                 </form>

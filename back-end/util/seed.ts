@@ -1,6 +1,8 @@
 //Execute: npx ts-node util/seed.ts
 
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
+
 
 const prisma = new PrismaClient();
 
@@ -16,11 +18,13 @@ const main = async () => {
         }
     });
 
+    // USERS
 
+    const passwordAdmin = await bcrypt.hash("admin", 12);
     await prisma.user.create({
         data: {
-            name: "admin",
-            password: "admin",
+            name: "Wannes",
+            password: passwordAdmin,
             admin: true,
             controlCenter: {
                 connect: { id: controlHomeCenter.id }
@@ -28,9 +32,58 @@ const main = async () => {
         }
     });
 
+    await prisma.user.create({
+        data: {
+            name: "Robin",
+            password: passwordAdmin,
+            admin: true,
+            controlCenter: {
+                connect: { id: controlHomeCenter.id }
+            }
+        }
+    });
+
+    const passwordGreetje = await bcrypt.hash("greetjej123", 12);
+    await prisma.user.create({
+        data: {
+            name: "greetjej",
+            password: passwordGreetje,
+            admin: false,
+            controlCenter: {
+                connect: { id: controlHomeCenter.id }
+            }
+        }
+    });
+
+    const passwordElkes = await bcrypt.hash("elkes123", 12);
+    await prisma.user.create({
+        data: {
+            name: "elkes",
+            password: passwordElkes,
+            admin: false,
+            controlCenter: {
+                connect: { id: controlHomeCenter.id }
+            }
+        }
+    });
+
+    const passwordJohan = await bcrypt.hash("johan123", 12);
+    await prisma.user.create({
+        data: {
+            name: "johanp",
+            password: passwordJohan,
+            admin: false,
+            controlCenter: {
+                connect: { id: controlHomeCenter.id }
+            }
+        }
+    });
+
+    //light sources
+
     await prisma.lightSources.create({
         data: {
-            name: "light",
+            name: "main light",
             location: "living room",
             brightness: 0,
             status: false,
@@ -42,7 +95,19 @@ const main = async () => {
 
     await prisma.lightSources.create({
         data: {
-            name: "light table",
+            name: "tv light",
+            location: "living room",
+            brightness: 0,
+            status: false,
+            controlCenter: {
+                connect: { id: controlHomeCenter.id }
+            }
+        }
+    });
+
+    await prisma.lightSources.create({
+        data: {
+            name: "main light",
             location: "kitchen",
             brightness: 0,
             status: false,
@@ -54,7 +119,19 @@ const main = async () => {
 
     await prisma.lightSources.create({
         data: {
-            name: "light sink",
+            name: "wine rack light",
+            location: "kitchen",
+            brightness: 0,
+            status: false,
+            controlCenter: {
+                connect: { id: controlHomeCenter.id }
+            }
+        }
+    });
+
+    await prisma.lightSources.create({
+        data: {
+            name: "extractor hood light",
             location: "kitchen",
             brightness: 0,
             status: false,
@@ -75,6 +152,8 @@ const main = async () => {
             location: "living room"
         }
     });
+
+    //SCENES
 
 
     await prisma.scene.create({
@@ -104,18 +183,6 @@ const main = async () => {
             }
         }
     });
-    const getScenes = await prisma.scene.findMany();
-    console.log(JSON.stringify(getScenes));
-
-
-    const getControlCenter = await prisma.controlCenter.findMany();
-    console.log(JSON.stringify(getControlCenter));
-
-    const getUser = await prisma.user.findMany();
-    console.log(JSON.stringify(getUser));
-
-    const getLightSources = await prisma.lightSources.findMany();
-    console.log(JSON.stringify(getLightSources));
 
 }
 

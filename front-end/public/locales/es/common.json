@@ -14,8 +14,8 @@
         "password": "Contraseña",
         "login": "Iniciar sesión",
         "register": "Registrarse",
-        "success": "¡Inicio de sesión exitoso! Redirigiendo a la página de inicio...",
-        "error": "¡Error al iniciar sesión! Por favor, verifica tus credenciales e intenta de nuevo."
+        "succes": "¡Inicio de sesión exitoso! Redirigiendo a la página de inicio...",
+        "error": "¡Inicio de sesión fallido! Por favor, verifica tus credenciales e intenta nuevamente."
     },
     "register": {
         "title": "Registrarse",
@@ -27,7 +27,7 @@
         "error": "¡Registro fallido!"
     },
     "home": {
-        "title": "Bienvenido a la aplicación de control del Hogar.",
+        "title": "Bienvenido a la aplicación de control del hogar.",
         "greeting": "Hola",
         "info": "En esta aplicación puedes controlar las luces y escenas de tu hogar.",
         "get.started": "Empezar",
@@ -35,10 +35,46 @@
         "control.scenes": "Controlar Escenas",
         "system.management": "Gestión del Sistema"
     },
+    "sys": {
+        "add.light": "Agregar Luz",
+        "add.scene": "Agregar Escena",
+        "delete.light": "Eliminar Luz",
+        "delete.scene": "Eliminar Escena",
+        "user": {
+            "succes": "¡Usuario eliminado exitosamente!",
+            "title": "Usuarios",
+            "info": "Información",
+            "delete": "Eliminar"
+        },
+        "lights": {
+            "name": "Nombre",
+            "succes": "¡Luz agregada exitosamente!",
+            "location": "Ubicación",
+            "add": "Agregar Luces",
+            "delete": {
+                "succes": "¡Luz eliminada exitosamente!",
+                "title": "Eliminar Escena",
+                "the": "La",
+                "selected": "Has seleccionado la siguiente luz para eliminar:"
+            }
+        },
+        "scenes": {
+            "succes": "¡Escena agregada exitosamente!",
+            "choose.lights": "Seleccionar Luces:",
+            "brightness": "Brillo:",
+            "selected": "Luces Seleccionadas:",
+            "delete": {
+                "succes": "¡Escena eliminada exitosamente!"
+            }
+        }
+    },
     "error": {
-        "error.password.required": "¡Se requiere contraseña!",
-        "error.username.required": "¡Se requiere nombre de usuario!",
-        "error.confirm.password.required": "¡Se requiere confirmación de contraseña!",
-        "error.passwords.not.match": "¡Las contraseñas no coinciden!"
+        "password.required": "¡Contraseña requerida!",
+        "username.required": "¡Nombre de usuario requerido!",
+        "location.required": "¡Ubicación requerida!",
+        "light.source": "¡Se requiere al menos una fuente de luz!",
+        "confirm.password.required": "¡Confirmar contraseña requerida!",
+        "passwords.not.match": "¡Las contraseñas no coinciden!",
+        "not.authorized.delete.user": "¡No estás autorizado para eliminar a este usuario!"
     }
 }

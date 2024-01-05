@@ -1,11 +1,11 @@
-import { t } from "i18next";
+import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 
 
 
 const Navigation: React.FC = () => {
+    const { t } = useTranslation();
     const router = useRouter();
 
     const onClickAddLight = () => {
@@ -34,22 +34,22 @@ const Navigation: React.FC = () => {
                     <button
                         className="system-mangament-button"
                         onClick={onClickAddLight}>
-                        {t('add.light')}
+                        {t('sys.add.light')}
                     </button>
                     <button
                         className="system-mangament-button"
                         onClick={onClickAddScene}>
-                        {t('add.scene')}
+                        {t('sys.add.scene')}
                     </button>
                     <button
                         className="system-mangament-button"
                         onClick={onClickDeleteLight}>
-                        {t('delete.light')}
+                        {t('sys.delete.light')}
                     </button>
                     <button
                         className="system-mangament-button"
                         onClick={onClickDeleteScene}>
-                        {t('delete.scene')}
+                        {t('sys.delete.scene')}
                     </button>
                 </section>
             </div>

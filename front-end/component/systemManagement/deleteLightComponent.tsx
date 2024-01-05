@@ -5,13 +5,14 @@ import classNames from "classnames";
 import { useEffect, useState } from "react";
 import useInterval from "use-interval";
 import OptionChooserDelete from "./optionChooserDelete";
+import { useTranslation } from "next-i18next";
 
 const DeleteLightComponent: React.FC = () => {
     const [allLightSources, setAllLightSources] = useState<LightSource[]>([]);
-
     const [name, setName] = useState('');
     const [location, setLocation] = useState('');
     const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
+    const { t } = useTranslation();
 
     const deleteLight = async (name: string, location: string) => {
         const response = await DeleteService.DeleteLight(name, location);
@@ -47,7 +48,7 @@ const DeleteLightComponent: React.FC = () => {
 
         deleteLight(name, location);
 
-        setStatusMessage([{message: `Deleted the light succesful!`, type: "success"}])
+        setStatusMessage([{message: "sys.lights.delete.succes", type: "success"}])
         
     };
 
@@ -73,7 +74,7 @@ const DeleteLightComponent: React.FC = () => {
                 <form onSubmit={handleSubmit}>
                     <div>
                         <OptionChooserDelete options={allLightSources}
-                            heading= {"choose light"}
+                            heading= {t("sys.lights.delete.title")}
                             choice={(selectedChoice: string) => {
                                 const [name, location] = selectedChoice.split('-');
                                 setName(name);
@@ -82,9 +83,9 @@ const DeleteLightComponent: React.FC = () => {
                     </div>
 
                     <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded mx-auto" 
+                        className="buttons" 
                         type="submit">
-                        Delete Light
+                        {t("sys.delete.light")}
                     </button>
                 </form>
                 </div>

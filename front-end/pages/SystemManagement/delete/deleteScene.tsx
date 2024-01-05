@@ -6,6 +6,7 @@ import ControlService from "@/service/ControlService";
 import DeleteService from "@/service/DeleteService";
 import { Scene, StatusMessage } from "@/types";
 import classNames from "classnames";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useInterval from "use-interval";
@@ -116,4 +117,14 @@ const deleteScene: React.FC = () => {
     );
 }
 
+export const getServerSideProps = async (context: any) => {
+    const { locale } = context;
+  
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
+  };
+  
 export default deleteScene;

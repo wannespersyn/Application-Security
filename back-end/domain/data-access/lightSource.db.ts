@@ -13,7 +13,7 @@ const createLightSource = async ({name, location, brightness, status}: LightSour
                 controlCenter: {
                     connect: {
                         id: 1
-                    }
+                    },
                 },
             }
         });

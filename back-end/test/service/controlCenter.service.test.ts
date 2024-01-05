@@ -3,6 +3,8 @@ import {LightSource} from "../../domain/model/lightSource";
 import {Scene} from "../../domain/model/scene";
 import controlCenterService from "../../service/controlCenter.service";
 
+const admin = true;
+
 const validUsers = [
     new User({
         name: "Wannes Persyn",
@@ -63,7 +65,7 @@ const validScenes = [
 let mockControlCenterDbCreateControlCenter: jest.Mock
 let mockControlCenterDbAddLightSource: jest.Mock
 let mockControlCenterDbTurnLightOn: jest.Mock
-let mockControlCenterDbTurnLightOff:jest.Mock
+let mockControlCenterDbTurnLightOff: jest.Mock
 let mockControlCenterDbChangeBrightness: jest.Mock
 let mockControlCenterDbAddScene: jest.Mock
 
@@ -97,7 +99,6 @@ test(`given: a valid control center; when: control panel is created; then: contr
 test(`given: a valid user; when: user is added; then: user is added with those values`, () => {
     //given
     const user = new User({
-        id: 4,
         name: "New User",
         password: "AGoodPassword1468!?",
         admin: false
@@ -117,7 +118,6 @@ test(`given: a valid user; when: user is added; then: user is added with those v
 test(`given: a user with an existing name; when: user is added; then: error is thrown`, () => {
     //given
     const invalidUser = new User({
-        id: 5,
         name: "Wannes Persyn",
         password: "WannesPS456!",
         admin: true
@@ -135,7 +135,6 @@ test(`given: a user with an existing name; when: user is added; then: error is t
 test(`given: a valid light source; when: light source is added; then: light source is added with those values`, () => {
     //given
     const newLightSource = new LightSource({
-        id: 1,
         name: "Light downstairs",
         location: "WC",
         brightness: 100,
@@ -144,7 +143,7 @@ test(`given: a valid light source; when: light source is added; then: light sour
 
     //when
     controlCenterService.createControlCenter();
-    const result = controlCenterService.addLightSource(newLightSource);
+    const result = controlCenterService.addLightSource(newLightSource, { admin });
 
     //then
     expect(mockControlCenterDbAddLightSource).toHaveBeenCalledTimes(1);
@@ -156,7 +155,6 @@ test(`given: a valid light source; when: light source is added; then: light sour
 test(`given: a light source with an existing name and location; when: light source is added; then: error is thrown`, () => {
     //given
     const invalidLightSource = new LightSource({
-        id: 5,
         name: "Light upstairs",
         location: "WC",
         brightness: 100,
@@ -165,8 +163,8 @@ test(`given: a light source with an existing name and location; when: light sour
 
     //when
     controlCenterService.createControlCenter();
-    controlCenterService.addLightSource(validLightSources[2])
-    const result = () => controlCenterService.addLightSource(invalidLightSource);
+    controlCenterService.addLightSource(validLightSources[2], { admin })
+    const result = () => controlCenterService.addLightSource(invalidLightSource , { admin });
 
     //then
     expect(result).toThrowError(`Light source with location: '${invalidLightSource.location}' and 
@@ -177,7 +175,6 @@ test(`given: a light source with an existing name and location; when: light sour
 test(`given: a valid scene; when: scene is added; then: scene is added with those values`, () => {
      //given
      const newScene = new Scene({
-         id: 1,
          name: "cooking",
          lightSources: [
              validLightSources[0],
@@ -199,7 +196,6 @@ test(`given: a valid scene; when: scene is added; then: scene is added with thos
 test(`given: a scene with an existing name and ; when: scene is added; then: error is thrown`, () => {
     //given
     const invalidScene = new Scene({
-        id: 4,
         name: "watching tv",
         lightSources: [
             validLightSources[0],
@@ -221,7 +217,7 @@ test(`given: a valid light source name; when: turning the light on; then: the li
 
     // when
     controlCenterService.createControlCenter();
-    controlCenterService.addLightSource(validLightSources[0])
+    controlCenterService.addLightSource(validLightSources[0], { admin })
     const result = controlCenterService.turnLightOn(validLightSources[0].name, validLightSources[0].location);
 
     // then
@@ -244,7 +240,7 @@ test(`given: a invalid light source name; when: turning the light on; then: erro
 
     // when
     controlCenterService.createControlCenter();
-    controlCenterService.addLightSource(validLightSources[0])
+    controlCenterService.addLightSource(validLightSources[0], { admin })
 
     const result = () => controlCenterService.turnLightOn(invalidName, validLightSources[0].location);
 
@@ -258,7 +254,7 @@ test(`given: a invalid light source location; when: turning the light on; then: 
 
     // when
     controlCenterService.createControlCenter();
-    controlCenterService.addLightSource(validLightSources[0])
+    controlCenterService.addLightSource(validLightSources[0], { admin })
 
     const result = () => controlCenterService.turnLightOn(validLightSources[0].name, invalidLocation);
 
@@ -272,7 +268,7 @@ test(`given: a valid light source name; when: turning the light off; then: the l
 
     // when
     controlCenterService.createControlCenter();
-    controlCenterService.addLightSource(validLightSources[0])
+    controlCenterService.addLightSource(validLightSources[0], { admin })
     const result = await controlCenterService.turnLightOff(validLightSources[0].name, validLightSources[0].location);
 
     // then
@@ -288,7 +284,7 @@ test(`given: a invalid light source name; when: turning the light off; then: err
 
     // when
     controlCenterService.createControlCenter();
-    controlCenterService.addLightSource(validLightSources[0])
+    controlCenterService.addLightSource(validLightSources[0], { admin })
 
     const result = () => controlCenterService.turnLightOff(invalidName, validLightSources[0].location);
 
@@ -302,7 +298,7 @@ test(`given: a invalid light source location; when: turning the light off; then:
 
     // when
     controlCenterService.createControlCenter();
-    controlCenterService.addLightSource(validLightSources[0])
+    controlCenterService.addLightSource(validLightSources[0], { admin })
 
     const result = () => controlCenterService.turnLightOff(validLightSources[0].name, invalidLocation);
 
@@ -316,7 +312,7 @@ test(`given: a valid light source name and brightness; when: changing brightness
 
     // when
     controlCenterService.createControlCenter();
-    controlCenterService.addLightSource(validLightSources[0])
+    controlCenterService.addLightSource(validLightSources[0], { admin })
     const result = await controlCenterService.changeBrightnessLight(validLightSources[0].name, validLightSources[0].location, validBrightness);
 
     // then
@@ -333,7 +329,7 @@ test(`given: a invalid light source name & valid brightness; when: changing the 
 
     // when
     controlCenterService.createControlCenter();
-    controlCenterService.addLightSource(validLightSources[0])
+    controlCenterService.addLightSource(validLightSources[0], { admin })
 
     const result = () => controlCenterService.changeBrightnessLight(invalidName, validLightSources[0].location, validBrightness);
 
@@ -348,7 +344,7 @@ test(`given: a invalid light source location & valid brightness; when: changing 
 
     // when
     controlCenterService.createControlCenter();
-    controlCenterService.addLightSource(validLightSources[0])
+    controlCenterService.addLightSource(validLightSources[0], { admin })
 
     const result = () => controlCenterService.changeBrightnessLight(validLightSources[0].name, invalidLocation, validBrightness);
 
@@ -362,7 +358,7 @@ test(`given: a valid light source name & invalid brightness; when: changing the 
 
     // when
     controlCenterService.createControlCenter();
-    controlCenterService.addLightSource(validLightSources[0])
+    controlCenterService.addLightSource(validLightSources[0], { admin })
 
     const result = () => controlCenterService.changeBrightnessLight(validLightSources[0].name, validLightSources[0].location, invalidBrightness);
 
@@ -375,7 +371,7 @@ test(`given: a valid light source name & invalid brightness; when: changing the 
     const invalidBrightness = -10;
 
     controlCenterService.createControlCenter();
-    controlCenterService.addLightSource(validLightSources[0])
+    controlCenterService.addLightSource(validLightSources[0], { admin })
 
     const result = () => controlCenterService.changeBrightnessLight(validLightSources[0].name, validLightSources[0].location, -10);
 

@@ -1,6 +1,7 @@
 import { 
     Scene as ScenePrisma,
-    LightSources as LightSourcePrisma
+    LightSources as LightSourcePrisma,
+    ControlCenter as ControlCenterPrisma
 } from "@prisma/client";
 import { LightSource } from "./lightSource";
 
@@ -10,7 +11,7 @@ export class Scene {
     readonly name: string;
     readonly lightSources: LightSource[];
 
-    constructor (scene: { name: string, lightSources: LightSource[]}) {
+    constructor (scene: { name: string, lightSources: LightSource[], controlCenterId?: number}) {
         this.validate(scene);
 
         this.name = scene.name;  
@@ -29,11 +30,13 @@ export class Scene {
 
     static from({ 
         name,
-        lightSources
-     }: ScenePrisma & { lightSources: LightSourcePrisma[] }) {
+        lightSources,
+        controlCenterId
+     }: ScenePrisma & { lightSources: LightSourcePrisma[]}) {
         return new Scene({
             name,
-            lightSources: lightSources.map((lightSource) => LightSource.from(lightSource))
+            lightSources: lightSources.map((lightSource) => LightSource.from(lightSource)),
+            controlCenterId
         })
     }
 

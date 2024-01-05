@@ -1,8 +1,8 @@
 {
     "header": {
-        "title": "Bediening Thuis Systeem",
-        "home": "Home",
-        "lights": "Lampen",
+        "title": "Home-systeem Beheer",
+        "home": "Thuis",
+        "lights": "Verlichting",
         "scenes": "Scènes",
         "system.management": "Systeembeheer",
         "login": "Inloggen",
@@ -14,8 +14,8 @@
         "password": "Wachtwoord",
         "login": "Inloggen",
         "register": "Registreren",
-        "success": "Inloggen gelukt! Doorsturen naar startpagina...",
-        "error": "Inloggen mislukt! Controleer uw gegevens en probeer opnieuw."
+        "succes": "Inloggen succesvol! Doorverwijzen naar de startpagina...",
+        "error": "Inloggen mislukt! Controleer je gegevens en probeer opnieuw."
     },
     "register": {
         "title": "Registreren",
@@ -23,22 +23,58 @@
         "password": "Wachtwoord",
         "confirm.password": "Bevestig wachtwoord",
         "submit": "Registreren",
-        "success": "Registratie succesvol! Doorsturen naar inlogpagina...",
+        "success": "Registratie succesvol! Doorverwijzen naar de inlogpagina...",
         "error": "Registratie mislukt!"
     },
     "home": {
-        "title": "Welkom bij de Home control app.",
+        "title": "Welkom bij de Home Control app.",
         "greeting": "Hallo",
-        "info": "In deze app kun je de verlichting en scènes in je huis bedienen.",
+        "info": "Met deze app kun je de verlichting en scènes in je huis bedienen.",
         "get.started": "Aan de slag",
-        "control.lights": "Verlichting bedienen",
-        "control.scenes": "Scènes bedienen",
+        "control.lights": "Verlichting Bedienen",
+        "control.scenes": "Scènes Bedienen",
         "system.management": "Systeembeheer"
     },
+    "sys": {
+        "add.light": "Licht Toevoegen",
+        "add.scene": "Scène Toevoegen",
+        "delete.light": "Verlichting Verwijderen",
+        "delete.scene": "Scène Verwijderen",
+        "user": {
+            "succes": "Gebruiker succesvol verwijderd!",
+            "title": "Gebruikers",
+            "info": "Informatie",
+            "delete": "Verwijderen"
+        },
+        "lights": {
+            "name": "Naam",
+            "succes": "Licht succesvol toegevoegd!",
+            "location": "Locatie",
+            "add": "Verlichting Toevoegen",
+            "delete": {
+                "succes": "Licht succesvol verwijderd!",
+                "title": "Scène Verwijderen",
+                "the": "De",
+                "selected": "Je hebt het volgende licht geselecteerd:"
+            }
+        },
+        "scenes": {
+            "succes": "Scène succesvol toegevoegd!",
+            "choose.lights": "Kies Verlichting:",
+            "brightness": "Helderheid:",
+            "selected": "Geselecteerde Verlichting:",
+            "delete": {
+                "succes": "Scène succesvol verwijderd!"
+            }
+        }
+    },
     "error": {
-        "error.password.required": "Wachtwoord vereist!",
-        "error.username.required": "Gebruikersnaam vereist!",
-        "error.confirm.password.required": "Bevestiging van wachtwoord vereist!",
-        "error.passwords.not.match": "Wachtwoorden komen niet overeen!"
+        "password.required": "Wachtwoord vereist!",
+        "username.required": "Gebruikersnaam vereist!",
+        "location.required": "Locatie vereist!",
+        "light.source": "Minstens één lichtbron is vereist!",
+        "confirm.password.required": "Bevestig wachtwoord vereist!",
+        "passwords.not.match": "Wachtwoorden komen niet overeen!",
+        "not.authorized.delete.user": "Je bent niet gemachtigd om deze gebruiker te verwijderen!"
     }
 }

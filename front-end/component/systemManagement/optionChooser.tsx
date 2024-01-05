@@ -1,4 +1,5 @@
 import { LightSource } from '@/types';
+import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
 
 type Props = {
@@ -10,6 +11,7 @@ const OptionChooser: React.FC<Props> = ({ options, updateActivationTargets }: Pr
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [brightness, setBrightness] = useState<number>(0);
+  const { t } = useTranslation();
 
   const handleOptionSelect = (option: LightSource) => {
     const isSelected = selectedOptions.includes(`${option.name}-${option.location}`);
@@ -48,7 +50,7 @@ const OptionChooser: React.FC<Props> = ({ options, updateActivationTargets }: Pr
         }}
         onClick={handleToggle}
       >
-        <h2 style={{ margin: 0 }}>Choose lights:</h2>
+        <h2 style={{ margin: 0 }}>{t("sys.scenes.choose.lights")}</h2>
         <span style={{ marginLeft: '5px' }}>{isOpen ? '▼' : '▶'}</span>
       </div>
       {isOpen && (
@@ -68,9 +70,9 @@ const OptionChooser: React.FC<Props> = ({ options, updateActivationTargets }: Pr
           ))}
         </div>
       )}
-      <p>You have selected: </p>
+      <p>{t("sys.scenes.selected")} </p>
       {selectedOptions.map((selectedOption, index) => {
-          const [name, location] = selectedOption.split('-'); // Splitting the string
+          const [name, location] = selectedOption.split('-');
           return (
             <div 
               className='bg-gray-200 my-2 py-2 px-2 rounded flex'
@@ -79,7 +81,7 @@ const OptionChooser: React.FC<Props> = ({ options, updateActivationTargets }: Pr
               <label 
                 className='justify-self-end ml-auto pr-2'
                 htmlFor="">
-                Brightness:
+                {t("sys.scenes.brightness")}
               </label>
               <input 
                 className='justify-self-end w-1/6'

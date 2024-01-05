@@ -2,17 +2,16 @@ import ControlService from "@/service/ControlService";
 import DeleteService from "@/service/DeleteService";
 import { StatusMessage, User } from "@/types";
 import classNames from "classnames";
-import { get } from "http";
-import { t } from "i18next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import useInterval from "use-interval";
+import { useTranslation } from "next-i18next";
 
 const UserOverview: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
     const router = useRouter();
+    const { t } = useTranslation(); 
 
     const getAllUsers = async () => {
         setStatusMessage([]);
@@ -45,7 +44,7 @@ const UserOverview: React.FC = () => {
         if (!responses.ok) {
             if (responses.status === 401) {
                 setStatusMessage([{
-                    message: "You are not authorized to delete a user. Please login with the right role.",
+                    message: "error.not.authorized.delete.user",
                     type: "error"
                 }]);
             } else {
@@ -55,7 +54,7 @@ const UserOverview: React.FC = () => {
                 }]);
             }
         } else {
-            setStatusMessage([{ message: `Deleted the user succesful!`, type: "success" }]);
+            setStatusMessage([{ message: `sys.user.succes`, type: "success" }]);
         }
     }
 
@@ -97,7 +96,7 @@ const UserOverview: React.FC = () => {
                         ))}
             </div>}
             {isLoading && <div>Loading...</div>}
-            <h1 className="text-center py-2 text-2xl font-bold">{t('user.overview')}</h1>
+            <h1 className="text-center py-2 text-2xl font-bold">{t('sys.user.title')}</h1>
             <div className="grid grid-cols-1 gap-2">
                 {users.map((user) => (
                     <div
@@ -108,12 +107,12 @@ const UserOverview: React.FC = () => {
                             <button
                                 className="px-4 py-1 bg-blue-500 text-white rounded mr-2"
                                 onClick={() => handleUserInfo(user.name)}>
-                                {t('info')}
+                                {t('sys.user.info')}
                             </button>
                             <button
                                 className="px-4 py-1 bg-red-500 text-white rounded"
                                 onClick={() => handleDeleteUser(user.name)}>
-                                {t('delete')}
+                                {t('sys.user.delete')}
                             </button>
                         </div>
                     </div>

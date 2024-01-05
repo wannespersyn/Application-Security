@@ -14,7 +14,7 @@
         "password": "Password",
         "login": "Login",
         "register": "Register",
-        "success": "Login successful! Redirecting to homepage...",
+        "succes": "Login successful! Redirecting to homepage...",
         "error": "Login failed! Please check your credentials and try again."
     },
     "register": {
@@ -35,10 +35,46 @@
         "control.scenes": "Control Scenes",
         "system.management": "System Management"
     },
+    "sys": {
+        "add.light": "Add Light",
+        "add.scene": "Add Scene",
+        "delete.light": "Delete Light",
+        "delete.scene": "Delete Scene",
+        "user": {
+            "succes": "Deleted user succesfull!",
+            "title": "Users",
+            "info": "Info",
+            "delete": "Delete"
+        },
+        "lights": {
+            "name": "Name",
+            "succes": "Added light succesful!",
+            "location": "Location",
+            "add": "Add Lights",
+            "delete": {
+                "succes": "Deleted light succesfull!",
+                "title": "Delete Scene",
+                "the": "The",
+                "selected": "You have selected the following light for deletion:"
+            }
+        },
+        "scenes": {
+            "succes": "Added scene succesful!",
+            "choose.lights": "Choose Lights:",
+            "brightness": "Brightness:",
+            "selected": "Selected Lights:",
+            "delete": {
+                "succes": "Deleted scene succesfull!"
+            }
+        }
+    },
     "error": {
         "password.required": "Password required!",
         "username.required": "Username required!",
+        "location.required": "Location required!",
+        "light.source": "At least one light source is required!",
         "confirm.password.required": "Confirm password required!",
-        "passwords.not.match": "Passwords do not match!"
+        "passwords.not.match": "Passwords do not match!",
+        "not.authorized.delete.user": "You are not authorized to delete this user!"
     }
 }
