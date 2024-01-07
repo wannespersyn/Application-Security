@@ -18,10 +18,12 @@ const UserOverview: React.FC = () => {
 
         const responses = await ControlService.getAllUsers();
 
-        if (!responses.ok) {
+        if (responses === undefined) {
+            router.push('/login');
+        } else {if (!responses.ok) {
             if (responses.status === 401) {
                 setStatusMessage([{
-                    message: "You are not authorized to view this page. Please login first.",
+                    message: t('error.unauthorized'),
                     type: "error"
             }]);
             } else {
@@ -30,9 +32,10 @@ const UserOverview: React.FC = () => {
                     type: "error"
                 }]);
             }
-        } else {
-            const usersData = await responses.json();
-            setUsers(usersData);
+            } else {
+                const usersData = await responses.json();
+                setUsers(usersData);
+            }
         }
     };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LightSource } from "@/types";
+import { LightSource, StatusMessage } from "@/types";
 import LightsOverview from '@/component/control/LightsOverview';
 import Head from 'next/head';
 import ControlService from '@/service/ControlService';
@@ -8,28 +8,33 @@ import useSWR, { mutate } from 'swr';
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+import classNames from 'classnames';
 
 
 const ControlLights: React.FC = () => {
     const [StatusError, setStatusError] = useState<string | null>(null);
     const [lightSources, setLightSources] = useState<LightSource[]>([]);
+    const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
+
     const { t } = useTranslation();
 
     const getAllLightSources = async () => {
-        setStatusError("");
+        setStatusMessage([]);
         
         const responses = await ControlService.getAllLightSources();
-
-        if (!responses.ok) {
-            if (responses.status === 401) {
-                setStatusError(
-                    'You are not authorized to view this page. Please login first.');
-            } else {
-                setStatusError(responses.statusText);
-            }
+        if (responses === undefined) {
+            setStatusMessage([{message: t('error.unauthorized'), type: 'error'}]);
         } else {
-            const lightSourcesData = await responses.json();
-            setLightSources(lightSourcesData);
+            if (!responses.ok) {
+                if (responses.status === 401) {
+                    setStatusMessage([{message: t('error.unauthorized'), type: 'error'}]);
+                } else {
+                    setStatusMessage([{message: responses.statusText, type: 'error'}]);
+                }
+            } else {
+                const lightSourcesData = await responses.json();
+                setLightSources(lightSourcesData);
+            }
         }
     };
 
@@ -47,10 +52,24 @@ const ControlLights: React.FC = () => {
             <Header />
             <main className='grid grid-cols-5'>
                 <section className='col-start-2 col-span-3 my-10'>
-                    <h2 className=' text-black font-medium text-3xl text-center'>{t("lights.title")}</h2>
+                    {statusMessage && (
+                    <div className="w-1/3 mx-auto">
+                        <ul className="list-none mb-3 mx-auto">
+                            {statusMessage.map(({message, type}, index) => (
+                                <li key={index}
+                                    className={classNames({
+                                        "text-green-800": type === "success",
+                                        "text-red-800": type === "error"
+                                    })}>
+                                        {message}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    )}
                     {error && <div>{error}</div>}
-                    {StatusError && <div>{StatusError}</div>}
                     {isLoading && <div>Loading...</div>}
+                    <h2 className=' text-black font-medium text-3xl text-center'>{t("lights.title")}</h2>
                     <section className='grid grid-cols-3 gap-5'>
                         {lightSources && (
                             <LightsOverview/>

@@ -15,11 +15,16 @@ const LightsOverview: React.FC = () => {
         
         const responses = await ControlService.getAllLightSources();
 
-        if (!responses.ok) {
-            checkStatus(responses);
+        if (responses === undefined) {
+            setStatusError(
+                t('error.no.response'));
         } else {
-            const lightSourcesData = await responses.json();
-            setLightSources(lightSourcesData);
+            if (!responses.ok) {
+                checkStatus(responses);
+            } else {
+                const lightSourcesData = await responses.json();
+                setLightSources(lightSourcesData);
+            }
         }
     };
 

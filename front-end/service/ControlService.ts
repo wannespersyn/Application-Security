@@ -1,7 +1,13 @@
 import { User } from "@/types";
 
 const getAllLightSources = () => {
-    const token = JSON.parse(sessionStorage.getItem('loggedInUser') || '')?.token;
+    const loggedInUser = sessionStorage.getItem('loggedInUser');
+
+    if (loggedInUser === null || loggedInUser === undefined) {
+        return;
+    }
+
+    const token = JSON.parse(loggedInUser)?.token;
 
     return fetch(process.env.NEXT_PUBLIC_API_URL + '/controlcenter/getAllLightSources', {
         method: 'GET',
@@ -13,7 +19,13 @@ const getAllLightSources = () => {
 }
 
 const getAllScenes = () => {
-    const token = JSON.parse(sessionStorage.getItem('loggedInUser') || '')?.token;
+    const loggedInUser = sessionStorage.getItem('loggedInUser');
+
+    if (loggedInUser === null || loggedInUser === undefined) {
+        return;
+    }
+
+    const token = JSON.parse(loggedInUser)?.token;
 
     return fetch(process.env.NEXT_PUBLIC_API_URL + '/controlcenter/getAllScenes', {
         method: 'GET',
@@ -25,7 +37,13 @@ const getAllScenes = () => {
 }
 
 const getAllUsers = () => {
-    const token = JSON.parse(sessionStorage.getItem('loggedInUser') || '')?.token;
+    const loggedInUser = sessionStorage.getItem('loggedInUser');
+
+    if (loggedInUser === null || loggedInUser === undefined) {
+        return;
+    }
+
+    const token = JSON.parse(loggedInUser)?.token;
 
     return fetch(process.env.NEXT_PUBLIC_API_URL + '/controlcenter/getAllUsers', {
         method: 'GET',

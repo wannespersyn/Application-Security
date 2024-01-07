@@ -12,6 +12,11 @@ const SystemManagement = () => {
 
     const getRole = () => {
         const user = JSON.parse(sessionStorage.getItem('loggedInUser') || '{}');
+        if (!user || !user.token || user.token.admin === undefined) {
+            setAdmin(false);
+            return;
+        }
+        console.log(user.token.admin);
         setAdmin(user.token.admin);
     }
     
@@ -19,7 +24,7 @@ const SystemManagement = () => {
         getRole();
     }, []);
 
-    //runt als admin veranderd
+
     useEffect(() => {
         if (!admin) {
             setStatusMessage([{ message: `You are not authorized to view this page!`, type: "error" }]);

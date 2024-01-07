@@ -5,27 +5,35 @@ import Header from '@/component/header';
 import useInterval from 'use-interval';
 import useSWR, { mutate } from 'swr';
 import SceneOverview from '@/component/control/SceneOverview';
-import { Scene } from '@/types';
+import { Scene, StatusMessage } from '@/types';
+import { useTranslation } from 'next-i18next';
+import classNames from 'classnames';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const controlScenes: React.FC = () => {
     const [StatusError, setStatusError] = useState<string | null>(null);
     const [scenes, setScenes] = useState<Scene[]>([]);
+    const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
+    const { t } = useTranslation();
 
     const getAllScenes = async () => {
-        setStatusError("");
+        setStatusMessage([]);
 
         const responses = await ControlService.getAllScenes();
         
-        if (!responses.ok) {
-            if (responses.status === 401) {
-                setStatusError(
-                    'You are not authorized to view this page. Please login first.');
-            } else {
-                setStatusError(responses.statusText);
-            }
+        if (responses === undefined) {
+            setStatusMessage([{message: t('error.unauthorized'), type: 'error'}]);
         } else {
-            const scenesData = await responses.json();
-            setScenes(scenesData);
+            if (!responses.ok) {
+                if (responses.status === 401) {
+                    setStatusMessage([{message: t('error.unauthorized'), type: 'error'}]);
+                } else {
+                    setStatusMessage([{message: responses.statusText, type: 'error'}]);
+                }
+            } else {
+                const scenesData = await responses.json();
+                setScenes(scenesData);
+            }
         }
     };
 
@@ -42,6 +50,21 @@ const controlScenes: React.FC = () => {
             <Header />
             <main className='grid grid-cols-5'>
                 <section className='col-start-2 col-span-3 my-10'>
+                {statusMessage && (
+                    <div className="w-1/3 mx-auto">
+                        <ul className="list-none mb-3 mx-auto">
+                            {statusMessage.map(({message, type}, index) => (
+                                <li key={index}
+                                    className={classNames({
+                                        "text-green-800": type === "success",
+                                        "text-red-800": type === "error"
+                                    })}>
+                                        {message}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    )}
                     <h2 className=' text-black font-medium text-3xl text-center'>Control Scenes</h2>
                     {error && <div>{error}</div>}
                     {isLoading && <div>Loading...</div>}
@@ -55,5 +78,15 @@ const controlScenes: React.FC = () => {
         </>
     );
 };
+
+export const getServerSideProps = async (context: any) => {
+    const { locale } = context;
+  
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
+  };
 
 export default controlScenes;
