@@ -2,7 +2,7 @@ export type LightSource = {
     id: number;
     name: string;
     location: string;
-    status: string;
+    status: boolean;
     brightness: number;
 };
 

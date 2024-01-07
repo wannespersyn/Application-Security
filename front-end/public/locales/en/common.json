@@ -82,6 +82,7 @@
         "confirm.password.required": "Confirm password required!",
         "passwords.not.match": "Passwords do not match!",
         "not.authorized.delete.user": "You are not authorized to delete this user!",
-        "unauthorized": "You are not authorized to view this page!"
+        "unauthorized": "You are not authorized to view this page!",
+        "light.required": "At least one light is required!"
     }
 }

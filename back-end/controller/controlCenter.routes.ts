@@ -269,29 +269,6 @@ const ControlCenterRouter = express.Router();
  *                    schema:
  *                      $ref: '#/components/schemas/User'
  * 
- * /getSpecificLightSource:
- *   get:
- *      summary: Get specific light source in control center.
- *      tags: [Control Center]
- *      parameters:
- *      - in: query
- *        name: name
- *        required: true
- *        schema:
- *           type: string
- *      - in: query
- *        location: location
- *        required: true
- *        schema:
- *           type: string
- *      responses:
- *          200:
- *           description: A Light Source object
- *           content:
- *                application/json:
- *                    schema:
- *                      $ref: '#/components/schemas/LightSource'
- * 
  * /getSpecificScene:
  *   get:
  *      summary: Get specific scene  in control center.
@@ -309,29 +286,6 @@ const ControlCenterRouter = express.Router();
  *                application/json:
  *                    schema:
  *                      $ref: '#/components/schemas/Scene'
- * 
- * /getIdLightSource:
- *   get:
- *      summary: Get id from light source in control center.
- *      tags: [Control Center]
- *      parameters:
- *      - in: query
- *        name: name
- *        required: true
- *        schema:
- *           type: string
- *      - in: query
- *        location: location
- *        required: true
- *        schema:
- *           type: string
- *      responses:
- *          200:
- *           description: A id of a Light Source object
- *           content:
- *                application/json:
- *                    schema:
- *                      $ref: '#/components/schemas/LightSource'
  * 
  * /deleteLightSource:
  *   del:
@@ -483,6 +437,7 @@ ControlCenterRouter.post('/addLightSource', async (req: Request & { auth }, res:
 ControlCenterRouter.post('/addScene', (req: Request, res: Response) => {
     try {
         const scene = <Scene>req.body;
+        console.log(scene)
         const result = controlCenterService.addScene(scene);
         res.status(200).json(result);
     } catch(error) {
@@ -609,6 +564,88 @@ ControlCenterRouter.put('/turnLightOff', async (req: Request, res: Response) => 
     }
 })
 
+/**
+ * @swagger
+ * 
+ * /controlCenter/getSpecificLightSource:
+ *   get:
+ *      security:
+ *        - bearerAuth: []
+ *      summary: Get specific light source in control center.
+ *      tags: [Control Center]
+ *      parameters:
+ *      - in: query
+ *        name: name
+ *        required: true
+ *        schema:
+ *           type: string
+ *      - in: query
+ *        location: location
+ *        required: true
+ *        schema:
+ *           type: string
+ *      responses:
+ *          200:
+ *           description: A Light Source object
+ *           content:
+ *                application/json:
+ *                    schema:
+ *                      $ref: '#/components/schemas/LightSource'
+ */
+ControlCenterRouter.get('/getSpecificLightSource', async (req: Request , res: Response) => {
+    try {
+        const name  = <string>req.query.name;
+        const location  = <string>req.query.location;
+        const lightSource = await controlCenterService.getSpecificLighSource(name, location);
+        console.log("test")
+
+        res.status(200).json(lightSource);
+    } catch(error) {
+        res.status(400).json({status: "error", errorMessage: error.message});
+    }
+})
+/**
+ * @swagger
+ *  
+ *  /getIdLightSource:
+ *   get:
+ *      security:
+ *        - bearerAuth: []
+ *      summary: Get id from light source in control center.
+ *      tags: [Control Center]
+ *      parameters:
+ *      - in: query
+ *        name: name
+ *        required: true
+ *        schema:
+ *           type: string
+ *      - in: query
+ *        location: location
+ *        required: true
+ *        schema:
+ *           type: string
+ *      responses:
+ *          200:
+ *           description: A id of a Light Source object
+ *           content:
+ *                application/json:
+ *                    schema:
+ *                      $ref: '#/components/schemas/LightSource'
+ */
+
+ControlCenterRouter.get('/getIdLightSource', async (req: Request, res: Response) => {
+    try {
+        const name  = <string>req.query.name;
+        const location  = <string>req.query.location;
+        const result = await controlCenterService.getIdFromLightSource(name, location);
+        res.status(200).json(result);
+        return result;
+    } catch(error) {
+        res.status(400).json({status: "error", errorMessage: error.message});
+    }
+})
+
+
 ControlCenterRouter.put('/changeBrightness', (req: Request, res: Response) => {
     try {
         const name  = <string>req.body;
@@ -695,16 +732,6 @@ ControlCenterRouter.get('/getAllScenes', async (req: Request, res: Response) => 
  * 
  */
 
-ControlCenterRouter.get('/getSpecificLighSource', async (req: Request, res: Response) => {
-    try {
-        const name  = <string>req.query.name;
-        const location  = <string>req.query.location;
-        const lightSource = await controlCenterService.getSpecificLighSource(name, location);
-        res.status(200).json(lightSource);
-    } catch(error) {
-        res.status(400).json({status: "error", errorMessage: error.message});
-    }
-})
 
 ControlCenterRouter.get('/getSpecificScene', async (req: Request, res: Response) => {
     try {
@@ -716,17 +743,6 @@ ControlCenterRouter.get('/getSpecificScene', async (req: Request, res: Response)
     }
 })
 
-ControlCenterRouter.get('/getIdLightSource', async (req: Request, res: Response) => {
-    try {
-        const name  = <string>req.query.name;
-        const location  = <string>req.query.location;
-        const result = await controlCenterService.getIdFromLightSource(name, location);
-        res.status(200).json(result);
-        return result;
-    } catch(error) {
-        res.status(400).json({status: "error", errorMessage: error.message});
-    }
-})
 
 ControlCenterRouter.get('/getSpecificUser', async (req: Request, res: Response) => {
     try {

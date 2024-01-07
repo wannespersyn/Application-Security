@@ -17,12 +17,13 @@ const LightsOverview: React.FC = () => {
 
         if (responses === undefined) {
             setStatusError(
-                t('error.no.response'));
+                t('error.noesponse'));
         } else {
             if (!responses.ok) {
                 checkStatus(responses);
             } else {
                 const lightSourcesData = await responses.json();
+                lightSourcesData.sort((a: LightSource, b: LightSource) => a.id - b.id);
                 setLightSources(lightSourcesData);
             }
         }
@@ -60,8 +61,6 @@ const LightsOverview: React.FC = () => {
     const handleSubmit = (lightSource: LightSource) => async (event: React.FormEvent) => {
         event.preventDefault();
 
-        getAllLightSources();
-
         if (lightSource.status) {
             await TurnLightOff(lightSource);
         } else {
@@ -69,8 +68,6 @@ const LightsOverview: React.FC = () => {
         }
 
         getAllLightSources();
-
-
     }
 
     useEffect(() => {

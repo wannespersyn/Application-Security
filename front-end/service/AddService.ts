@@ -40,7 +40,7 @@ const addNewScene = (name: string, lightSources: LightSource[]) => {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token.token}`
         },
         body: JSON.stringify({
             name,

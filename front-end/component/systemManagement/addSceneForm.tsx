@@ -17,6 +17,7 @@ const AddSceneForm: React.FC  = () => {
 
     
     const addScene = async (name: string, lightSources: LightSource[]) => {
+        validate();
         const response = await AddService.addNewScene(name, lightSources);
         return response;
     }
@@ -24,6 +25,9 @@ const AddSceneForm: React.FC  = () => {
     const getLightSources = async () => {
         try {
             const response = await ControlService.getAllLightSources();
+            if (response === undefined) {
+                return
+            }
             const lightSourceData = await response.json();
             setAllLightSources(lightSourceData);
         } catch (error) {
@@ -34,7 +38,12 @@ const AddSceneForm: React.FC  = () => {
     const getUniqueLightSource = async (name: string, location: string) => {
         try {
             const response = await ControlService.getLightSourceByNameAndLocation(name, location);
+            if (response === undefined) {
+                return
+            }
             const lightSourceData = await response.json();
+            console.log("The light source data is: ", lightSourceData);
+
             const id = await ControlService.getIdLightSource(name, location);
             console.log(id);
             const updatedLightSource = { ...lightSourceData, id }; 
@@ -55,7 +64,7 @@ const AddSceneForm: React.FC  = () => {
         let result = true;
 
         if (!name && name.trim() === '') {
-            setNameError(t("error.name.required"));
+            setNameError(t("error.username.required"));
             result = false;
         }
 
@@ -78,7 +87,7 @@ const AddSceneForm: React.FC  = () => {
 
         addScene(name, lightSources);
 
-        setStatusMessage([{message: "sys.scenes.succes", type: "success"}])
+        setStatusMessage([{message: t("sys.scenes.succes"), type: "success"}])
         
     };
 
