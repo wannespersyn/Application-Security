@@ -36,7 +36,6 @@ export class User {
             admin
         })
     }
-
-    
-
 }
+
+export default User;

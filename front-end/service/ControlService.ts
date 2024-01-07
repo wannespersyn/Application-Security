@@ -36,6 +36,8 @@ const getAllUsers = () => {
     });
 }
 
+
+
 const getLightSourceByNameAndLocation = async (name: string, location: string) => {
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/controlcenter/getSpecificLighSource?name=${name}&location=${location}`, {
         method: 'GET',
@@ -56,15 +58,41 @@ const getIdLightSource = async (name: string, location: string) => {
     return response.json();
 }
 
-const TurnSceneOn = async (name: string) => {
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/controlcenter/turnSceneOn?name=${name}`, {
+
+
+const turnLightOn = (name: string, location: string) => {
+    const token = JSON.parse(sessionStorage.getItem('loggedInUser') || '')?.token;
+
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/controlCenter/turnLightOn`, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application.json'
-        }
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token.token}`
+        },
+        body: JSON.stringify({
+            name,
+            location
+        })
     });
-    return response;
 }
+
+const turnLightOff = (name: string, location: string) => {
+    const token = JSON.parse(sessionStorage.getItem('loggedInUser') || '')?.token;
+
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/controlCenter/turnLightOff`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token.token}`
+        },
+        body: JSON.stringify({
+            name,
+            location
+        })
+    });
+}
+
+
 
 const login = ({name, password}: User) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + `/controlCenter/login`, {
@@ -83,9 +111,14 @@ const login = ({name, password}: User) => {
 const ControlService = {
     getAllLightSources,
     getAllScenes,
+    getAllUsers,
+
     getLightSourceByNameAndLocation,
     getIdLightSource,
-    getAllUsers,
+
+    turnLightOn,
+    turnLightOff,
+
     login
 }
 

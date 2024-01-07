@@ -1,4 +1,4 @@
-import { User } from "../../domain/model/user";
+import User from "../../domain/model/user";
 
 const validName = "Wannes Persyn";
 const validPassword = "yB8=2\JaX{c2"
@@ -20,7 +20,7 @@ test(`given: valid value for name and password; when: user is created; then: fie
 
 test(`giver: invalid password; when: user is created; then: an error is thrown`, () => {
     //given
-    const invalidPassword = "a";
+    const invalidPassword = "     ";
 
     //when
     const CreateNewUser = () =>
@@ -31,5 +31,21 @@ test(`giver: invalid password; when: user is created; then: an error is thrown`,
         });
 
     //then
-    expect(CreateNewUser).toThrowError('Password does not meet the criteria.');
+    expect(CreateNewUser).toThrowError('Password is required!');
+})
+
+test(`giver: invalid name; when: user is created; then: an error is thrown`, () => {
+    //given
+    const invalidName = "     ";
+
+    //when
+    const CreateNewUser = () =>
+        new User({
+            name: invalidName,
+            password: validPassword,
+            admin: false
+        });
+
+    //then
+    expect(CreateNewUser).toThrowError('Name is required!');
 })

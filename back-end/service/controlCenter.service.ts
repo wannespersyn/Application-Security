@@ -95,24 +95,24 @@ const deleteUser = async (name: string, admin: boolean): Promise<User> => {
  * LIGHT CONTROL FUNCTIONS
  * 
  */
-const turnLightOn = (name: string, location: string): Promise<LightSource> => {
-    const targetLightSource = controlCenterDb.findLightSourceByNameAndLocation(name, location)
+const turnLightOn = async (name: string, location: string): Promise<LightSource> => {
+    const targetLightSource = await controlCenterDb.findLightSourceByNameAndLocation(name, location)
 
     if (!targetLightSource) {
         throw new Error(`Light source with name: '${name}' and location: '${location} not found!`)
     }
 
-    return controlCenterDb.turnLightOn(name, location)
+    return await controlCenterDb.turnLightOn(name, location)
 };
 
-const turnLightOff = (name: string, location: string): Promise<LightSource> => {
-    const targetLightSource = controlCenterDb.findLightSourceByNameAndLocation(name, location)
+const turnLightOff = async (name: string, location: string): Promise<LightSource> => {
+    const targetLightSource = await controlCenterDb.findLightSourceByNameAndLocation(name, location)
 
     if (!targetLightSource) {
         throw new Error(`Light source with name: '${name}' and location: '${location} not found!`)
     }
 
-    return controlCenterDb.turnLightOff(name, location);
+    return await controlCenterDb.turnLightOff(name, location);
 };
 
 const changeBrightnessLight= (name: string, location: string, brightness: number): Promise<LightSource> | null => {

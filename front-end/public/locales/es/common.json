@@ -68,6 +68,12 @@
             }
         }
     },
+    "lights": {
+        "location": "Ubicación",
+        "on": "Encendido",
+        "off": "Apagado",
+        "title": "Controlar Luces"
+    },
     "error": {
         "password.required": "¡Contraseña requerida!",
         "username.required": "¡Nombre de usuario requerido!",

@@ -15,11 +15,12 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-test(`given: a valid user; when: user is created; then: user is created with those values`, () => {
+test(`given: a valid user; when: user is created; then: user is created with those values`, async () => {
     //given
+    userDb.createUser = mockUserDbCreateUser;
 
     //when
-    userService.createUser({name: validName, password: validPassword, admin: false})
+    await userDb.createUser({name: validName, password: validPassword, admin: false, validate(user) {},});
 
     //then
     expect(mockUserDbCreateUser).toHaveBeenCalledTimes(1);

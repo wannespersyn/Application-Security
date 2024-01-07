@@ -167,16 +167,38 @@ const deleteUser = async (name: string): Promise<User> => {
  */
 const turnLightOn = async (name: string, location: string): Promise<LightSource> => {
     const targetLightSource = await findLightSourceByNameAndLocation(name, location)
-    targetLightSource.status = true;
 
-    return targetLightSource;
+    const turnLightOnPrisma = await database.lightSources.update({
+        where: {
+            name_location: {
+                name: name,
+                location: location
+            }
+        },
+        data: {
+            status: true
+        }
+    });
+
+    return LightSource.from(turnLightOnPrisma);
 };
 
 const turnLightOff = async (name: string, location: string): Promise<LightSource> => {
     const targetLightSource = await findLightSourceByNameAndLocation(name, location)
-    targetLightSource.status = false;
+    
+    const turnLightOffPrisma = await database.lightSources.update({
+        where: {
+            name_location: {
+                name: name,
+                location: location
+            }
+        },
+        data: {
+            status: false
+        }
+    });
 
-    return targetLightSource;
+    return LightSource.from(turnLightOffPrisma);
 };
 
 const changeBrightness = async (name: string, location: string, brightness: number): Promise<LightSource> => {

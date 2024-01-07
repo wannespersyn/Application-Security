@@ -68,6 +68,12 @@
             }
         }
     },
+    "lights": {
+        "location": "Location",
+        "on": "On",
+        "off": "Off",
+        "title": "Control Lights"
+    },
     "error": {
         "password.required": "Password required!",
         "username.required": "Username required!",
@@ -75,6 +81,7 @@
         "light.source": "At least one light source is required!",
         "confirm.password.required": "Confirm password required!",
         "passwords.not.match": "Passwords do not match!",
-        "not.authorized.delete.user": "You are not authorized to delete this user!"
+        "not.authorized.delete.user": "You are not authorized to delete this user!",
+        "unauthorized": "You are not authorized to view this page!"
     }
 }

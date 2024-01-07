@@ -1,5 +1,5 @@
 import { LightSource } from "../../domain/model/lightSource";
-import { Scene} from "../../domain/model/scene";
+import { Scene } from "../../domain/model/scene";
 
 const validName = "watching tv";
 const validActivationTargets = [

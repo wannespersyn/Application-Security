@@ -3,6 +3,7 @@ import {
     LightSources as LightSourcePrisma,
     ControlCenter as ControlCenterPrisma
 } from "@prisma/client";
+
 import { LightSource } from "./lightSource";
 
 export class Scene {
@@ -25,6 +26,12 @@ export class Scene {
 
         if (scene.lightSources.length === 0) {
             throw new Error("No light sources found!");
+        }
+        const dup_lightSources = scene.lightSources;
+        for (const light of dup_lightSources) {
+            if (light.name in dup_lightSources) {
+                throw new Error("Duplicate light source found!");
+            }
         }
     }
 

@@ -17,6 +17,7 @@ afterEach(() => {
 
 test(`given: a valid light source; when: light source is created; then: light source is created with those values`, () => {
     //given
+    lightSourceDb.createLightSource = mockLightSourceDbCreateLightSource;
 
     //when
     lightSourceService.createLightSource(

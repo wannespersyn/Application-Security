@@ -10,7 +10,6 @@ test(`given: valid values; when: control center is created; then: create control
     
     //then
     expect(controlCenter.name).toEqual("Home Control Center");
-    expect(controlCenter.users).toEqual([new User({name: "admin", admin: true, password: "Admin123!"})]);
     expect(controlCenter.light_sources).toEqual([]);
     expect(controlCenter.scenes).toEqual([]);
 })

@@ -1,3 +1,4 @@
+import sceneDb from "../../domain/data-access/scene.db";
 import {LightSource} from "../../domain/model/lightSource";
 import {Scene} from "../../domain/model/scene";
 import sceneService from "../../service/scene.service";
@@ -31,6 +32,7 @@ afterEach(() => {
 
 test(`given: a valid scene; when: scene is created; then: scene is created with those values`, () => {
     //given
+    sceneDb.createScene = mockSceneDbCreateScene;
 
     //when
     sceneService.createScene({

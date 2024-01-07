@@ -44,7 +44,7 @@ const addNewScene = (name: string, lightSources: LightSource[]) => {
         },
         body: JSON.stringify({
             name,
-            lightSources,
+            lightSources
         })
     });
 }

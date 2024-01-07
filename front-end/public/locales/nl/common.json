@@ -68,6 +68,12 @@
             }
         }
     },
+    "lights": {
+        "location": "Locatie",
+        "on": "Aan",
+        "off": "Uit",
+        "title": "Verlichting Bedienen"
+    },
     "error": {
         "password.required": "Wachtwoord vereist!",
         "username.required": "Gebruikersnaam vereist!",

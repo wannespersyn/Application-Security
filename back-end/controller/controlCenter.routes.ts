@@ -127,47 +127,6 @@ const ControlCenterRouter = express.Router();
  *                      schema:
  *                        $ref: '#/components/schemas/ControlCenter'
  *
- * /LightSource/turnLightOn:
- *   put:
- *      summary: Turn the light on
- *      tags: [Control Center]
- *      requestBody:
- *        required: true
- *        content:
- *          application.json:
- *            schema:
- *              type: object
- *              properties:
- *                name:
- *                  type: string
- *      responses:
- *          200:
- *              description: A LightSource object
- *              content:
- *                  application.json:
- *                      schema:
- *                        $ref: '#/components/schemas/LightSource'
- *
- * /LightSource/turnLightOff:
- *   put:
- *      summary: Turn the light off
- *      tags: [Control Center]
- *      requestBody:
- *        required: true
- *        content:
- *          application.json:
- *            schema:
- *              type: object
- *              properties:
- *                name:
- *                  type: string
- *      responses:
- *          200:
- *              description: A LightSource object
- *              content:
- *                  application.json:
- *                      schema:
- *                        $ref: '#/components/schemas/LightSource'
  *
  * /LightSource/changeBrightness:
  *   put:
@@ -574,22 +533,76 @@ ControlCenterRouter.delete('/deleteUser', (req: Request & { auth }, res: Respons
  * 
  */
 
-ControlCenterRouter.put('/turnLightOn', (req: Request, res: Response) => {
+/**
+ * @swagger
+ * 
+ *  /controlCenter/turnLightOn:
+ *    put:
+ *      security:
+ *        - bearerAuth: []
+ *      summary: Turn the light on
+ *      tags: [Control Center]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                name:
+ *                  type: string
+ *                location:
+ *                  type: string
+ *      responses:
+ *        200:
+ *          description: A LightSource object
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/LightSource'
+ */
+ControlCenterRouter.put('/turnLightOn', async (req: Request, res: Response) => {
     try {
-        const name  = <string>req.body;
-        const location  = <string>req.body;
-        const result = controlCenterService.turnLightOn(name, location);
+        const { name, location } = req.body;
+        const result = await controlCenterService.turnLightOn(name, location);
         res.status(200).json(result);
     } catch(error) {
         res.status(400).json({status: "error", errorMessage: error.message});
     }
 })
 
-ControlCenterRouter.put('/turnLightOff', (req: Request, res: Response) => {
+/**
+ * @swagger
+ * 
+ *  /controlCenter/turnLightOff:
+ *    put:
+ *      security:
+ *        - bearerAuth: []
+ *      summary: Turn the light off
+ *      tags: [Control Center]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                name:
+ *                  type: string
+ *                location:
+ *                  type: string
+ *      responses:
+ *        200:
+ *          description: A LightSource object
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/LightSource'
+ */
+ControlCenterRouter.put('/turnLightOff', async (req: Request, res: Response) => {
     try {
-        const name  = <string>req.body;
-        const location  = <string>req.body;
-        const result = controlCenterService.turnLightOff(name, location);
+        const { name, location } = req.body;
+        const result = await controlCenterService.turnLightOff(name, location);
         res.status(200).json(result);
     } catch(error) {
         res.status(400).json({status: "error", errorMessage: error.message});
