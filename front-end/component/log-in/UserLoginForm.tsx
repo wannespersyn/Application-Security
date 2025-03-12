@@ -2,9 +2,8 @@ import { StatusMessage } from "@/types";
 import { useRouter } from "next/router";
 import classNames from "classnames";
 import React, { useState } from "react";
-import ControlService from "@/service/ControlService";
 import { useTranslation } from "next-i18next";
-import UserOverview from "./userOverview";
+import AuthService from "@/service/AuthService";
 
 const UserLoginForm: React.FC = () => {
     const [name, setUsername] = useState('');
@@ -47,16 +46,11 @@ const UserLoginForm: React.FC = () => {
         }
 
         const user = {name, password};
-        const response = await ControlService.login(user);
+        const response = await AuthService.login(user);
 
         if (response.status === 200) {
             setStatusMessage([{message: `${t("login.succes")}`, type: "success"}])
             const user = await response.json();
-            console.log(JSON.stringify({
-                token: user.token,
-                name: user.name,
-                admin: user.admin,
-            }));
             sessionStorage.setItem(
                 'loggedInUser',
                 JSON.stringify({

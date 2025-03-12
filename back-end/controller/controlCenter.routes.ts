@@ -54,15 +54,10 @@
  *                  format: int64
 */
 
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import controlCenterService from "../service/controlCenter.service";
-import { ControlCenterInput, UserInput } from "../types";
-import {User} from "../domain/model/user";
 import {LightSource} from "../domain/model/lightSource";
 import {Scene} from "../domain/model/scene";
-import lightSourceService from "../service/lightSource.service";
-import {lightSourceRouter} from "./lightSource.routes";
-import { requestToBodyStream } from "next/dist/server/body-streams";
 import next from "next";
 
 
@@ -358,68 +353,6 @@ ControlCenterRouter.post('/', (req: Request, res: Response) => {
     }
 })
 
-/**
- * @swagger
- * /controlCenter/login:
- *   post:
- *      summary: Login using name and password. Returns a token an object with JWT token and user name when succesfull.
- *      tags: [Control Center]
- *      requestBody:
- *        required: true
- *        content:
- *          application.json:
- *            schema:
- *              $ref: '#/components/schemas/UserInput'
- *      responses:
- *         200:
- *            description: The created user object
- *            content:
- *             application/json:
- *               schema:  
- *                 $ref: '#/components/schemas/User'
- */
-
-ControlCenterRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const user = <UserInput>req.body;
-        const result = await controlCenterService.authenticate(user);
-        res.status(200).json({message: "authentication succesfull", token: result});
-    } catch(error) {
-        next(error);
-    }
-})
-
-/**
- * @swagger
- * 
- *  /controlCenter/signUp:
- *   post:
- *      summary: sign a new user up to control center.
- *      tags: [Control Center]
- *      requestBody:
- *        required: true
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/UserInput'
- *      responses:
- *          200:
- *              description: A user object
- *              content:
- *                  application/json:
- *                      schema:
- *                        $ref: '#/components/schemas/User'
- */
-
-ControlCenterRouter.post('/signUp', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const user = <UserInput>req.body;
-        const result = await controlCenterService.addUserToControlCenter(user);
-        res.status(200).json(result);
-    } catch(error) {
-        next(error);
-    }
-})
 
 ControlCenterRouter.post('/addLightSource', async (req: Request & { auth }, res: Response) => {
     try {

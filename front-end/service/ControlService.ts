@@ -130,6 +130,9 @@ const turnLightOff = (name: string, location: string) => {
 
 
 const login = ({name, password}: User) => {
+    console.log(process.env.NEXT_PUBLIC_API_URL + `/controlCenter/login`);
+    console.log(name,
+        password);
     return fetch(process.env.NEXT_PUBLIC_API_URL + `/controlCenter/login`, {
         method: 'POST',
         headers: {

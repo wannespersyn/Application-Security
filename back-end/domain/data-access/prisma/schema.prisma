@@ -48,3 +48,11 @@ model Scene {
   controlCenter   ControlCenter  @relation(fields: [controlCenterId], references: [id])
   controlCenterId Int
 }
+
+model RevokedToken {
+  id        Int      @id @default(autoincrement()) 
+  token     String   @unique                      
+  reason    String  
+  revokedAt DateTime @default(now())              
+}
+

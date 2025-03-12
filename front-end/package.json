@@ -3,15 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 8000",
+    "dev": "next --experimental-https -p 8000",
     "build": "next build",
-    "start": "next start -p 8000",
+    "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "classnames": "^2.3.3",
+    "front-end": "file:",
     "i18next": "^23.7.14",
-    "next": "14.0.3",
+    "next": "15.2.1",
     "next-i18next": "^15.1.2",
     "react": "^18",
     "react-dom": "^18",

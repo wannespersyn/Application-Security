@@ -1,22 +1,8 @@
 import { LightSource, User } from "@/types";
 
-const addNewUser = ({name , password}: User) => {
-
-    return fetch(process.env.NEXT_PUBLIC_API_URL + '/controlCenter/signUp', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            name,
-            password,
-            admin: false,
-        })
-    });
-}
 
 const addNewLight = async (name: string, location: string) => {
-    const token = JSON.parse(sessionStorage.getItem('loggedInUser') || '')?.token;
+   const token = JSON.parse(sessionStorage.getItem('loggedInUser') || '')?.token;
 
    return fetch(process.env.NEXT_PUBLIC_API_URL + '/controlCenter/addLightSource', {
         method: 'POST',
@@ -52,7 +38,6 @@ const addNewScene = (name: string, lightSources: LightSource[]) => {
 const AddService = {
     addNewLight,
     addNewScene,
-    addNewUser
 }
 
 export default AddService;

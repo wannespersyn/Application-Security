@@ -7,10 +7,10 @@ import bcrypt from "bcrypt";
 const prisma = new PrismaClient();
 
 const main = async () => {
-    await prisma.controlCenter.deleteMany();
     await prisma.lightSources.deleteMany();
     await prisma.scene.deleteMany();
     await prisma.user.deleteMany();
+    await prisma.controlCenter.deleteMany();
 
     const controlHomeCenter = await prisma.controlCenter.create({
         data: {
@@ -18,128 +18,60 @@ const main = async () => {
         }
     });
 
-    // USERS
+    /**
+     * USERS
+     */
+    const users = [
+        { name: "Wannes", password: "admin", admin: true },
+        { name: "Robin", password: "admin", admin: true },
+        { name: "greetjej", password: "greetjej123", admin: false },
+        { name: "elkes", password: "elkes123", admin: false },
+        { name: "johanp", password: "johan123", admin: false }
+    ]
 
-    const passwordAdmin = await bcrypt.hash("admin", 12);
-    await prisma.user.create({
-        data: {
-            name: "Wannes",
-            password: passwordAdmin,
-            admin: true,
-            controlCenter: {
-                connect: { id: controlHomeCenter.id }
+    const pepper = process.env.PEPPER || 'je-geheime-pepper-string';
+
+    for (const user of users) {
+        const salt = await bcrypt.genSalt(12);
+        const pepperedPassword = user.password + pepper;
+        const password = await bcrypt.hash(pepperedPassword, salt);
+        await prisma.user.create({
+            data: {
+                name: user.name,
+                password: password,
+                admin: user.admin,
+                controlCenter: {
+                    connect: { id: controlHomeCenter.id }
+                }
             }
-        }
-    });
+        });
+    }
 
-    await prisma.user.create({
-        data: {
-            name: "Robin",
-            password: passwordAdmin,
-            admin: true,
-            controlCenter: {
-                connect: { id: controlHomeCenter.id }
+    /**
+     * LIGHT SOURCES
+     */
+    const lightSources = [
+        { name: "main light", location: "living room" },
+        { name: "tv light", location: "living room" },
+        { name: "main light", location: "kitchen" },
+        { name: "wine rack light", location: "kitchen" },
+        { name: "extractor hood light", location: "kitchen" }
+    ]
+
+    for (const lightSource of lightSources) {
+        await prisma.lightSources.create({
+            data: {
+                name: lightSource.name,
+                location: lightSource.location,
+                brightness: 0,
+                status: false,
+                controlCenter: {
+                    connect: { id: controlHomeCenter.id }
+                }
             }
-        }
-    });
+        });
+    }
 
-    const passwordGreetje = await bcrypt.hash("greetjej123", 12);
-    await prisma.user.create({
-        data: {
-            name: "greetjej",
-            password: passwordGreetje,
-            admin: false,
-            controlCenter: {
-                connect: { id: controlHomeCenter.id }
-            }
-        }
-    });
-
-    const passwordElkes = await bcrypt.hash("elkes123", 12);
-    await prisma.user.create({
-        data: {
-            name: "elkes",
-            password: passwordElkes,
-            admin: false,
-            controlCenter: {
-                connect: { id: controlHomeCenter.id }
-            }
-        }
-    });
-
-    const passwordJohan = await bcrypt.hash("johan123", 12);
-    await prisma.user.create({
-        data: {
-            name: "johanp",
-            password: passwordJohan,
-            admin: false,
-            controlCenter: {
-                connect: { id: controlHomeCenter.id }
-            }
-        }
-    });
-
-    //light sources
-
-    await prisma.lightSources.create({
-        data: {
-            name: "main light",
-            location: "living room",
-            brightness: 0,
-            status: false,
-            controlCenter: {
-                connect: { id: controlHomeCenter.id }
-            }
-        }
-    });
-
-    await prisma.lightSources.create({
-        data: {
-            name: "tv light",
-            location: "living room",
-            brightness: 0,
-            status: false,
-            controlCenter: {
-                connect: { id: controlHomeCenter.id }
-            }
-        }
-    });
-
-    await prisma.lightSources.create({
-        data: {
-            name: "main light",
-            location: "kitchen",
-            brightness: 0,
-            status: false,
-            controlCenter: {
-                connect: { id: controlHomeCenter.id }
-            }
-        }
-    });
-
-    await prisma.lightSources.create({
-        data: {
-            name: "wine rack light",
-            location: "kitchen",
-            brightness: 0,
-            status: false,
-            controlCenter: {
-                connect: { id: controlHomeCenter.id }
-            }
-        }
-    });
-
-    await prisma.lightSources.create({
-        data: {
-            name: "extractor hood light",
-            location: "kitchen",
-            brightness: 0,
-            status: false,
-            controlCenter: {
-                connect: { id: controlHomeCenter.id }
-            }
-        }
-    });
 
     const getLightSourcesKitchen = await prisma.lightSources.findMany({
         where: {
@@ -153,42 +85,34 @@ const main = async () => {
         }
     });
 
-    //SCENES
+    /**
+     * SCENES
+     */
+    const scenes = [
+        { name: "watching tv", lightSources: getLightSourcesLivingRoom },
+        { name: "cooking", lightSources: getLightSourcesKitchen }
+    ]
 
-
-    await prisma.scene.create({
-        data: {
-            name: "watching tv",
-            lightSources: {
-                connect: getLightSourcesLivingRoom.map((lightSource) => ({
-                    id: lightSource.id
-                }))
-            },
-            controlCenter: {
-                connect: {id: controlHomeCenter.id }
+    for (const scene of scenes) {
+        await prisma.scene.create({
+            data: {
+                name: scene.name,
+                lightSources: {
+                    connect: scene.lightSources.map((lightSource) => ({
+                        id: lightSource.id
+                    }))
+                },
+                controlCenter: {
+                    connect: {id: controlHomeCenter.id }
+                }
             }
-        }
-    });
-
-    await prisma.scene.create({
-        data: {
-            name: "cooking",
-            lightSources: {
-                connect: getLightSourcesKitchen.map((lightSource) => ({
-                    id: lightSource.id
-                }))
-            },
-            controlCenter: {
-                connect: {id: controlHomeCenter.id }
-            }
-        }
-    });
-
+        });
+    }
 }
 
 main()
     .catch(e => {
-        console.error(e.messa)
+        console.error(e.message)
     })
     .finally(async () => {
         await prisma.$disconnect()

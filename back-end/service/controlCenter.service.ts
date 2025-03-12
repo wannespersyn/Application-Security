@@ -3,9 +3,7 @@ import { ControlCenter } from "../domain/model/controlCenter";
 import { User } from "../domain/model/user";
 import { LightSource } from "../domain/model/lightSource";
 import { Scene } from "../domain/model/scene";
-import { AuthenticationResponse, UserInput } from "../types";
-import bcrypt from "bcrypt";
-import { generateJwtToken } from "../util/jwt";
+import { UserInput } from "../types";
 import { UnauthorizedError } from "express-jwt";
 
 /**
@@ -17,38 +15,11 @@ const createControlCenter = (): Promise<ControlCenter> => {
     return controlCenterDb.createControlPanel();
 }
 
-const authenticate = async ({ name, password}: UserInput): Promise<AuthenticationResponse> => {
-    const user = await getSpecificUser(name);
-
-    const isvalidPassword = await bcrypt.compare(password, user.password);
-    if (!isvalidPassword) {
-        throw new Error("Password is incorrect!");
-    }
-
-    return {
-        token: generateJwtToken({ name, admin: user.admin }),
-        name: user.name,
-        admin: user.admin
-    };
-}
-
 /**
  * 
  * ADD FUNCTIONS
  * 
  */
-const addUserToControlCenter = async ({name, password, admin }: UserInput): Promise<User> => {
-    const excisting = await controlCenterDb.findUserByName(name);
-
-    if (excisting) {
-        throw new Error(`User with name: '${name}' already exists!`);
-    }
-    
-    const hashedPassword = await bcrypt.hash(password, 12);
-    const user = new User ({name, password: hashedPassword, admin});
-
-    return await controlCenterDb.addUser(user);
-}
 
 const addLightSource = ({name, location, brightness, status}: LightSource, { admin }) : Promise<LightSource> => {
     if (!admin) {
@@ -201,9 +172,7 @@ const getIdFromLightSource = (name, location) => {
 
 export default {
     createControlCenter,
-    authenticate,
 
-    addUserToControlCenter,
     addLightSource,
     addScene,
 
