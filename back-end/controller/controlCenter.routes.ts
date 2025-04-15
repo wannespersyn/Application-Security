@@ -58,7 +58,7 @@ import express, { Request, Response } from "express";
 import controlCenterService from "../service/controlCenter.service";
 import {LightSource} from "../domain/model/lightSource";
 import {Scene} from "../domain/model/scene";
-import next from "next";
+// import next from "next";
 
 
 const ControlCenterRouter = express.Router();
@@ -636,7 +636,7 @@ ControlCenterRouter.get('/getAllUsers', async (req: Request, res: Response) => {
         const users = await controlCenterService.getAllUsers();
         res.status(200).json(users);
     } catch(error) {
-        next(error);
+        res.status(400).json({status: "error", errorMessage: error.message});
     }
 })
 

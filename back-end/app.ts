@@ -26,6 +26,10 @@ app.use(
     helmet.contentSecurityPolicy({
         directives: {
             connectSrc: ['self', 'https://api.ucll.be'],
+            defaultSrc: ["'self'"],
+            fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+            objectSrc: ["'none'"],
+            scriptSrc: ["'self'"]
         },
     })
 );
@@ -84,10 +88,10 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 // Load certificates
-const options = {
-    key: fs.readFileSync('C:/Program Files/OpenSSL/private.key'),
-    cert: fs.readFileSync('C:/Program Files/OpenSSL/public.crt'),  
-};
+// const options = {
+//     key: fs.readFileSync('keys/tls/private.key'),
+//     cert: fs.readFileSync('keys/tls/public.crt'),  
+// };
 
 
 // Create HTTPS server

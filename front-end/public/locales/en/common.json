@@ -27,7 +27,7 @@
         "error": "Registration failed!"
     },
     "home": {
-        "title": "Welcome to the Home control app.",
+        "title": "Welcome to the Home control app",
         "greeting": "Hello",
         "info": "In this app you can control the lights and scenes in your home.",
         "get.started": "Get started",

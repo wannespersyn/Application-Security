@@ -1,17 +1,18 @@
-// pages/index.tsx
 import React, { useEffect, useState } from 'react';
 import Header from '../component/header';
 import OptionsOverview from '../component/optionsOverview';
-import { GetServerSidePropsContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+import DOMPurify from 'dompurify';
 
 const HomePage: React.FC = () => {
-  const [name, setName] = useState<String | null>(null);
+  const [name, setName] = useState<string>('');
   const { t } = useTranslation();
   
   useEffect(() => {
     const sessionDataString = sessionStorage.getItem('loggedInUser');
+    setName(DOMPurify.sanitize(name));
+
     if (!sessionDataString) {
       return;
     }
@@ -21,21 +22,15 @@ const HomePage: React.FC = () => {
 
 
   return (
-    <>
-      <Header />
-      <main className='grid grid-cols-5 my-5'>
-        <section className='col-start-2 col-span-3 text-center bg-gray-200 py-8'>
-          <div>
-            <h2 className='text-3xl'>{t("home.greeting")} {name}!</h2>
-          </div>
-          <h2 className='text-xl'>{t("home.title")}</h2>
-          <p className='italic'>{t("home.info")}</p>
-          <div className='grid subgrid-col-3 my-12 gap-8 mx-16'>
-          <OptionsOverview />
-        </div>
-      </section>
-      </main>
-    </>
+      <>
+          <Header />
+          <main className="min-h-screen bg-gray-200">
+              <section className="text-center ">
+                  <h1 className="text-5xl pt-12 font-bold">{t(("home.title"), { name: name })}!</h1>
+                  <OptionsOverview />
+              </section>
+          </main>
+      </>
   );
 };
 

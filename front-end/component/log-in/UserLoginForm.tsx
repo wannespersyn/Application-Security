@@ -1,12 +1,12 @@
 import { StatusMessage } from "@/types";
 import { useRouter } from "next/router";
-import classNames from "classnames";
 import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import AuthService from "@/service/AuthService";
+import StatusMessageComponent from "../statusMessageComponent";
 
 const UserLoginForm: React.FC = () => {
-    const [name, setUsername] = useState('');
+    const [name, setName] = useState('');
     const [nameError, setNameError] = useState("");
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState("");
@@ -41,7 +41,7 @@ const UserLoginForm: React.FC = () => {
 
         clearErros();
 
-        if (validate() == false) {
+        if (!validate()) {
             return;
         }
 
@@ -57,7 +57,7 @@ const UserLoginForm: React.FC = () => {
                     token: user.token,
                     name: user.name,
                 })
-            ),
+            );
             setTimeout(() => { router.push("/"); }, 2000);
         } else if (response.status === 401) {
             const { errorMessage }  = await response.json();
@@ -72,19 +72,7 @@ const UserLoginForm: React.FC = () => {
         <>
             <h2 className="font-medium text-xl text-center">{t("login.title")}</h2>
             {statusMessage && (
-                <div className="w-1/3 mx-auto">
-                    <ul className="list-none mb-3 mx-auto">
-                        {statusMessage.map(({message, type}, index) => (
-                            <li key={index}
-                                className={classNames({
-                                    "text-green-800": type === "success",
-                                    "text-red-800": type === "error"
-                                })}>
-                                    {message}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                <StatusMessageComponent message={statusMessage} />
             )}
             <div className="w-1/2 mx-auto">
                 <form onSubmit={handleSubmit}>
@@ -94,7 +82,7 @@ const UserLoginForm: React.FC = () => {
                             type="text"
                             id="usernameInput"
                             value={name}
-                            onChange={(event) => setUsername(event.target.value)}
+                            onChange={(event) => setName(event.target.value)}
                             placeholder={t("login.username")}
                         />
                         {nameError && (

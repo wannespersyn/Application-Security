@@ -1,5 +1,5 @@
 import Header from "@/component/header";
-import statusMessage from "@/component/statusMessage";
+import statusMessage from "@/component/statusMessageComponent";
 import Navigation from "@/component/systemManagement/navigation";
 import OptionChooserDelete from "@/component/systemManagement/optionChooserDelete";
 import ControlService from "@/service/ControlService";

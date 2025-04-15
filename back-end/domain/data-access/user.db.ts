@@ -10,7 +10,7 @@ const createUser = async ({ name, password, admin }: User): Promise<User> => {
                 password: password,
                 admin: admin,
                 controlCenter: {
-                    connect: { id: 1 }
+                    connect: { id: 435 }
                 }  
             }
         });

@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 
 const Language: React.FC = () => {
     const router = useRouter();
-    const { locale, pathname, asPath, query } = router;
+    const { locale } = router;
 
     const handleLanguageChange = (event: {target: { value: string } }) => {
         const newLocale = event.target.value;

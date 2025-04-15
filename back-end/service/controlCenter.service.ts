@@ -3,7 +3,6 @@ import { ControlCenter } from "../domain/model/controlCenter";
 import { User } from "../domain/model/user";
 import { LightSource } from "../domain/model/lightSource";
 import { Scene } from "../domain/model/scene";
-import { UserInput } from "../types";
 import { UnauthorizedError } from "express-jwt";
 
 /**

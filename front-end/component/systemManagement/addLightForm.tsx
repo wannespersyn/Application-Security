@@ -1,8 +1,8 @@
 import AddService from "@/service/AddService";
 import { StatusMessage } from "@/types";
-import classNames from "classnames";
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
+import StatusMessageComponent from "../statusMessageComponent";
 
 const AddLightForm: React.FC = () => {
     const [name, setName] = useState('');
@@ -27,7 +27,7 @@ const AddLightForm: React.FC = () => {
 
         clearErros();
 
-        if (validate() == false) {
+        if (!validate()) {
             return;
         }
 
@@ -57,19 +57,7 @@ const AddLightForm: React.FC = () => {
     return (
         <>
              {statusMessage && (
-                <div className="w-1/2 mx-auto">
-                    <ul className="list-none mb-3 mx-auto">
-                        {statusMessage.map(({message, type}, index) => (
-                            <li key={index}
-                                className={classNames({
-                                    "text-green-600 ": type === "success",
-                                    "text-red-800": type === "error"
-                                })}>
-                                    {message}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                <StatusMessageComponent message={statusMessage} />
             )}
             <div className="w-1/2 mx-auto">
                 <form onSubmit={handleSubmit}>

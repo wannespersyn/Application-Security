@@ -36,6 +36,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import { UserInput } from "../types";
 import AuthenticationService from "../service/authentication.service";
+import { verifyCaptcha } from "../middleware/recaptchaMiddleware";
 
 const AuthenticationRouter = express.Router();
 
@@ -92,9 +93,10 @@ AuthenticationRouter.post('/login', async (req: Request, res: Response, next: Ne
  *                        $ref: '#/components/schemas/User'
  */
 
-AuthenticationRouter.post('/signUp', async (req: Request, res: Response, next: NextFunction) => {
+AuthenticationRouter.post('/signUp', verifyCaptcha , async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = <UserInput>req.body;
+        console.log(user);
         const result = await AuthenticationService.addUserToControlCenter(user);
         res.status(200).json(result);
     } catch(error) {

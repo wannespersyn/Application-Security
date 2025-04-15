@@ -1,4 +1,4 @@
-import { LightSource, User } from "@/types";
+import { LightSource } from "@/types";
 
 
 const addNewLight = async (name: string, location: string) => {

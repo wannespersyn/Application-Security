@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import Language from "./Language";
 
 const Header: React.FC = () => {
-    const [loggedInUser, setLoggedInUser] = useState<String | null>(null);
+    const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
     const router = useRouter();
     const { t } = useTranslation();
 
@@ -20,7 +19,6 @@ const Header: React.FC = () => {
     };
 
     return (
-        <>
             <header className="mx-auto bg-gray-800 py-4 text-white">
                 <nav className="m-5 md:flex md:items-start md:justify-between">
                     <div className="text-2xl">
@@ -49,18 +47,16 @@ const Header: React.FC = () => {
                         )}
                         {loggedInUser && (
                             <li>
-                                <a
-                                    href="#"
+                                <button
                                     onClick={handleClick}>
                                     {t("header.logout")}
-                                </a>
+                                </button>
                             </li>
                             )}
                     </ul>
                     <Language />
                 </nav>
             </header>
-        </>
     );
 }
 

@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 
 const UserOverview = () => {
     const [users, setUsers] = useState<User[]>([]);
-    
-
+  
     const SetUsers = () => {
         setUsers([
             {
@@ -52,8 +51,8 @@ const UserOverview = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
-              <tr key={index} className="border">
+            {users.map((user) => (
+              <tr key={user.id} className="border">
                 <td className="tableData">{user.name}</td>
                 <td className="tableData">{user.password}</td>
                 <td className="tableData">

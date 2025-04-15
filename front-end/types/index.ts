@@ -24,4 +24,5 @@ export type User = {
     password: string;
     admin?: boolean;
     token?: string;
+    captcha?: string;
 };

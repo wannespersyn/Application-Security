@@ -4,7 +4,7 @@ import { signToken } from '../util/jwt';
 import controlCenterDb from '../domain/data-access/controlCenter.db';
 import User from '../domain/model/user';
 
-const pepper = process.env.PEPPER || 'je-geheime-pepper-string';
+const pepper = process.env.PEPPER;
 
 /**
  * Function to hash a password with a salt and a pepper
@@ -89,6 +89,9 @@ const addUserToControlCenter = async ({name, password, admin }: UserInput): Prom
 
     return await controlCenterDb.addUser(user);
 }
+
+
+
 
 export default {
     hashPassword,
