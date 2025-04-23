@@ -96,7 +96,6 @@ AuthenticationRouter.post('/login', async (req: Request, res: Response, next: Ne
 AuthenticationRouter.post('/signUp', verifyCaptcha , async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = <UserInput>req.body;
-        console.log(user);
         const result = await AuthenticationService.addUserToControlCenter(user);
         res.status(200).json(result);
     } catch(error) {

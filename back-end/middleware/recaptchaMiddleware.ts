@@ -8,8 +8,7 @@ const verifyCaptcha = async (req: Request, res: Response, next: NextFunction) =>
     return res.status(400).json({ message: 'Please complete the CAPTCHA' });
   }
 
-  const secretKey = "6LcnjPIqAAAAAC0RKg5o6aA1HsxCSD_GWaFWa8j7";
-
+  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
   try {
     const response = await axios.post(
       `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${captcha}`
