@@ -36,6 +36,7 @@
 import express, { Request, Response } from "express";
 import userService from "../service/user.service";
 import { UserInput } from "../types";
+import logger from "../util/logger";
 
 const userRouter = express.Router();
 
@@ -69,8 +70,10 @@ userRouter.post('/', async (req: Request, res: Response) => {
     try {
         const user = <UserInput>req.body;
         const result = userService.createUser(user);
+        logger.info(`User created: ${JSON.stringify(result)}`);
         res.status(200).json(result);
     } catch(error) {
+        logger.error(`Error creating user: ${error.message}`);
         res.status(400).json({status: "error", errorMessage: error.message});
     }
 });

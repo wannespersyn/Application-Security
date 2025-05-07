@@ -37,7 +37,8 @@
         "https": "^1.0.0",
         "jsonwebtoken": "^9.0.2",
         "swagger-jsdoc": "^6.2.0",
-        "swagger-ui-express": "^4.6.0"
+        "swagger-ui-express": "^4.6.0",
+        "winston": "^3.17.0"
     },
     "devDependencies": {
         "@types/bcrypt": "^5.0.0",

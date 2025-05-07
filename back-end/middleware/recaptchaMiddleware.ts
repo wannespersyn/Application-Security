@@ -9,6 +9,12 @@ const verifyCaptcha = async (req: Request, res: Response, next: NextFunction) =>
   }
 
   const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+
+  if (!secretKey) {
+    console.error('RECAPTCHA_SECRET_KEY is not defined in environment variables');
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+
   try {
     const response = await axios.post(
       `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${captcha}`

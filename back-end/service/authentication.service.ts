@@ -69,6 +69,7 @@ const authenticate = async ({ name, password}: UserInput): Promise<Authenticatio
   if (!isvalidPassword) {
       throw new Error("Password is incorrect!");
   }
+  
 
   return {
       token: signToken({ name, admin: user.admin }),

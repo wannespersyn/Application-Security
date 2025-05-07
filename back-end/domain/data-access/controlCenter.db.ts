@@ -68,7 +68,6 @@ const getIdFromLightSource = async (name: string, location: string): Promise<num
             scenes: true
         }
     });
-    console.log(lightSource.id)
     return lightSource.id;
 }
 

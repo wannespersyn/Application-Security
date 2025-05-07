@@ -58,25 +58,32 @@ const RegisterForm: React.FC = () => {
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
-
+  
+    if (!captcha) {
+      alert("Please complete the CAPTCHA");
+      return;
+    }
+  
     clearErrors();
-
+  
     if (!validate()) {
       return;
     }
-
+  
     const user = { name, password, captcha };
     console.log(user);
     const response = await AuthenticationService.Register(user);
-
-    if (response.status === 200) {
+  
+    if (response.status === 200 || response.status === 201 || response.status === 204) {
       setStatusMessage([{ message: `${t('register.success')}`, type: 'success' }]);
+      
       router.push('/login');
     } else {
       setStatusMessage([{ message: `${t('register.error')}`, type: 'error' }]);
       console.log('Error:', response.status);
     }
   };
+  
 
   const onCaptchaChange = (value: string | null) => {
     setCaptcha(value ?? '');

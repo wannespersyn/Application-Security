@@ -47,6 +47,7 @@ app.use(
     expressjwt({
         secret: publicKey,
         algorithms: ['RS256'],
+        getToken: (req) => req.cookies.token ?? req.headers['authorization']?.split(' ')[1],
     }).unless({
         path: ['/api-docs', /^\/api-docs\/.*/, '/authentication/login', '/authentication/signUp', '/status']
     })

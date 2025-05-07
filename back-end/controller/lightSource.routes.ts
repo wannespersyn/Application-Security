@@ -37,6 +37,7 @@
 import express, { Request, Response } from "express";
 import lightSourceService from "../service/lightSource.service";
 import { LightSourceInput} from "../types";
+import logger from "../util/logger";
 
 const lightSourceRouter = express.Router();
 
@@ -70,8 +71,10 @@ lightSourceRouter.post('/', (req: Request, res: Response) => {
     try {
         const lightSource = <LightSourceInput>req.body;
         const result = lightSourceService.createLightSource(lightSource);
+        logger.info(`Light source created: ${JSON.stringify(result)}`);
         res.status(200).json(result);
     } catch(error) {
+        logger.error(`Error creating light source: ${error.message}`);
         res.status(400).json({status: "error", errorMessage: error.message});
     }
 })

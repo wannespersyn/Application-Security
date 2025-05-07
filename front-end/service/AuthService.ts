@@ -31,8 +31,11 @@ const Register = async ({ name, password, captcha }: User): Promise<any> => {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
+        console.log("Registration successful:", response.statusText);
+        console.log("Response:", response);
+        
 
-        return await response.json();
+        return response;
     } catch (error) {
         console.error("Registration failed:", error);
         throw error; 

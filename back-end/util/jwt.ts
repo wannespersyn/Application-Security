@@ -7,17 +7,24 @@ const publicKeyPath = 'C:/Users/wanne/Documents/SCHOOL/fase 2/semester 1/full st
 const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
 const publicKey = fs.readFileSync(publicKeyPath, 'utf8');
 
-
 /**
- * Helpers function to sign a JWT token to prevent double code
- * 
+ * Helper function to sign a JWT token
  * @param payload 
  * @param expiresIn 
  * @returns 
  */
-const signJwtToken = (payload: object, expiresIn: string): string => {
+const signOptions: jwt.SignOptions = {
+    issuer: 'your-issuer',
+    audience: 'your-audience',
+    subject: 'your-subject',
+    algorithm: 'RS256',
+    expiresIn: '1h',  
+};
+
+// Sign function
+const signJwtToken = (payload: object, privateKey: string): string => {
     try {
-        return jwt.sign(payload, privateKey, { algorithm: 'RS256', expiresIn });
+        return jwt.sign(payload, privateKey, signOptions);  // Pass the signOptions here
     } catch (err) {
         console.error(err);
         throw new Error('Error generating JWT token, see server logs for more details');
@@ -25,8 +32,7 @@ const signJwtToken = (payload: object, expiresIn: string): string => {
 };
 
 /**
- * Helper function to verify a JWT token 
- * 
+ * Helper function to verify a JWT token
  * @param token 
  * @returns 
  */
@@ -39,13 +45,13 @@ const verifyJwtToken = (token: string): any => {
     }
 };
 
-
+// Sample sign and verify functions for tokens
 const signToken = ({ name, admin }): string => {
-    return signJwtToken({ name, admin }, '1h'); 
+    return signJwtToken({ name, admin }, privateKey); 
 };
 
 const signRefreshToken = ({ name, admin }): string => {
-    return signJwtToken({ name, admin }, '7d');
+    return signJwtToken({ name, admin }, privateKey);
 };
 
 const verifyToken = (token: string): any => {

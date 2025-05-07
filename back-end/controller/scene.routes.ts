@@ -43,6 +43,7 @@
 import express, { Request, Response } from "express";
 import sceneService from "../service/scene.service";
 import { SceneInput } from "../types";
+import logger from "../util/logger";
 
 const sceneRouter = express.Router();
 
@@ -76,8 +77,10 @@ sceneRouter.post('/', (req: Request, res: Response) => {
     try {
         const scene = <SceneInput>req.body;
         const result = sceneService.createScene(scene);
+        logger.info(`Scene created: ${JSON.stringify(result)}`);
         res.status(200).json(result);
     } catch(error) {
+        logger.error(`Error creating scene: ${error.message}`);
         res.status(400).json({status: "error", errorMessage: error.message});
     }
 })
